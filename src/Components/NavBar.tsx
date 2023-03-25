@@ -1,10 +1,11 @@
 import React from "react";
-import { MdSearch } from "react-icons/md";
+import { MdHelpOutline, MdSearch } from "react-icons/md";
+
 const NavBar = () => {
 	return (
 		<header className="h-16 fixed top-0 text-[#404144] w-full">
 			<nav className="flex w-full h-full items-center font-google">
-				<div className="flex mr-3 ml-7">
+				<div className="flex mr-3 ml-7 w-1/4">
 					<svg className="h-10 w-10 mr-2" aria-hidden="true" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
 						<path fill="none" d="M0,0h40v40H0V0z"></path>
 						<g>
@@ -19,15 +20,20 @@ const NavBar = () => {
 					</svg>
 					<span className="font-medium leading-7 text-[1.375rem] text-[#5f6368] self-center">Google Play</span>
 				</div>
-				<div className="flex justify-start gap-5 text-sm">
+				<div className="flex justify-start gap-5 text-sm w-full">
 					<span>Applications</span>
 					<span>Games</span>
 					<span>Movies</span>
 					<span>Books</span>
 				</div>
-                <div className="flex justify-end">
-                    <MdSearch size={25} color="#404144"/>
-                </div>
+				<div className="flex justify-end items-center w-1/2 gap-5 p-2">
+					<MdSearch size={25} color="#404144" />
+					<MdHelpOutline size={25} color="#404144" />
+					<img
+						src="https://lh3.googleusercontent.com/a/AGNmyxb2tn8LIEUZqmRpLcPbpamnrmP-0MMSkM8dLz4U=s32-c-k-cc"
+						className="h-8 w-8 rounded-full"
+					></img>
+				</div>
 			</nav>
 		</header>
 	);
