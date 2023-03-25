@@ -6,7 +6,8 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      'google': ['Roboto', 'Arial', 'sans-serif'],
+      'google': ['"Product Sans"' ,'Roboto', 'Arial', 'sans-serif'],
+      'googleBold': ['"Product Sans Bold"' ,'Roboto', 'Arial', 'sans-serif'],
     },
     extend: {},
   },
