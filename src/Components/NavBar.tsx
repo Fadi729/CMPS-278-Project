@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
 import { RouteTo } from "../data/Routes";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);
@@ -77,11 +79,35 @@ const NavBar = () => {
 								{underlineBooks && <div className="w-full h-[3px] bg-[#0179ca] rounded-full"></div>}
 							</div>
 						</NavLink>
+						<GoogleLogin
+							onSuccess={async (credentialResponse) => {
+								let token: any;
+								console.log(credentialResponse);
+								await axios.post("https://localhost:44300/Auth/login?token=" + credentialResponse.credential).then((res) => {
+									console.log(res.data);
+									token = res.data;
+								});
+
+								await axios.get("https://localhost:44300/WeatherForecast", {
+									headers: {
+										Authorization: "Bearer " + token.accessToken,
+									},
+								}).then((res) => {
+									console.log(res);
+								});
+							}}
+							onError={() => {
+								console.log("Login Failed");
+							}}
+						/>
 					</div>
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
 						<MdSearch size={25} color="#404144" />
 						<MdHelpOutline size={25} color="#404144" />
-						<img src="https://lh3.googleusercontent.com/a/AGNmyxb2tn8LIEUZqmRpLcPbpamnrmP-0MMSkM8dLz4U=s32-c-k-cc" className="h-8 w-8 rounded-full" />
+						<img
+							src="https://fonts.gstatic.com/s/i/productlogos/avatar_anonymous/v4/web-32dp/logo_avatar_anonymous_color_1x_web_32dp.png"
+							className="h-8 w-8 rounded-full"
+						/>
 					</div>
 				</nav>
 			</header>
