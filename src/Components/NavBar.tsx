@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
-import { RouteTo } from "../data/Routes";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import RouteTo from "../data/Routes";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);

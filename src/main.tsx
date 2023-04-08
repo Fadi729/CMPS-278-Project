@@ -5,13 +5,17 @@ import App from "./App";
 import "./index.css";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
-		<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</GoogleOAuthProvider>
+		<Provider store={store}>
+			<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</GoogleOAuthProvider>
+		</Provider>
 	</React.StrictMode>
 );
