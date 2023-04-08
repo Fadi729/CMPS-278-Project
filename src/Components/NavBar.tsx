@@ -81,20 +81,7 @@ const NavBar = () => {
 						</NavLink>
 						<GoogleLogin
 							onSuccess={async (credentialResponse) => {
-								let token: any;
 								console.log(credentialResponse);
-								await axios.post("https://localhost:44300/Auth/login?token=" + credentialResponse.credential).then((res) => {
-									console.log(res.data);
-									token = res.data;
-								});
-
-								await axios.get("https://localhost:44300/WeatherForecast", {
-									headers: {
-										Authorization: "Bearer " + token.accessToken,
-									},
-								}).then((res) => {
-									console.log(res);
-								});
 							}}
 							onError={() => {
 								console.log("Login Failed");
