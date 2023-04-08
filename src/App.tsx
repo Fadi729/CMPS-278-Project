@@ -1,15 +1,25 @@
-import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import NavBar from "./Components/NavBar";
+import { RouteTo } from "./data/Routes";
+
+import Apps from "./Pages/Apps";
+import Books from "./Pages/Books";
+import Games from "./Pages/Games";
+import Movies from "./Pages/Movies";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-  )
+	return (
+		<Routes>
+			<Route path="/" element={<NavBar />}>
+				<Route index path={RouteTo.Apps} element={<Apps />} />
+				<Route path={RouteTo.Games} element={<Games />} />
+				<Route path={RouteTo.Movies} element={<Movies />} />
+				<Route path={RouteTo.Books} element={<Books />} />
+			</Route>
+		</Routes>
+	);
 }
 
-export default App
+export default App;
