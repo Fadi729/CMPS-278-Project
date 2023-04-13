@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
 import { GoogleLogin } from "@react-oauth/google";
