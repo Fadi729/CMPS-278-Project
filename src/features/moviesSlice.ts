@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import ApiEndpoints from "../data/ApiEndpoints";
-import Movie from "../data/Movies";
+import Movie from "../data/Interfaces/Movies";
 
 export const getMoviesAsync = createAsyncThunk("movies/fetchMovies", async (_, thunkAPI) => {
 	try {

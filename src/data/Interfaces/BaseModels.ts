@@ -1,0 +1,65 @@
+export interface BaseDataModel {
+    url: string;
+    appId: string;
+    title: string | null;
+    summary: string | null;
+    developer: string | null;
+    developerId: string | null;
+    icon: string | null;
+    score: number | null;
+    scoreText: string | null;
+    priceText: string | null;
+    free: boolean | null;
+    description: string | null;
+    descriptionHTML: string | null;
+    installs: string | null;
+    minInstalls: number | null;
+    maxInstalls: number | null;
+    ratings: number | null;
+    reviewsCount: number | null;
+    histogram: { [key: string]: number; } | null;
+    price: number | null;
+    currency: string | null;
+    available: boolean | null;
+    offersIAP: boolean | null;
+    iAPRange: string | null;
+    size: string | null;
+    androidVersion: string | null;
+    androidVersionText: string | null;
+    developerInternalID: string | null;
+    developerEmail: string | null;
+    developerWebsite: string | null;
+    developerAddress: string | null;
+    genre: string | null;
+    genreId: string | null;
+    familyGenre: string | null;
+    familyGenreId: string | null;
+    headerImage: string | null;
+    screenshots: string[] | null;
+    video: string | null;
+    videoImage: string | null;
+    contentRating: string | null;
+    contentRatingDescription: string | null;
+    adSupported: boolean | null;
+    released: string | null;
+    updated: number | null;
+    version: string | null;
+    recentChanges: string | null;
+    comments: string[] | null;
+}
+
+export interface BaseReviewModel {
+    id: string;
+    userName: string | null;
+    userImage: string | null;
+    date: string | null;
+    score: number | null;
+    scoreText: string | null;
+    url: string | null;
+    title: string | null;
+    text: string | null;
+    replyDate: string | null;
+    replyText: string | null;
+    version: string | null;
+    thumbsUp: number | null;
+}
