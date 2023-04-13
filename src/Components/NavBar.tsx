@@ -97,7 +97,9 @@ const NavBar = () => {
 					</div>
 				</nav>
 			</header>
-			<Outlet />
+			<div className="px-28 pt-5">
+				<Outlet />
+			</div>
 		</>
 	);
 };

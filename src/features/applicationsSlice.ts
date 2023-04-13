@@ -7,6 +7,7 @@ export const getApplicationAsync = createAsyncThunk("applications/getApplication
 	try {
 		const response = await axios.get<Application[]>(ApiEndpoints.getApplications);
 		thunkAPI.dispatch(setApplications(response.data));
+		thunkAPI.dispatch(setIsLoading(false));
 		return response.data;
 	} catch (error) {
 		return thunkAPI.rejectWithValue(error);
@@ -15,10 +16,12 @@ export const getApplicationAsync = createAsyncThunk("applications/getApplication
 
 interface State {
 	applications: Application[];
+	isLoading: boolean;
 }
 
 const initialState: State = {
 	applications: [] as Application[],
+	isLoading: true,
 };
 
 const applicationsSlice = createSlice({
@@ -28,9 +31,12 @@ const applicationsSlice = createSlice({
 		setApplications: (state, action: PayloadAction<Application[]>) => {
 			state.applications = action.payload;
 		},
+		setIsLoading(state, action: PayloadAction<boolean>) {
+			state.isLoading = action.payload;
+		},
 	},
 });
 
-export const { setApplications } = applicationsSlice.actions;
+export const { setApplications, setIsLoading } = applicationsSlice.actions;
 
 export default applicationsSlice.reducer;
