@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import RouteTo from "../data/Routes";
-import { useAppDispatch } from "../hooks";
-import { getBooksAsync } from "../features/booksSlice";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);

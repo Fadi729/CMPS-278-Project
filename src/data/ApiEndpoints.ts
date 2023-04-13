@@ -4,6 +4,8 @@ const ApiEndpoints = {
     getMovies: `${baseUrl}/api/Movies`,
 
     getBooks: `${baseUrl}/api/BooksData`,
+
+    getGames: `${baseUrl}/api/GameData`,
 }
 
 export default ApiEndpoints;

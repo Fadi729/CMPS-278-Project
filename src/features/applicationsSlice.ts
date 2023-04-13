@@ -1,17 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
+import { Application } from "../data/Interfaces/Applications";
 
- 
-
-const initialState = {
-
+interface State {
+	applications: Application[];
 }
 
+const initialState: State = {
+	applications: [] as Application[],
+};
+
 const applicationsSlice = createSlice({
-  name: "Applications",
-  initialState,
-  reducers: {}
+	name: "Applications",
+	initialState,
+	reducers: {},
 });
 
-export const {} = applicationsSlice.actions
+export const {} = applicationsSlice.actions;
 
-export default applicationsSlice.reducer
+export default applicationsSlice.reducer;
