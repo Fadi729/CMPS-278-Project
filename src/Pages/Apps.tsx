@@ -1,9 +1,10 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getApplicationAsync } from "../features/applicationsSlice";
 import { Application } from "../data/Interfaces/Applications";
 import { MdChevronLeft, MdChevronRight, MdStarRate } from "react-icons/md";
 import { IconType } from "react-icons";
+import useNavbarContext from "../contexts/NavbarContext";
 
 const ScrollButton = ({
 	Icon,
@@ -113,7 +114,8 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 
 const Apps = () => {
 	const dispatch = useAppDispatch();
-	const { applications } = useAppSelector((state) => state.Applications);
+	const { applications, isLoading } = useAppSelector((state) => state.Applications);
+	const { targetRef, setTopValue, topValue } = useNavbarContext();
 	async function getApps() {
 		await dispatch(getApplicationAsync());
 	}
@@ -124,18 +126,34 @@ const Apps = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		const handleScroll = () => {
+			const rect = targetRef.current?.getBoundingClientRect();
+			setTopValue(rect!.top);
+		};
+		window.addEventListener("scroll", handleScroll);
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, [topValue]);
+
 	return (
-		<div className="relative top-16">
-			<Section
-				section="Top Selling"
-				filter={(arr: Application[]): Application[] => [...arr].sort((a, b) => (b.maxInstalls ?? 0) - (a.maxInstalls ?? 0))}
-			/>
-			<Section
-				section="New Releases"
-				filter={(arr: Application[]): Application[] => [...arr].sort((a, b) => parseInt(b.released ?? "0") - parseInt(a.released ?? "0"))}
-			/>
-			<Section section="Recommended" filter={(arr: Application[]): Application[] => [...arr].sort((a, b) => (b.score ?? 0) - (a.score ?? 0))} />
-		</div>
+		<>
+			{!isLoading && (
+				<div ref={targetRef} className="relative top-16">
+					<Section
+						section="Top Selling"
+						filter={(arr: Application[]): Application[] => [...arr].sort((a, b) => (b.maxInstalls ?? 0) - (a.maxInstalls ?? 0))}
+					/>
+					<Section
+						section="New Releases"
+						filter={(arr: Application[]): Application[] => [...arr].sort((a, b) => parseInt(b.released ?? "0") - parseInt(a.released ?? "0"))}
+					/>
+					<Section section="Recommended" filter={(arr: Application[]): Application[] => [...arr].sort((a, b) => (b.score ?? 0) - (a.score ?? 0))} />
+				</div>
+			)}
+		</>
 	);
 };
 
