@@ -5,6 +5,8 @@ import { Application } from "../data/Interfaces/Applications";
 import { MdChevronLeft, MdChevronRight, MdStarRate } from "react-icons/md";
 import { IconType } from "react-icons";
 import useNavbarContext from "../contexts/NavbarContext";
+import { useNavigate } from "react-router-dom";
+import RouteTo from "../data/Routes";
 
 const ScrollButton = ({
 	Icon,
@@ -82,6 +84,10 @@ const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 
 const Section = ({ section, filter }: { section: string; filter: (arr: Application[]) => Application[] }) => {
 	const { applications, isLoading } = useAppSelector((state) => state.Applications);
+	const navigate = useNavigate()
+	function toAppPage(appId: string): void {
+		navigate(RouteTo.AppDetailsPage(appId))
+	}
 
 	return (
 		<>
@@ -92,7 +98,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 						{filter(applications)
 							.slice(0, 20)
 							.map((app) => (
-								<div key={app.appId} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start">
+								<div key={app.appId} onClick={() => toAppPage(app.appId)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start">
 									<img
 										src={app.icon!}
 										className="rounded-[20%] mb-2"
