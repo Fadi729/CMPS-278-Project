@@ -8,6 +8,7 @@ import Books from "./Pages/Books";
 import Games from "./Pages/Games";
 import Movies from "./Pages/Movies";
 import RouteTo from "./data/Routes";
+import BookPage from "./Components/BookPage";
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 				<Route path={RouteTo.Games} element={<Games />} />
 				<Route path={RouteTo.Movies} element={<Movies />} />
 				<Route path={RouteTo.Books} element={<Books />} />
+				<Route path="/book/:id" element={<BookPage />} />
 			</Route>
 		</Routes>
 	);

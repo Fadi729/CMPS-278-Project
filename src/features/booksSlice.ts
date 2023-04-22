@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { BooksData, BooksDataAPIResponse } from "../data/Books";
+import { BooksData, BooksDataAPIResponse, BooksReview } from "../data/Books";
 import axios from "axios";
 import ApiEndpoints from "../data/ApiEndpoints";
 
@@ -20,10 +20,12 @@ function convertBook(book: BooksDataAPIResponse) {
 
 interface State {
 	books: BooksData[];
+	bookReviews: BooksReview[];
 }
 
 const initialState: State = {
 	books: [] as BooksData[],
+	bookReviews: [] as BooksReview[]
 };
 
 const booksSlice = createSlice({
