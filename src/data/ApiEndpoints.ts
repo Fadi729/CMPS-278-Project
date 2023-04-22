@@ -1,9 +1,13 @@
 const baseUrl = import.meta.env.VITE_SERVER_BASE_URL;
 
 const ApiEndpoints = {
-    getMovies: `${baseUrl}/api/Movies`,
+	getMovies: `${baseUrl}/api/Movies`,
 
-    getBooks: `${baseUrl}/api/BooksData`,
-}
+	getBooks: `${baseUrl}/api/BooksData`,
+
+	getGames: `${baseUrl}/api/GameData`,
+
+	getApplications: `${baseUrl}/api/ApplicationData`,
+};
 
 export default ApiEndpoints;

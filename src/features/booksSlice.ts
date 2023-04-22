@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { BooksData, BooksDataAPIResponse, BooksReview } from "../data/Books";
 import axios from "axios";
 import ApiEndpoints from "../data/ApiEndpoints";
+import { BooksDataAPIResponse, BooksData,BooksReview } from "../data/Interfaces/Books";
 
 export const getBooksAsync = createAsyncThunk("books/getBooksAsync", async (_, thunkAPI) => {
 	try {
