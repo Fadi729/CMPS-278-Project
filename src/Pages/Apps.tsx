@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getApplicationAsync } from "../features/applicationsSlice";
+import { getApplicationsAsync } from "../features/applicationsSlice";
 import { Application } from "../data/Interfaces/Applications";
 import { MdChevronLeft, MdChevronRight, MdStarRate } from "react-icons/md";
 import { IconType } from "react-icons";
@@ -123,7 +123,7 @@ const Apps = () => {
 	const { applications, isLoading } = useAppSelector((state) => state.Applications);
 	const { targetRef, setTopValue, topValue } = useNavbarContext();
 	async function getApps() {
-		await dispatch(getApplicationAsync());
+		await dispatch(getApplicationsAsync());
 	}
 
 	useEffect(() => {
