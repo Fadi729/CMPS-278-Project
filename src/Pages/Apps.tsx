@@ -8,23 +8,30 @@ import useNavbarContext from "../contexts/NavbarContext";
 import { useNavigate } from "react-router-dom";
 import RouteTo from "../data/Routes";
 
-const ScrollButton = ({
+export const ScrollButton = ({
 	Icon,
 	direction,
 	handleArrowClick,
+	top,
+	xAxis,
 }: {
 	Icon: IconType;
 	direction: "right" | "left";
 	handleArrowClick: (distance: number) => void;
+	top: string;
+	xAxis: string;
 }) => {
 	const scrollAmount = direction === "right" ? 800 : -800;
 
 	return (
 		<button
-			style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
-			className={`absolute top-[33%] transform -translate-y-1/2 z-10 rounded-[28px] bg-white h-14 w-14 text-gray-600 cursor-pointer ${
-				direction === "right" ? "-right-4" : "-left-4"
-			}`}
+			style={{
+				top: `${top}%`,
+				left: `-${direction === "left" ? xAxis : ""}rem`,
+				right: `-${direction === "right" ? xAxis : ""}rem`,
+				boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)",
+			}}
+			className={`absolute transform -translate-y-1/2 z-10 rounded-[28px] bg-white h-14 w-14 text-gray-600 cursor-pointer`}
 			onClick={() => handleArrowClick(scrollAmount)}
 		>
 			<div className="flex justify-center">
@@ -76,17 +83,17 @@ const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 			<div className="flex overflow-x-auto gap-0.5 container-snap snap-x snap-mandatory" ref={containerRef}>
 				{children}
 			</div>
-			{leftPointer > 0 && isOver && <ScrollButton Icon={MdChevronLeft} direction="left" handleArrowClick={handleArrowClick} />}
-			{rightPointer < 20 && isOver && <ScrollButton Icon={MdChevronRight} direction="right" handleArrowClick={handleArrowClick} />}
+			{leftPointer > 0 && isOver && <ScrollButton Icon={MdChevronLeft} direction="left" handleArrowClick={handleArrowClick} top="33" xAxis="1"/>}
+			{rightPointer < 20 && isOver && <ScrollButton Icon={MdChevronRight} direction="right" handleArrowClick={handleArrowClick} top="33" xAxis="1"/>}
 		</div>
 	);
 };
 
 const Section = ({ section, filter }: { section: string; filter: (arr: Application[]) => Application[] }) => {
 	const { applications, isLoading } = useAppSelector((state) => state.Applications);
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	function toAppPage(appId: string): void {
-		navigate(RouteTo.AppDetailsPage(appId))
+		navigate(RouteTo.AppDetailsPage(appId));
 	}
 
 	return (
@@ -98,7 +105,11 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 						{filter(applications)
 							.slice(0, 20)
 							.map((app) => (
-								<div key={app.appId} onClick={() => toAppPage(app.appId)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start">
+								<div
+									key={app.appId}
+									onClick={() => toAppPage(app.appId)}
+									className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start"
+								>
 									<img
 										src={app.icon!}
 										className="rounded-[20%] mb-2"
