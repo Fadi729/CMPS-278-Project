@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { MdChevronLeft, MdChevronRight, MdLanguage, MdOutlineEmail, MdOutlinePlace, MdOutlineVerifiedUser, MdStarRate } from "react-icons/md";
 import { Application, ApplicationReview } from "../data/Interfaces/Applications";
 import { ScrollButton } from "./Apps";
+import { getApplicationsAsync } from "../features/applicationsSlice";
+import useNavbarContext from "../contexts/NavbarContext";
 
 function trimNumber(num: number): string {
 	const sizes = ["K", "M", "B", "T"];
@@ -263,38 +265,38 @@ const DeveloperInfo = ({ app }: { app: Application }) => {
 	);
 };
 
-const SimilarApps = () => {
+const SimilarApps = ({ appId, appGenre }: { appId: string | undefined; appGenre: string | null | undefined }) => {
 	const { applications } = useAppSelector((state) => state.Applications);
+	const similarApps = [...applications.filter((obj) => obj.genreId === appGenre), ...applications.filter((obj) => obj.genreId !== appGenre)]
+		.filter((obj) => obj.appId !== appId)
+		.slice(0, 6);
 	return (
 		<div className="flex flex-col">
 			<h3 className="text-[1.375rem] font-medium font-google mb-4">Similar Apps</h3>
 			<div className="flex flex-col">
-				{[...Array(6)].map((_, index) => {
-					const randomApp = applications[Math.floor(Math.random() * applications.length)];
-					return (
-						<div key={index} className="p-3 hover:bg-[#f5f5f5] rounded-lg cursor-pointer">
-							<NavLink className="flex" to={`${import.meta.env.BASE_URL}apps/${randomApp.appId!}/`}>
-								<img
-									src={randomApp.icon!}
-									style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
-									className="w-16 h-16 rounded-xl object-cover mr-4"
-								/>
-								<div className="flex flex-col">
-									<div className="text-sm font-medium" style={{ color: "rgb(32,33,36)" }}>
-										{randomApp.title}
-									</div>
-									<div className="text-sm font-normal" style={{ color: "rgb(95,99,104)" }}>
-										{randomApp.developer}
-									</div>
-									<div className="flex text-[#5f6368] text-sm">
-										<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{randomApp.scoreText}</p>
-										<MdStarRate />
-									</div>
+				{...similarApps.map((randomApp, index) => (
+					<div key={index} className="p-3 hover:bg-[#f5f5f5] rounded-lg cursor-pointer">
+						<NavLink className="flex" to={`${import.meta.env.BASE_URL}apps/${randomApp.appId!}/`}>
+							<img
+								src={randomApp.icon!}
+								style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
+								className="w-16 h-16 rounded-xl object-cover mr-4"
+							/>
+							<div className="flex flex-col">
+								<div className="text-sm font-medium" style={{ color: "rgb(32,33,36)" }}>
+									{randomApp.title}
 								</div>
-							</NavLink>
-						</div>
-					);
-				})}
+								<div className="text-sm font-normal" style={{ color: "rgb(95,99,104)" }}>
+									{randomApp.developer}
+								</div>
+								<div className="flex text-[#5f6368] text-sm">
+									<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{randomApp.scoreText}</p>
+									<MdStarRate />
+								</div>
+							</div>
+						</NavLink>
+					</div>
+				))}
 			</div>
 		</div>
 	);
@@ -302,46 +304,63 @@ const SimilarApps = () => {
 
 const AppDetails = () => {
 	const { appId } = useParams<{ appId: string }>();
-	console.log(appId);
-	const { applications } = useAppSelector((state) => state.Applications);
-	console.log(applications);
+	const { applications, isLoading } = useAppSelector((state) => state.Applications);
+	const { targetRef, setTopValue, topValue } = useNavbarContext();
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		const handleScroll = () => {
+			const rect = targetRef.current?.getBoundingClientRect();
+			setTopValue(rect!.top);
+		};
+		window.addEventListener("scroll", handleScroll);
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, [topValue]);
 
 	const app = applications.find((app) => app.appId === appId);
-	console.log(app);
+	
+	if (app === null || app === undefined) dispatch(getApplicationsAsync());
 
 	return (
-		<div className="relative top-12 h-full font-fontAlt">
-			<div className="flex flex-col w-3/4 mt-12">
-				<AppHeader app={app!} />
-			</div>
-			<div className="inline absolute right-0 top-0">
-				<img
-					src={app?.icon!}
-					className="rounded-[20%] w-[250px]"
-					style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
-				/>
-				<img
-					src={app?.icon!}
-					className="absolute w-36 left-5 rounded-[20%] -bottom-[15px] opacity-50 blur-md -z-10"
-					style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
-				/>
-			</div>
-			<div className="mt-24">
-				<div className="flex justify-between">
-					<div className="w-2/3">
-						<AppScreenShots screenShots={app?.screenshots} />
-						<RateApp />
-						<AppRatings scoreText={app?.scoreText!} ratings={app?.ratings!} histogram={app?.histogram!} />
-						<AppReviews reviews={app?.reviews!} />
-						<AppDescription description={app?.descriptionHTML!} updated={app?.updated!} />
+		<>
+			{!isLoading && (
+				<div ref={targetRef} className="relative top-12 h-full font-fontAlt">
+					<div className="flex flex-col w-3/4 mt-12">
+						<AppHeader app={app!} />
 					</div>
-					<div className="flex flex-col pt-5 w-[364px]">
-						<DeveloperInfo app={app!} />
-						<SimilarApps />
+					<div className="inline absolute right-0 top-0">
+						<img
+							src={app?.icon!}
+							className="rounded-[20%] w-[250px]"
+							style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
+						/>
+						<img
+							src={app?.icon!}
+							className="absolute w-36 left-5 rounded-[20%] -bottom-[15px] opacity-50 blur-md -z-10"
+							style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
+						/>
+					</div>
+					<div className="mt-24">
+						<div className="flex justify-between">
+							<div className="w-2/3">
+								<AppScreenShots screenShots={app?.screenshots} />
+								<RateApp />
+								<AppRatings scoreText={app?.scoreText!} ratings={app?.ratings!} histogram={app?.histogram!} />
+								<AppReviews reviews={app?.reviews!} />
+								<AppDescription description={app?.descriptionHTML!} updated={app?.updated!} />
+							</div>
+							<div className="flex flex-col pt-5 w-[364px]">
+								<DeveloperInfo app={app!} />
+								<SimilarApps appId={app?.appId} appGenre={app?.genreId} />
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };
 
