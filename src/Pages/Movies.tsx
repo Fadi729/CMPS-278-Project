@@ -97,7 +97,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Movie[]) 
 					{filter(movies)
 						.slice(0, 20)
 						.map((app) => (
-							<div key={app.id} onClick={() => toMoviePage(""+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', marginRight:'-10px'}}>
+							<div key={app.id} onClick={() => toMoviePage(''+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', marginRight:'-10px'}}>
 								<img
 									src={app.image.replace("._V1_SX101_CR0,0,101,150_","").replace("._V1_SY150_CR0,0,101,150_","").replace("._V1_SY150_CR2,0,101,150_","").replace("._V1_SY150_CR1,0,101,150_","").replace("._V1_SY150_SX101_","").replace("._V1_SY150_CR3,0,101,150_","")!}
 									className="rounded-[1%] mb-2"

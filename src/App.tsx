@@ -9,6 +9,7 @@ import Movies from "./Pages/Movies";
 import MovieDetails from "./Pages/MovieDetails";
 import RouteTo from "./data/Routes";
 import AppDetails from "./Pages/AppDetails";
+import SimilarMovies from "./Pages/SimilarMovies";
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				<Route path={RouteTo.Games} element={<Games />} />
 				<Route path={RouteTo.Movies} element={<Movies />} />
 				<Route path={RouteTo.MovieDetails} element={<MovieDetails />} />
+				<Route path={RouteTo.SimilarMovies} element={<SimilarMovies />} />
 				<Route path={RouteTo.Books} element={<Books />} />
 			</Route>
 		</Routes>

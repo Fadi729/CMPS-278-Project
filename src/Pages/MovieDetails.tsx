@@ -17,6 +17,8 @@ const Trailer=() =>{
     const currID=id
     const { movies } = useAppSelector((state) => state.Movies);
     const { targetRef, setTopValue, topValue } = useNavbarContext();
+    console.log(reviews)
+    
 	async function getMovies() {
 		await dispatch(getMoviesAsync());
 	}
@@ -52,10 +54,31 @@ const Trailer=() =>{
     var reviews=JSON.parse(movie?.reviews+'')
     console.log(reviews[0])
     const genre=movie?.genres.split(",")[0].slice(2,-1);
+    function toSimilarMoviesPage(genre: string): void {
+		navigate(RouteTo.SimilarMoviesPage(genre))
+        console.log("going to similar movies")
+	}
     function filter(arr: Movie[], ct: string){ return [...arr].sort((a, b) => (parseInt(b.sales) ?? 0) - (parseInt(a.sales) ?? 0))}
     const bg='linear-gradient(90deg,#242424,#242424,transparent,transparent,transparent,#242424),url('+movie?.image.replace("._V1_SX101_CR0,0,101,150_","").replace("._V1_SY150_CR0,0,101,150_","").replace("._V1_SY150_CR2,0,101,150_","").replace("._V1_SY150_CR1,0,101,150_","").replace("._V1_SY150_SX101_","").replace("._V1_SY150_CR3,0,101,150_","")!+')';
+    const [open, setOpen]=useState(false);
+	function OpenMenu(){
+		setOpen(true)
+        
+	}
+    function CloseMenu(){
+        setOpen(false)
+    }
     return(
         <div>
+            {open &&
+            <div style={{backgroundColor:'white', height:'570px',width:'750px', position:'fixed', marginLeft:'140px',zIndex:'10',marginTop:'-40px', borderRadius:'1% 1% 1% 1%',  paddingRight:'20px'}}>
+                <div style={{position:'absolute',  marginLeft:'30px', marginTop:'20px'}}>
+                    <p style={{fontSize:'22px', fontWeight:'500'}}>{movie?.title}<span className="hover:bg-[#f5f5f5]" style={{float:'right', color:'grey',borderRadius:'50% 50% 50% 50%', paddingLeft:'7px',paddingRight:'7px'}} onClick={CloseMenu}>&#10005;</span></p>
+                    <span style={{fontSize:'14px', color:'grey'}}>About this movie</span>
+                    <p style={{color:'#706f6f', width:'700px',fontSize:'13.5px',marginTop:'25px',marginBottom:'30px',fontWeight:'500'}}>{movie?.description}</p><hr></hr>
+                </div>
+            </div>
+            }
             <div style={{backgroundImage:bg, backgroundSize:'60%',backgroundPosition:'20% 20%', backgroundRepeat:'no-repeat',backgroundColor:'#242424', color:"white",margin:"-10px", width:'2000px', height:'620px',marginLeft:'-120px',marginTop:'-22px'}}>
                 <div style={{paddingTop:'215px',paddingLeft:'80px',display:'flex',flexDirection:'row'}}>
                     <div>
@@ -81,7 +104,7 @@ const Trailer=() =>{
             <div style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',width:'1300px',marginLeft:'-120px',paddingTop:'60px',paddingLeft:'30px'}}>
                 <div style={{display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
                     <div style={{marginLeft:'50px'}}>
-                        <h1 style={{fontSize:'23px',fontWeight:'500', color:'#2e2e2e'}}>About this movie <span onMouseOver={changeBackground2} onMouseOut={changeBackgroundBack1} style={{color:'grey', borderRadius:'50% 50% 50% 50%', padding:'8px 15px 10px 15px'}}>&#8594;</span></h1>
+                        <h1 style={{fontSize:'23px',fontWeight:'500', color:'#2e2e2e'}}>About this movie <span onMouseOver={changeBackground2} onMouseOut={changeBackgroundBack1} style={{color:'grey', borderRadius:'50% 50% 50% 50%', padding:'8px 15px 10px 15px'}} onClick={OpenMenu}>&#8594;</span></h1>
                         <p style={{color:'#706f6f', width:'700px',fontSize:'13.5px',marginTop:'25px',marginBottom:'30px',fontWeight:'500'}}>{movie?.description}</p>
                         <div onMouseOver={changeBackground2} onMouseOut={changeBackgroundBack1} style={{border:'1px solid #adacac', borderRadius:'20px 20px 20px 20px', width:'fit-content', padding:'5px 20px 5px 20px', fontSize:'14px', color:'#706f6f', fontWeight:'500'}}>{movie?.genres.split(",")[0].slice(2,-1)}</div>
                     </div>
@@ -96,7 +119,7 @@ const Trailer=() =>{
                                     <div className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt" style={{marginTop:'10px', marginLeft:'20px'}}>{review['author']}</div>
                                 </div>
                                 <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}> 
-                                    <ReactStars edit={false} count={5} value={review['rating']!} size={15} color2={'#e33659'}/>
+                                    <ReactStars edit={false} count={5} value={review['rating']/2!} size={15} color2={'#e33659'}/>
                                     <div  style={{marginTop:'5px', color:'#706f6f', fontSize:'11px', fontWeight:'500', minWidth:'fit-content'}}>{review['date']}</div>
                                 </div>
                                 <div style={{minWidth:'600px'}}>
@@ -116,7 +139,7 @@ const Trailer=() =>{
                     </div>
                 </div>
                 <div style={{position:'absolute',marginLeft:'800px',width:'400px'}}>
-                    <h1 style={{fontSize:'23px',fontWeight:'500', color:'#2e2e2e',marginLeft:'10px',marginBottom:'15px'}}>Similar movies <span onMouseOver={changeBackground2} onMouseOut={changeBackgroundBack1} style={{color:'grey', borderRadius:'50% 50% 50% 50%', padding:'8px 15px 10px 15px'}}>&#8594;</span></h1>
+                    <h1 style={{fontSize:'23px',fontWeight:'500', color:'#2e2e2e',marginLeft:'10px',marginBottom:'15px'}} onClick={()=>{toSimilarMoviesPage(genre+'')}}>Similar movies <span onMouseOver={changeBackground2} onMouseOut={changeBackgroundBack1} style={{color:'grey', borderRadius:'50% 50% 50% 50%', padding:'8px 15px 10px 15px'}}>&#8594;</span></h1>
                     {movies.filter(movie => movie.genres.includes(genre+'') && ""+movie.id != currID)
 						.slice(0, 4)
 						.map((app) => (

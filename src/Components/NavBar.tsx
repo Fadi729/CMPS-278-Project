@@ -4,6 +4,8 @@ import { MdHelpOutline, MdSearch } from "react-icons/md";
 import { GoogleLogin } from "@react-oauth/google";
 import RouteTo from "../data/Routes";
 import useNavbarContext from "../contexts/NavbarContext";
+import {RiHeart3Fill} from 'react-icons/ri';
+import { FaSignInAlt, FaSignOutAlt,FaHistory } from "react-icons/fa";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);
@@ -14,12 +16,17 @@ const NavBar = () => {
 
 	const { topValue } = useNavbarContext();
 
-	const imgRef=useRef();
-	const menuRef=useRef();
+	const imgRef=useRef(null);
+	const menuRef=useRef(null);
 
-	window.addEventListener('click',()=>{
-
+	window.addEventListener("click", (e) => {
+		console.log(e.target !== menuRef.current && e.target!== imgRef.current)
 	})
+	
+	function Menu(){
+		setOpen(!open)
+	}
+	
 
 	return (
 		<>
@@ -105,21 +112,23 @@ const NavBar = () => {
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
 						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdSearch size={25} color="#404144" /></div>
 						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdHelpOutline size={25} color="#404144" /></div>
-						<div className="hover:bg-[#f5f5f5]" style={{borderRadius:'50% 50% 50% 50%', padding:'10px'}}>
+						<div  className="hover:bg-[#f5f5f5]" style={{borderRadius:'50% 50% 50% 50%', padding:'10px'}}>
 						<img
+								ref={imgRef}
 								src="https://fonts.gstatic.com/s/i/productlogos/avatar_anonymous/v4/web-32dp/logo_avatar_anonymous_color_1x_web_32dp.png"
 								className="h-8 w-8 rounded-full"
-								onClick={()=>setOpen(!open)}
+								onClick={Menu}
 						/>
-					</div>
+						</div>
 				</div>	
 				</nav>
 				{open &&
-				<div>
+				<div ref={menuRef} style={{float:'right',boxShadow:'-5px 5px 50px -25px grey', marginRight:'10px', borderRadius:'3% 3% 3% 3%', paddingTop:'10px', paddingBottom:'10px', backgroundColor:'white'}}>
 					<ul>
-						<li>Wishlist</li>
-						<li>History</li>
-						<li>Sign In</li>
+						<li className="hover:bg-[#f5f5f5]" style={{padding:'12.5px 200px 12.5px 10px'}}><RiHeart3Fill style={{display:'inline', marginRight:'10px'}}/>Wishlist</li>
+						<li className="hover:bg-[#f5f5f5]" style={{padding:'12.5px 200px 12.5px 10px'}}><FaHistory style={{display:'inline', marginRight:'10px'}}/>History</li>
+						<li className="hover:bg-[#f5f5f5]" style={{padding:'12.5px 200px 12.5px 10px'}}><FaSignInAlt style={{display:'inline', marginRight:'10px'}}/>Sign In</li><hr/>
+						<li className="hover:bg-[#f5f5f5]" style={{padding:'12.5px 200px 12.5px 10px'}}><FaSignOutAlt style={{display:'inline', marginRight:'10px'}}/>Sign Out</li>
 					</ul>
 				</div>
 				}
