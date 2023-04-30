@@ -1,13 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import moviesSlice from "./features/moviesSlice";
-import booksSlice from "./features/booksSlice";
-import gamesSlice from "./features/gamesSlice";
+import { Applications, Games, Movies, Books } from "./features/index";
 
 export const store = configureStore({
 	reducer: {
-		Movies: moviesSlice,
-		Books: booksSlice,
-		Games: gamesSlice,
+		Games,
+		Applications,
+		Movies,
+		Books,
 	},
 });
 

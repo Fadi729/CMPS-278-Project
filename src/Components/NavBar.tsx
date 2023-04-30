@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
 import { GoogleLogin } from "@react-oauth/google";
 import RouteTo from "../data/Routes";
+import useNavbarContext from "../contexts/NavbarContext";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);
@@ -10,10 +11,16 @@ const NavBar = () => {
 	const [underlineMovies, setUnderlineMovies] = useState(false);
 	const [underlineBooks, setUnderlineBooks] = useState(false);
 
+	const { topValue } = useNavbarContext();
+
 	return (
 		<>
-			<header className="h-16 fixed top-0 text-[#404144] w-full">
-				<nav className="flex w-full h-full items-center font-google">
+			<header
+				className="h-16 fixed top-0 text-[#404144] w-full z-10"
+				style={{ boxShadow:  topValue !== null && topValue! < 65 ? "0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2)": "" }}
+				id="navbar"
+			>
+				<nav className="flex w-full h-full items-center font-google bg-white">
 					<div className="flex mr-3 ml-7 w-[22.5%]">
 						<svg className="h-10 w-10 mr-2" aria-hidden="true" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
 							<path fill="none" d="M0,0h40v40H0V0z"></path>
@@ -38,7 +45,7 @@ const NavBar = () => {
 							}}
 						>
 							<div className="flex flex-col justify-center">
-								<span className="my-5">Games</span>
+								<span className="my-[1.3rem]">Games</span>
 								{underlineGames && <div className="w-full h-[3px] bg-[#01875f] rounded-full"></div>}
 							</div>
 						</NavLink>
@@ -50,7 +57,7 @@ const NavBar = () => {
 							}}
 						>
 							<div className="flex flex-col justify-center">
-								<span className="my-5">Apps</span>
+								<span className="my-[1.3rem]">Apps</span>
 								{underlineApps && <div className="w-full h-[3px] bg-[#01875f] rounded-full"></div>}
 							</div>
 						</NavLink>
@@ -62,7 +69,7 @@ const NavBar = () => {
 							}}
 						>
 							<div className="flex flex-col justify-center">
-								<span className="my-5">Movies</span>
+								<span className="my-[1.3rem]">Movies</span>
 								{underlineMovies && <div className="w-full h-[3px] bg-[#c71c56] rounded-full"></div>}
 							</div>
 						</NavLink>
@@ -74,7 +81,7 @@ const NavBar = () => {
 							}}
 						>
 							<div className="flex flex-col justify-center">
-								<span className="my-5">Books</span>
+								<span className="my-[1.3rem]">Books</span>
 								{underlineBooks && <div className="w-full h-[3px] bg-[#0179ca] rounded-full"></div>}
 							</div>
 						</NavLink>
@@ -97,7 +104,9 @@ const NavBar = () => {
 					</div>
 				</nav>
 			</header>
-			<Outlet />
+			<div className="relative px-28 pt-5">
+				<Outlet />
+			</div>
 		</>
 	);
 };
