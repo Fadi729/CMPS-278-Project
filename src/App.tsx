@@ -8,6 +8,7 @@ import Books from "./Pages/Books";
 import Games from "./Pages/Games";
 import Movies from "./Pages/Movies";
 import RouteTo from "./data/Routes";
+import AppDetails from "./Pages/AppDetails";
 import BookPage from "./Components/BookPage";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
 		<Routes>
 			<Route path="/" element={<NavBar />}>
 				<Route index path={RouteTo.Apps} element={<Apps />} />
+				<Route path={RouteTo.AppsDetails} element={<AppDetails />} />
 				<Route path={RouteTo.Games} element={<Games />} />
 				<Route path={RouteTo.Movies} element={<Movies />} />
 				<Route path={RouteTo.Books} element={<Books />} />
