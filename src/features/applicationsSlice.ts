@@ -3,7 +3,7 @@ import { Application } from "../data/Interfaces/Applications";
 import axios from "axios";
 import ApiEndpoints from "../data/ApiEndpoints";
 
-export const getApplicationAsync = createAsyncThunk("applications/getApplicationAsync", async (_, thunkAPI) => {
+export const getApplicationsAsync = createAsyncThunk("applications/getApplicationsAsync", async (_, thunkAPI) => {
 	try {
 		const response = await axios.get<Application[]>(ApiEndpoints.getApplications);
 		thunkAPI.dispatch(setApplications(response.data));
