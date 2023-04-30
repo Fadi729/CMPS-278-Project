@@ -10,8 +10,16 @@ const NavBar = () => {
 	const [underlineGames, setUnderlineGames] = useState(false);
 	const [underlineMovies, setUnderlineMovies] = useState(false);
 	const [underlineBooks, setUnderlineBooks] = useState(false);
+	const [open, setOpen]=useState(false);
 
 	const { topValue } = useNavbarContext();
+
+	const imgRef=useRef();
+	const menuRef=useRef();
+
+	window.addEventListener('click',()=>{
+
+	})
 
 	return (
 		<>
@@ -95,14 +103,26 @@ const NavBar = () => {
 						/>
 					</div>
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
-						<MdSearch size={25} color="#404144" />
-						<MdHelpOutline size={25} color="#404144" />
+						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdSearch size={25} color="#404144" /></div>
+						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdHelpOutline size={25} color="#404144" /></div>
+						<div className="hover:bg-[#f5f5f5]" style={{borderRadius:'50% 50% 50% 50%', padding:'10px'}}>
 						<img
-							src="https://fonts.gstatic.com/s/i/productlogos/avatar_anonymous/v4/web-32dp/logo_avatar_anonymous_color_1x_web_32dp.png"
-							className="h-8 w-8 rounded-full"
+								src="https://fonts.gstatic.com/s/i/productlogos/avatar_anonymous/v4/web-32dp/logo_avatar_anonymous_color_1x_web_32dp.png"
+								className="h-8 w-8 rounded-full"
+								onClick={()=>setOpen(!open)}
 						/>
 					</div>
+				</div>	
 				</nav>
+				{open &&
+				<div>
+					<ul>
+						<li>Wishlist</li>
+						<li>History</li>
+						<li>Sign In</li>
+					</ul>
+				</div>
+				}
 			</header>
 			<div className="relative px-28 pt-5">
 				<Outlet />

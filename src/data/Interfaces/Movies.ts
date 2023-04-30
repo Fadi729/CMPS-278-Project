@@ -4,7 +4,7 @@ export default interface Movie {
     date:        string;
     image:       string;
     rating:      string;
-    genres:      string[];
+    genres:      string;
     trailer:     string;
     cast:        string[];
     credits:     string[];

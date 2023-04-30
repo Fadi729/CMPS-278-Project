@@ -3,6 +3,8 @@ const RouteTo = {
 	Games: "/games",
 	Books: "/books",
 	Apps: "/apps",
+	MovieDetails: "/movies/:id",
+	MovieDetailsPage: (id: string) => `/movies/${id}`,
 	AppsDetails: "/apps/:appId",
 	AppDetailsPage: (appId: string) => `/apps/${appId}`,
 };
