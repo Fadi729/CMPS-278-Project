@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 
 interface BookCoverProps {
   id: string;
-  image: string;
+  image: string | null;
   title: string;
   rating: number;
-  price: string | number;
+  price: null | number;
   // id: number | string;
 }
 
 const BookCover: React.FC<BookCoverProps> = ({ id,image, title, rating, price}) => {
-  const displayPrice = price === "Free" ? "Free" : `USD ${price}`;
+  const displayPrice = price === null ? "Free" : `USD ${price}`;
 
   return (
     <div className=' inline-block'>
@@ -19,7 +19,7 @@ const BookCover: React.FC<BookCoverProps> = ({ id,image, title, rating, price}) 
         <div className='w-44 h-80 m-1 hover:bg-[#E4E4E4] cursor-pointer relative active:bg-[#DCDCDC]'>
           <div className='absolute left-0 right-0' >
           <div className='mx-auto flex justify-center'>
-            <img src={image} alt="" />
+            <img src={image?image:"https://drupal.nypl.org/sites-drupal/default/files/blogs/J5LVHEL.jpg"} alt="" />
           </div>
           <div className='mx-auto flex ml-1 mt-2'>
             <p className='font-light text-sm'>{title}</p>

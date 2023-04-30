@@ -5,6 +5,8 @@ const ApiEndpoints = {
 
 	getBooks: `${baseUrl}/api/BooksData`,
 
+	getReviews: `${baseUrl}/api/BooksReview`,
+
 	getGames: `${baseUrl}/api/GameData`,
 
 	getApplications: `${baseUrl}/api/ApplicationData`,
