@@ -10,6 +10,8 @@ const ApiEndpoints = {
 	getApplications: `${baseUrl}/api/ApplicationData`,
 
 	login: `${baseUrl}/Auth/login`,
+
+	wishlist: `${baseUrl}/api/Wishlist`,
 };
 
 export default ApiEndpoints;
