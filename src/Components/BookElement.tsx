@@ -13,11 +13,12 @@ interface BookElementProps {
 }
 
 const BookElement: React.FC<BookElementProps> = ({ id,image, title,author,category, rating, price,index }) => {
-  const displayPrice = price === null ? "Free" : `USD ${price}`; // Conditional statement to display "Free" or "USD {price}"
+  const displayPrice = price === null || price === "" ? "Free" : `USD ${price}`;
+
 
   return (
     <div className=' inline-block'>
-      <Link to={`/book/${id}`}>
+      <Link to={`/book/${id}/`}>
       <div className='w-[360px] h-[140px] m-1 hover:bg-[#E4E4E4] cursor-pointer relative active:bg-[#DCDCDC] flex align-middle rounded-lg'>
         <div className='absolute left-0 right-0 h-full w-[72px] ml-4 mt-7 text-sm'>
             {index}

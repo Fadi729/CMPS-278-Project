@@ -28,8 +28,10 @@ const BookPage: React.FC = () => {
       price: price1,
     };});
 
-  const date = new Date(`${filteredBooks[0].publishedDate}-01`);
-  const formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+  // const date = new Date(`${filteredBooks[0].publishedDate}-01`);
+  // const formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+  const formattedDate = filteredBooks[0].publishedDate;
+
 
   const ratings = filteredReviews.reduce((sum: any, review: { reviewscore: any; }) => {
     const rating = review.reviewscore;
@@ -226,6 +228,9 @@ return (
           <p className='mt-5 text-[#5f6368] font-bold'>
            {filteredBooks[0].description}
           </p>
+          <button className="bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-full mt-5">
+          {filteredBooks[0].categories.substring(2, filteredBooks[0].categories.length - 2)}
+          </button>
 
 
           <div className='mt-10'>
@@ -259,18 +264,18 @@ return (
       </div>
 
       <div className='w-[30%] ml-10'>
-        <span className='w-full text-2xl'>More books</span>
+        <span className='w-full text-2xl'>Recommended books</span>
         <i className="material-icons hover:rounded-full hover:bg-[#F6F6F6] ml-2 cursor-pointer" style={{fontSize: '2em', color:"#5F6368"}}>chevron_right</i>
 
-      {bookList.map((book: { image: string; title: string; authors: string; categories: string[]; rating: number; price: string | number; index: React.Key | null | undefined; id: string; }, index: number) => (
+      {bookList.map((book: { image: string; title: string; authors: string; categories: string; rating: number; price: string | number; index: React.Key | null | undefined; id: string; }, index: number) => (
         <BookElement
           image={book.image}
           title={book.title}
           author={book.authors}
-          category={book.categories}
+          category={[book.categories?book.categories.substring(2, book.categories.length - 2):""]}
           rating={book.rating}
           price={book.price}
-          index={index}
+          index={index+1}
           key={index} 
           id={book.id}        
           />

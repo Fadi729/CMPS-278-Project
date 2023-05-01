@@ -1,85 +1,3 @@
-// // import React, { useEffect } from 'react'
-// // import BooksScroll from '../Components/BooksScroll';
-// // import BooksSection from '../Components/BooksSection';
-// // import { useAppDispatch, useAppSelector } from '../hooks';
-// // import { getBooksAsync } from '../features/booksSlice';
-
-
-
-
-// // const Books = () => {
-// //   const {books} = useAppSelector(state => state.Books)
-// //   const dispatch = useAppDispatch()
-// //   async function getBooksData() {
-// //    await dispatch(getBooksAsync())
-// //   }
-// //   useEffect(()=> {getBooksData()},[])
-
-  
-
-// //   return (
-// //     <>
-// //     <h1 className='text-2xl font-google relative left-16 top-24'>Top selling books</h1>
-
-// //     {books.map(book => <div key={book.id}>{book.title}</div>)}
-
-
-// //     <BooksScroll books={books} />
-// //     <BooksSection/>
-
-
-// //     </>
-    
-// //   )
-// // }
-
-// // export default Books
-
-// import React, { useEffect, useState } from 'react';
-// import BooksScroll from '../Components/BooksScroll';
-// import BooksSection from '../Components/BooksSection';
-// import { useAppDispatch, useAppSelector } from '../hooks';
-// import { getBooksAsync } from '../features/booksSlice';
-
-// const Books = () => {
-//   const { books } = useAppSelector(state => state.Books);
-//   const dispatch = useAppDispatch();
-//   const [isLoading, setIsLoading] = useState(true);
-
-//   async function getBooksData() {
-//     await dispatch(getBooksAsync());
-//     setIsLoading(false);
-//   }
-
-//   useEffect(() => {
-//     getBooksData();
-//   }, []);
-
-//   return (
-//     <>
-      
-
-//       {isLoading ? (
-//         <div className='text-2xl font-google relative left-16 top-24'>Loading...</div>
-//       ) : (
-//         <>
-//           <h1 className='text-2xl font-google relative left-16 top-24'>Top selling books</h1>
-//           {/* {books.map(book => (
-//             <div key={book.id}>{book.title}</div>
-//           ))} */}
-//           <BooksScroll books={books} />
-//           <BooksSection />
-//         </>
-//       )}
-//     </>
-//   );
-// };
-
-// export default Books;
-
-
-
-
 
 import React, { useEffect, useState } from 'react';
 import BooksScroll from '../Components/BooksScroll';
@@ -94,18 +12,55 @@ const Books = () => {
 
   async function getBooksData() {
     await dispatch(getBooksAsync());
-    
+    setIsLoading(false);
   }
 
   async function getBookReviewsData() {
     await dispatch(getBookReviewsAsync());
-    setIsLoading(false);
+    // setIsLoading(false);
   }
 
   useEffect(() => {
     getBooksData();
     getBookReviewsData();
   }, []);
+
+  //joining books and reviews
+  const bookList = books.map((book) => {
+    const bookRvws = bookReviews.filter((review) => review.book_Id === book.id);
+    const ratingSum = bookRvws.reduce((sum, review) => sum + review.reviewscore, 0);
+    const averageRating = ratingSum / bookRvws.length;
+    const price = bookRvws.length > 0 ? bookRvws[0].price : null;
+
+    return {
+      ...book,
+      rating: averageRating,
+      price: price,
+    };
+  });
+
+  // Top Selling Books
+  const topBooks = books
+    .filter(b => b.ratingsCount !== null)
+    .sort((a, b) => b.ratingsCount! - a.ratingsCount!);
+
+  //Free books
+  const freeBooks = bookList.filter(b=> b.price == null )
+
+  //Deals 
+  const dealsBooks = bookList.filter(b => b.price != null && b.price < 10);
+
+  //New releases
+  const newReleasedBooks = books.filter(b => b.publishedDate !== null)
+  .sort((a, b) => {
+    const dateA = new Date(a.publishedDate ?? '');
+    const dateB = new Date(b.publishedDate ?? '');
+    return dateB.getTime() - dateA.getTime();
+  })
+  .slice(0, 50);
+
+
+
 
   return (
     <>
@@ -115,12 +70,22 @@ const Books = () => {
         <div className='text-2xl font-google relative left-16 top-24'>Loading...</div>
       ) : (
         <>
-          <h1 className='text-2xl font-google relative left-16 top-24'>Top selling books</h1>
-          {/* {books.map(book => (
-            <div key={book.id}>{book.title}</div>
-          ))} */}
-          <BooksScroll books={books} reviews={bookReviews} />
+          <h1 className='text-2xl font-google relative left-16 top-24'>Browse books</h1>
+          <BooksScroll books={books} reviews={bookReviews} id='browse' />
+
+          <h1 className='text-2xl font-google relative left-16 top-24'>Top Selling books</h1>
+          <BooksScroll books={topBooks} reviews={bookReviews} id='topselling' />
+
           <BooksSection books={books} reviews={bookReviews}/>
+
+          <h1 className='text-2xl font-google relative left-16 top-24'>Newly Released books</h1>
+          <BooksScroll books={newReleasedBooks} reviews={bookReviews} id='new' />
+
+          <h1 className='text-2xl font-google relative left-16 top-24'>Free books</h1>
+          <BooksScroll books={freeBooks} reviews={bookReviews} id='free' />
+
+          <h1 className='text-2xl font-google relative left-16 top-24'>Deals</h1>
+          <BooksScroll books={dealsBooks} reviews={bookReviews} id='deals' />
         </>
       )}
     </>
