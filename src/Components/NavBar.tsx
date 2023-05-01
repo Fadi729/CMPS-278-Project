@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import RouteTo from "../data/Routes";
 import useNavbarContext from "../contexts/NavbarContext";
+import { useAppDispatch } from "../hooks";
+import { LoginAsync } from "../features/authSlice";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);
@@ -12,6 +14,12 @@ const NavBar = () => {
 	const [underlineBooks, setUnderlineBooks] = useState(false);
 
 	const { topValue } = useNavbarContext();
+
+	const dispatch = useAppDispatch();
+
+	const Login = (response: CredentialResponse) => {
+		dispatch(LoginAsync(response));
+	}
 
 	return (
 		<>
@@ -86,9 +94,7 @@ const NavBar = () => {
 							</div>
 						</NavLink>
 						<GoogleLogin
-							onSuccess={async (credentialResponse) => {
-								console.log(credentialResponse);
-							}}
+							onSuccess={Login}
 							onError={() => {
 								console.log("Login Failed");
 							}}
