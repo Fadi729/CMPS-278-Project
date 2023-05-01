@@ -8,6 +8,7 @@ import jwtDecode from "jwt-decode";
 export const LoginAsync = createAsyncThunk("auth/LoginAsync", async (token: CredentialResponse, thunkAPI) => {
 	try {
 		const response = await axios.post<{ accessToken: string }>(`${ApiEndpoints.login}?token=${token.credential}`);
+		localStorage.setItem("token", response.data.accessToken);
         const jwtToken = jwtDecode<User>(response.data.accessToken);
         thunkAPI.dispatch(setUser(jwtToken));
 	} catch (error) {
