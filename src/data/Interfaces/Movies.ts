@@ -1,14 +1,17 @@
 export default interface Movie {
     id:          number;
     title:       string;
+    date:        string;
     image:       string;
-    rating:      number;
-    genres:      string[];
+    rating:      string;
+    genres:      string;
     trailer:     string;
-    cast:        string[];
-    credits:     string[];
+    cast:        string;
+    credits:     string;
+    company:     string;
     description: string;
-    price:       number;
+    price:       string;
+    sales:       string;
     reviews:     Review[];
 }
 
