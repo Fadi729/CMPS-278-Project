@@ -61,12 +61,13 @@ const wishListSlice = createSlice({
 	reducers: {
 		setWishList: (state, action: PayloadAction<WishList>) => {
 			state.wishList = action.payload;
+			state.isLoading = false;
 		},
 		addItemToWishList: (state, action: PayloadAction<WishListItem>) => {
-			state.wishList.wishListItems.push(action.payload);
+			state.wishList.items.push(action.payload);
 		},
 		removeItemFromWishList: (state, action: PayloadAction<string>) => {
-			state.wishList.wishListItems = state.wishList.wishListItems.filter((item) => item.itemId !== action.payload);
+			state.wishList.items = state.wishList.items.filter((item) => item.itemId !== action.payload);
 		},
 	},
 });

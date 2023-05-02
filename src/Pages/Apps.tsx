@@ -5,8 +5,10 @@ import { Application } from "../data/Interfaces/Applications";
 import { MdChevronLeft, MdChevronRight, MdStarRate } from "react-icons/md";
 import { IconType } from "react-icons";
 import useNavbarContext from "../contexts/NavbarContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RouteTo from "../data/Routes";
+import { ItemType } from "../data/Interfaces/WishList";
+import { Game } from "../data/Interfaces/Games";
 
 export const ScrollButton = ({
 	Icon,
@@ -41,7 +43,7 @@ export const ScrollButton = ({
 	);
 };
 
-const HorizontalScroll = ({ children }: { children: ReactNode }) => {
+export const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [leftPointer, setLeftPointer] = useState(0);
@@ -83,9 +85,26 @@ const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 			<div className="flex overflow-x-auto gap-0.5 container-snap snap-x snap-mandatory" ref={containerRef}>
 				{children}
 			</div>
-			{leftPointer > 0 && isOver && <ScrollButton Icon={MdChevronLeft} direction="left" handleArrowClick={handleArrowClick} top="33" xAxis="1"/>}
-			{rightPointer < 20 && isOver && <ScrollButton Icon={MdChevronRight} direction="right" handleArrowClick={handleArrowClick} top="33" xAxis="1"/>}
+			{leftPointer > 0 && isOver && <ScrollButton Icon={MdChevronLeft} direction="left" handleArrowClick={handleArrowClick} top="33" xAxis="1" />}
+			{rightPointer < 20 && isOver && <ScrollButton Icon={MdChevronRight} direction="right" handleArrowClick={handleArrowClick} top="33" xAxis="1" />}
 		</div>
+	);
+};
+
+export const Item = ({ item, itemType }: { item: Application | Game; itemType: ItemType }) => {
+	return (
+		<Link
+			key={item.appId}
+			to={`${itemType == ItemType.Application ? RouteTo.AppDetailsPage(item.appId) : RouteTo.GameDetailsPage(item.appId)}`}
+			className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start"
+		>
+			<img src={item.icon!} className="rounded-[20%] mb-2" style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }} />
+			<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-2">{item.title}</p>
+			<div className="flex text-[#5f6368] text-sm">
+				<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{item.scoreText}</p>
+				<MdStarRate />
+			</div>
+		</Link>
 	);
 };
 
@@ -105,22 +124,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 						{filter(applications)
 							.slice(0, 20)
 							.map((app) => (
-								<div
-									key={app.appId}
-									onClick={() => toAppPage(app.appId)}
-									className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start"
-								>
-									<img
-										src={app.icon!}
-										className="rounded-[20%] mb-2"
-										style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
-									/>
-									<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-2">{app.title}</p>
-									<div className="flex text-[#5f6368] text-sm">
-										<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{app.scoreText}</p>
-										<MdStarRate />
-									</div>
-								</div>
+								<Item item={app} itemType={ItemType.Application}/>
 							))}
 					</HorizontalScroll>
 				</div>
@@ -133,15 +137,15 @@ const Apps = () => {
 	const dispatch = useAppDispatch();
 	const { applications, isLoading } = useAppSelector((state) => state.Applications);
 	const { targetRef, setTopValue, topValue } = useNavbarContext();
-	async function getApps() {
-		await dispatch(getApplicationsAsync());
-	}
+	// async function getApps() {
+	// 	await dispatch(getApplicationsAsync());
+	// }
 
-	useEffect(() => {
-		if (Object.keys(applications).length === 0) {
-			getApps();
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (Object.keys(applications).length === 0) {
+	// 		getApps();
+	// 	}
+	// }, []);
 
 	useEffect(() => {
 		const handleScroll = () => {

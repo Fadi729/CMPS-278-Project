@@ -9,7 +9,7 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 	const { wishList } = useAppSelector((state) => state.WishList);
 
 	// TODO: check if item is in wishlist 
-	const isItemInWishList = true
+	const isItemInWishList = false
 
 	const handleAddToWishList = async () => {
 		dispatch(addItemToWishListAsync(item));
