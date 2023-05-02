@@ -63,19 +63,26 @@ const Trailer=() =>{
     const [open, setOpen]=useState(false);
 	function OpenMenu(){
 		setOpen(true)
-        
+        document.getElementById("")?.style.filter!="brightness(50%)";
 	}
     function CloseMenu(){
         setOpen(false)
     }
+    
+    
+    
     return(
         <div>
             {open &&
-            <div style={{backgroundColor:'white', height:'570px',width:'750px', position:'fixed', marginLeft:'140px',zIndex:'10',marginTop:'-40px', borderRadius:'1% 1% 1% 1%',  paddingRight:'20px'}}>
+            <div style={{overflow:'scroll',  backgroundColor:'white', height:'570px',width:'750px', position:'fixed', marginLeft:'140px',zIndex:'10',marginTop:'-40px', borderRadius:'1% 1% 1% 1%',  paddingRight:'20px'}}>
                 <div style={{position:'absolute',  marginLeft:'30px', marginTop:'20px'}}>
                     <p style={{fontSize:'22px', fontWeight:'500'}}>{movie?.title}<span className="hover:bg-[#f5f5f5]" style={{float:'right', color:'grey',borderRadius:'50% 50% 50% 50%', paddingLeft:'7px',paddingRight:'7px'}} onClick={CloseMenu}>&#10005;</span></p>
                     <span style={{fontSize:'14px', color:'grey'}}>About this movie</span>
                     <p style={{color:'#706f6f', width:'700px',fontSize:'13.5px',marginTop:'25px',marginBottom:'30px',fontWeight:'500'}}>{movie?.description}</p><hr></hr>
+                </div>
+                <div style={{fontSize:'10px', marginTop:'250px'}}>
+                    <p>{movie?.cast}</p>
+                    
                 </div>
             </div>
             }

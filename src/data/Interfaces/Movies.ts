@@ -6,9 +6,9 @@ export default interface Movie {
     rating:      string;
     genres:      string;
     trailer:     string;
-    cast:        string[];
-    credits:     string[];
-    company:     string[]
+    cast:        string;
+    credits:     string;
+    company:     string;
     description: string;
     price:       string;
     sales:       string;

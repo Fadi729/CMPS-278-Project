@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./Components/NavBar";
+import Admin from "./Pages/Admin"
 import Apps from "./Pages/Apps";
 import Books from "./Pages/Books";
 import Games from "./Pages/Games";
@@ -16,6 +18,7 @@ function App() {
 		<Routes>
 			<Route path="/" element={<NavBar />}>
 				<Route index path={RouteTo.Apps} element={<Apps />} />
+				<Route index path={RouteTo.Admin} element={<Admin />} />
 				<Route path={RouteTo.AppsDetails} element={<AppDetails />} />
 				<Route path={RouteTo.Games} element={<Games />} />
 				<Route path={RouteTo.Movies} element={<Movies />} />
