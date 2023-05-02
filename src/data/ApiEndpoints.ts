@@ -10,6 +10,8 @@ const ApiEndpoints = {
 	getGames: `${baseUrl}/api/GameData`,
 
 	getApplications: `${baseUrl}/api/ApplicationData`,
+
+	history: `${baseUrl}/api/History`,
 };
 
 export default ApiEndpoints;

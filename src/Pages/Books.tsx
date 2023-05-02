@@ -76,7 +76,7 @@ const Books = () => {
           <h1 className='text-2xl font-google relative left-16 top-24'>Top Selling books</h1>
           <BooksScroll books={topBooks} reviews={bookReviews} id='topselling' />
 
-          <BooksSection books={books} reviews={bookReviews}/>
+          <BooksSection books={books} reviews={bookReviews} id='booksection1'/>
 
           <h1 className='text-2xl font-google relative left-16 top-24'>Newly Released books</h1>
           <BooksScroll books={newReleasedBooks} reviews={bookReviews} id='new' />
