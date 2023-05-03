@@ -6,6 +6,8 @@ import RouteTo from "../data/Routes";
 import useNavbarContext from "../contexts/NavbarContext";
 import {RiHeart3Fill} from 'react-icons/ri';
 import { FaSignInAlt, FaSignOutAlt,FaHistory } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { not } from "cheerio/lib/api/traversing";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);
@@ -13,19 +15,60 @@ const NavBar = () => {
 	const [underlineMovies, setUnderlineMovies] = useState(false);
 	const [underlineBooks, setUnderlineBooks] = useState(false);
 	const [open, setOpen]=useState(false);
+	const [notSearch, setNotSearch]=useState(true);
 
 	const { topValue } = useNavbarContext();
 
 	const imgRef=useRef(null);
 	const menuRef=useRef(null);
-
-	window.addEventListener("click", (e) => {
-		console.log(e.target !== menuRef.current && e.target!== imgRef.current)
-	})
+	const searchIconRef = useRef(null);
+	const navRef=useRef(null)
 	
+	
+
 	function Menu(){
 		setOpen(!open)
 	}
+	
+	function Search(){
+		setNotSearch(!notSearch)
+	}
+	var searchRef=useRef(null)
+	const navigate = useNavigate()
+	function toSearchPage(key: string): void {
+		navigate(RouteTo.SearchPage(key))
+        console.log("going to search page")
+	}
+	function handleClick(e: any){
+		if(e.key === 'Enter'){
+			if(searchRef.current){
+				toSearchPage(searchRef.current['value'])
+			}
+		}	
+	}
+
+	/**?
+	 * document.addEventListener("click",(e) => {
+		if(searchRef.current !== e.target && searchIconRef.current !== e.target){
+			setNotSearch(true)
+		}
+	})
+
+	useEffect(() => {
+		const fn = (e: any) => {
+			if(e.target !== searchRef.current){
+				setNotSearch(true)
+			}
+		}
+		if (!notSearch) {
+			window.addEventListener("click", fn)
+		}else{
+			window.removeEventListener("click", fn)
+		}
+	}, []);
+
+	 */
+
 	
 
 	return (
@@ -35,7 +78,7 @@ const NavBar = () => {
 				style={{ boxShadow:  topValue !== null && topValue! < 65 ? "0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2)": "" }}
 				id="navbar"
 			>
-				<nav className="flex w-full h-full items-center font-google bg-white">
+				<nav ref={navRef} className="flex w-full h-full items-center font-google bg-white">
 					<div className="flex mr-3 ml-7 w-[24%]" style={{marginLeft:'26px'}}>
 						<svg className="h-10 w-11 mr-2" aria-hidden="true" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
 							<path fill="none" d="M0,0h40v40H0V0z"></path>
@@ -52,6 +95,13 @@ const NavBar = () => {
 						<span className="font-medium leading-7 tracking-[0] text-[1.375rem] text-[#5f6368]  self-center" style={{width: '139px', fontSize:'22.2px', marginTop:'-1px'}}>google_logo Play</span>
 					</div>
 					<div className="flex justify-start gap-8 text-[14.5px] w-full text-[#5f6368] mt-1">
+						{ !notSearch && 
+						<div style={{position:'relative', display:'inline-block'}}>
+							<input ref={searchRef} onKeyDown={(e) => {handleClick(e)}} type='text' className='form-control' style={{marginLeft:'40px', width:'720px',height:'50px', boxShadow:'5px 5px 15px -1px grey', marginBottom:'4px', backgroundImage:'url(https://www.freepnglogos.com/uploads/search-png/search-icon-transparent-images-vector-16.png)', backgroundRepeat:'no-repeat', backgroundSize:'20px', backgroundPositionX:'15px', backgroundPositionY:'15px', paddingLeft:'50px'}} placeholder="Search"></input>
+						</div>
+						}
+						{ notSearch &&
+						<>
 						<NavLink
 							to={RouteTo.Games}
 							className={({ isActive }) => {
@@ -108,9 +158,11 @@ const NavBar = () => {
 								console.log("Login Failed");
 							}}
 						/>
+						</>
+						}
 					</div>
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
-						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdSearch size={25} color="#404144" /></div>
+						<div ref={searchIconRef} className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} onClick={Search}><MdSearch size={25} color="#404144" /></div>
 						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdHelpOutline size={25} color="#404144" /></div>
 						<div  className="hover:bg-[#f5f5f5]" style={{borderRadius:'50% 50% 50% 50%', padding:'10px'}}>
 						<img

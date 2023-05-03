@@ -8,6 +8,10 @@ module.exports = {
 			fontAlt: ["Roboto", "Helvetica", "Arial", "sans-serif"],
 		},
 		extend: {},
+		borderWidth:{
+			DEFAULT: '1px',
+			1: '1px'
+		}
 	},
 	plugins: [],
 };

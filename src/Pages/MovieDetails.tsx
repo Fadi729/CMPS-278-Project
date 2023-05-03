@@ -86,7 +86,7 @@ const Trailer=() =>{
                 </div>
             </div>
             }
-            <div style={{backgroundImage:bg, backgroundSize:'60%',backgroundPosition:'20% 20%', backgroundRepeat:'no-repeat',backgroundColor:'#242424', color:"white",margin:"-10px", width:'2000px', height:'620px',marginLeft:'-120px',marginTop:'-22px'}}>
+            <div style={{backgroundImage:bg, backgroundSize:'60%',backgroundPosition:'20% 20%', backgroundRepeat:'no-repeat',backgroundColor:'#242424', color:"white",margin:"-10px", width:'2000px', height:'620px',marginLeft:'-120px',marginTop:'-49px'}}>
                 <div style={{paddingTop:'215px',paddingLeft:'80px',display:'flex',flexDirection:'row'}}>
                     <div>
                     <img src={movie?.image.replace("._V1_SX101_CR0,0,101,150_","").replace("._V1_SY150_CR0,0,101,150_","").replace("._V1_SY150_CR2,0,101,150_","").replace("._V1_SY150_CR1,0,101,150_","").replace("._V1_SY150_SX101_","").replace("._V1_SY150_CR3,0,101,150_","")!}

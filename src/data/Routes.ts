@@ -4,6 +4,8 @@ const RouteTo = {
 	Books: "/books",
 	Apps: "/apps",
 	Admin: "/admin",
+	Search: "/search/:key",
+	SearchPage: (key: string) => `/search/${key}`,
 	MovieDetails: "/movies/:id",
 	MovieDetailsPage: (id: string) => `/movies/${id}`,
 	SimilarMovies:"/movies/details/:genre",
