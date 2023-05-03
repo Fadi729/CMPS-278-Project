@@ -16,17 +16,23 @@ import WishList from "./Pages/WishList";
 import { useAppDispatch, useAppSelector } from "./hooks";
 import { getApplicationsAsync } from "./features/applicationsSlice";
 import { getGamesAsync } from "./features/gamesSlice";
+import { getMoviesAsync } from "./features/moviesSlice";
 
 function App() {
 	const dispatch = useAppDispatch();
 	const { applications, isLoading: appIsLoading } = useAppSelector((state) => state.Applications);
 	const { games, isLoading: gameIsLoading } = useAppSelector((state) => state.Games);
+	const { movies, isLoading: movieIsLoading } = useAppSelector((state) => state.Movies);
 	async function getApps() {
 		await dispatch(getApplicationsAsync());
 	}
 
 	async function getGames() {
 		await dispatch(getGamesAsync());
+	}
+
+	async function getMovies() {
+		await dispatch(getMoviesAsync());
 	}
 
 	useEffect(() => {
@@ -36,10 +42,13 @@ function App() {
 		if (Object.keys(games).length === 0) {
 			getGames();
 		}
+		if (Object.keys(movies).length === 0) {
+			getMovies();
+		}
 	}, []);
 	return (
 		<>
-			{!appIsLoading && !gameIsLoading && (
+			{!appIsLoading && !gameIsLoading && !movieIsLoading &&(
 				<Routes>
 					<Route path="/" element={<NavBar />}>
 						<Route index path={RouteTo.Apps} element={<Apps />} />

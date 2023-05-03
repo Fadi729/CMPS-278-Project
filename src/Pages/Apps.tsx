@@ -102,7 +102,7 @@ export const Item = ({ item, itemType }: { item: Application | Game; itemType: I
 			<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-2">{item.title}</p>
 			<div className="flex text-[#5f6368] text-sm">
 				<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{item.scoreText}</p>
-				<MdStarRate />
+				<MdStarRate className="self-center"/>
 			</div>
 		</Link>
 	);
@@ -124,7 +124,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 						{filter(applications)
 							.slice(0, 20)
 							.map((app) => (
-								<Item item={app} itemType={ItemType.Application}/>
+								<Item key={app.appId} item={app} itemType={ItemType.Application}/>
 							))}
 					</HorizontalScroll>
 				</div>
@@ -135,17 +135,8 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 
 const Apps = () => {
 	const dispatch = useAppDispatch();
-	const { applications, isLoading } = useAppSelector((state) => state.Applications);
+	const { isLoading } = useAppSelector((state) => state.Applications);
 	const { targetRef, setTopValue, topValue } = useNavbarContext();
-	// async function getApps() {
-	// 	await dispatch(getApplicationsAsync());
-	// }
-
-	// useEffect(() => {
-	// 	if (Object.keys(applications).length === 0) {
-	// 		getApps();
-	// 	}
-	// }, []);
 
 	useEffect(() => {
 		const handleScroll = () => {

@@ -5,36 +5,41 @@ import { Item, HorizontalScroll } from "./Apps";
 import { getWishListAsync } from "../features/wishListSlice";
 import { Application } from "../data/Interfaces/Applications";
 import { Game } from "../data/Interfaces/Games";
+import Movie from "../data/Interfaces/Movies";
+import { MovieItem } from "./Movies";
 
 const WishListHelper = () => {
 	const { wishList, isLoading } = useAppSelector((state) => state.WishList);
 	const { applications } = useAppSelector((state) => state.Applications);
 	const { games } = useAppSelector((state) => state.Games);
 	// const { books } = useAppSelector((state) => state.Books);
-	// const { movies } = useAppSelector((state) => state.Movies);
-
-	// const appsAndGamesIds = wishList.items
-	// 	.filter((item) => item.itemType === ItemType.Application || item.itemType === ItemType.Game)
-	// 	.map((item) => item.itemId);
+	const { movies } = useAppSelector((state) => state.Movies);
 
 	const appsAndGames = [
-		// ...applications.filter((app) => appsAndGamesIds.includes(app.appId)),
-		// ...games.filter((game) => appsAndGamesIds.includes(game.appId)),
-
 		...wishList.items
 			.filter((item) => item.itemType === ItemType.Application || item.itemType === ItemType.Game)
 			.map((item) => {
 				return {
 					itemType: item.itemType,
-					item:
-						(item.itemType === ItemType.Application
-							? applications.find((app) => app.appId === item.itemId)
-							: games.find((game) => game.appId === item.itemId)) as Game | Application,
+					item: (item.itemType === ItemType.Application
+						? applications.find((app) => app.appId === item.itemId)
+						: games.find((game) => game.appId === item.itemId)) as Game | Application,
 				};
 			}),
 	];
 
-    console.log(appsAndGames)
+	const movieList = [
+		...wishList.items
+			.filter((item) => item.itemType === ItemType.Movie)
+			.map((item) => {
+				return {
+					itemType: item.itemType,
+					item: movies.find((movie) => movie.id === parseInt(item.itemId)) as Movie,
+				};
+			}),
+	]
+
+	console.log(movieList)
 
 	// const booksIds = wishList.wishListItems.filter((item) => item.itemType === ItemType.Book).map((item) => item.itemId);
 	// const bookItems = books.filter((book) => book.id in booksIds);
@@ -51,7 +56,14 @@ const WishListHelper = () => {
 					<h2 className="text-lg text-[#595a5c] font-google">Apps & Games</h2>
 					<HorizontalScroll>
 						{appsAndGames.map((item) => (
-							<Item item={item.item} itemType={item.itemType} />
+							<Item key={item.item.appId} item={item.item} itemType={item.itemType} />
+						))}
+					</HorizontalScroll>
+					
+					<h2 className="text-lg text-[#595a5c] font-google">Movies</h2>
+					<HorizontalScroll>
+						{movieList.map((movie) => (
+							<MovieItem key={movie.item.id} movieItem={movie.item} />
 						))}
 					</HorizontalScroll>
 				</div>
