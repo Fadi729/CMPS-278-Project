@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getMoviesAsync } from "../features/moviesSlice";
 import Movie from "../data/Interfaces/Movies";
@@ -8,20 +8,21 @@ import { useNavigate } from "react-router-dom";
 import useNavbarContext from "../contexts/NavbarContext";
 import RouteTo from "../data/Routes";
 import {BsCurrencyExchange} from "react-icons/bs"
+import { ItemType } from "../data/Interfaces/WishList";
 var comma = new Intl.NumberFormat();
-const ScrollButton=({
+const ScrollButton = ({
 	Icon,
 	direction,
-	handleArrowClick
-}:{
-	Icon: IconType,
-	direction: "right"|"left";
-	handleArrowClick: (distance: number) => void
+	handleArrowClick,
+}: {
+	Icon: IconType;
+	direction: "right" | "left";
+	handleArrowClick: (distance: number) => void;
 }) => {
-	const scrollAmount = direction === "right"? 800: -800;
+	const scrollAmount = direction === "right" ? 800 : -800;
 	return (
 		<button
-			style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)"}}
+			style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
 			className={`absolute top-[33%] transform -translate-y-1/2 z-10 rounded-[28px] bg-white h-14 w-14 text-gray-600 cursor-pointer ${
 				direction === "right" ? "-right-4" : "-left-4"
 			}`}
@@ -34,8 +35,8 @@ const ScrollButton=({
 	);
 };
 
-const HorizontalScroll=({children}:{children: ReactNode})=> {
-	const containerRef=useRef<HTMLDivElement>(null);
+const HorizontalScroll = ({ children }: { children: ReactNode }) => {
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [leftPointer, setLeftPointer] = useState(0);
 	const [rightPointer, setRightPointer] = useState(7);
@@ -86,47 +87,80 @@ const HorizontalScroll=({children}:{children: ReactNode})=> {
 	);
 };
 
-const Section = ({curr, section, filter}: {curr: number, section: string; filter: (arr: Movie[]) => Movie[] }) => {
-	const {movies} = useAppSelector((state) => state.Movies);
-	
-	const navigate = useNavigate()
+export const MovieItem = ({ movieItem, curr }: { movieItem: Movie, curr: number}) => {
+	const navigate = useNavigate();
 	function toMoviePage(id: string): void {
-		navigate(RouteTo.MovieDetailsPage(id))
+		navigate(RouteTo.MovieDetailsPage(id));
 	}
-	 
-
-	
-  return (
-	<>
-		{true && (
-			<div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-				<h1 className="leading-6 font-google font-small mb-4 " style={{marginLeft:'12px', fontSize:'19px', color:"#1e1e1e", fontWeight:'500'}}>{section}</h1>
-				<HorizontalScroll>
-					{filter(movies)
-						.slice(0, 20)
-						.map((app) => (
-							<div key={app.id} onClick={() => toMoviePage(''+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', marginRight:'-10px'}}>
-								<img
-									src={app.image.replace("._V1_SX101_CR0,0,101,150_","").replace("._V1_SY150_CR0,0,101,150_","").replace("._V1_SY150_CR2,0,101,150_","").replace("._V1_SY150_CR1,0,101,150_","").replace("._V1_SY150_SX101_","").replace("._V1_SY150_CR3,0,101,150_","")!}
-									className="rounded-[1%] mb-2"
-									style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)", height: '247px', width:'500px' }}
-								/>
-								<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-0.8 mt-3" style={{color:'#2e2e2e'}}>{app.title}</p>
-								<div className="flex text-[#5f6368] text-sm">
-									<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{curr===1? "$ "+comma.format(parseInt(app.price)*curr):"LBP "+comma.format(parseInt(app.price)*curr)}</p>
-								</div>
-							</div>
-						))}
-				</HorizontalScroll>
+	return (
+		<div
+			onClick={() => toMoviePage("" + movieItem.id)}
+			className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start"
+			style={{ width: "196.7px", marginRight: "-10px" }}
+		>
+			<img
+				src={
+					movieItem.image
+						.replace("._V1_SX101_CR0,0,101,150_", "")
+						.replace("._V1_SY150_CR0,0,101,150_", "")
+						.replace("._V1_SY150_CR2,0,101,150_", "")
+						.replace("._V1_SY150_CR1,0,101,150_", "")
+						.replace("._V1_SY150_SX101_", "")
+						.replace("._V1_SY150_CR3,0,101,150_", "")!
+				}
+				className="rounded-[1%] mb-2"
+				style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)", height: "247px", width: "500px" }}
+			/>
+			<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-0.8 mt-3" style={{ color: "#2e2e2e" }}>
+				{movieItem.title}
+			</p>
+			<div className="flex text-[#5f6368] text-sm">
+				<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{curr===1? "$ "+comma.format(parseInt(movieItem.price)*curr):"LBP "+comma.format(parseInt(movieItem.price)*curr)}</p>
 			</div>
-		)}
-	</>
-  );
+		</div>
+	);
+};
+
+const Section = ({ curr ,section, filter }: { curr: number, section: string; filter: (arr: Movie[]) => Movie[] }) => {
+	const { movies } = useAppSelector((state) => state.Movies);
+
+	return (
+		<>
+			{true && (
+				<div className="mb-7" style={{ width: "1160px", marginLeft: "-76px", paddingRight: "-30px" }}>
+					<h1
+						className="leading-6 font-google font-small mb-4 "
+						style={{ marginLeft: "12px", fontSize: "19px", color: "#1e1e1e", fontWeight: "500" }}
+					>
+						{section}
+					</h1>
+					<HorizontalScroll>
+						{filter(movies)
+							.slice(0, 20)
+							.map((movie) => (
+								// <div key={app.id} onClick={() => toMoviePage(''+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', marginRight:'-10px'}}>
+								// 	<img
+								// 		src={app.image.replace("._V1_SX101_CR0,0,101,150_","").replace("._V1_SY150_CR0,0,101,150_","").replace("._V1_SY150_CR2,0,101,150_","").replace("._V1_SY150_CR1,0,101,150_","").replace("._V1_SY150_SX101_","").replace("._V1_SY150_CR3,0,101,150_","")!}
+								// 		className="rounded-[1%] mb-2"
+								// 		style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)", height: '247px', width:'500px' }}
+								// 	/>
+								// 	<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-0.8 mt-3" style={{color:'#2e2e2e'}}>{app.title}</p>
+								// 	<div className="flex text-[#5f6368] text-sm">
+								// 		<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{"LBP "+comma.format(parseInt(app.price)*10000)}</p>
+								// 	</div>
+								// </div>
+								<MovieItem curr={curr} key={movie.id} movieItem={movie} />
+							))}
+					</HorizontalScroll>
+				</div>
+			)}
+		</>
+	);
 };
 
 const Movies = () => {
 	const dispatch = useAppDispatch();
-	const { movies} = useAppSelector((state) => state.Movies);
+	const { movies } = useAppSelector((state) => state.Movies);
 	const { targetRef, setTopValue, topValue } = useNavbarContext();
 	async function getMovies() {
 		await dispatch(getMoviesAsync());

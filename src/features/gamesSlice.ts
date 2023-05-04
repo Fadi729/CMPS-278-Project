@@ -15,10 +15,12 @@ export const getGamesAsync = createAsyncThunk("games/getGamesAsync", async (_, t
 
 interface State {
 	games: Game[];
+	isLoading: boolean;
 }
 
 const initialState: State = {
 	games: [] as Game[],
+	isLoading: true,
 };
 
 const gamesSlice = createSlice({
@@ -27,6 +29,7 @@ const gamesSlice = createSlice({
 	reducers: {
 		setGames: (state, action: PayloadAction<Game[]>) => {
 			state.games = action.payload;
+			state.isLoading = false;
 		},
 	},
 });

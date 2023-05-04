@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import useNavbarContext from "../contexts/NavbarContext";
 import RouteTo from "../data/Routes";
 import ReactStars from 'react-stars';
+import AddToWishListButton from "../Components/WishListButton";
+import { ItemType } from "../data/Interfaces/WishList";
 var comma = new Intl.NumberFormat();
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
@@ -191,10 +193,12 @@ const Trailer=() =>{
                     <p style={{fontSize:'14px', fontWeight:'bold', color:'#dedcdc', display:'block'}}>{parseFloat(movie?.rating+'')/2} &#9733;</p>
                     <p style={{color:'#adacac', fontSize:'13px'}}>{(parseInt(movie?.sales+'')/1000).toFixed(1)+"K reviews"}</p>
                 </div>
-                <div style={{marginLeft:'80px', marginTop:'45px', display:'flex',flexDirection:'row'}} >
+                <div style={{marginLeft:'80px', marginTop:'45px', display:'flex',flexDirection:'row', gap:"0.5rem"}} >
                     <div id="btn1" onMouseOver={changeBackground} onMouseOut={changeBackgroundBack} style={{backgroundColor:'#e33659', padding:'9px 30px 9px 40px', width:'fit-content', borderRadius:'10px 10px 10px 10px', color:'black', fontWeight:'500'}}>{"LBP "+comma.format(parseInt(movie?.price!)*10000)+" Buy"}</div>
-                    <div onMouseOver={changeBackground1} onMouseOut={changeBackgroundBack1} style={{marginLeft:'10px', backgroundColor:'transparent',color:'#e33659',padding:'9px 20px 9px 20px', width:'fit-content',borderRadius:'5px 5px 5px 5px', fontWeight:'500'}}>Add to wishlist</div>
+                    <AddToWishListButton  item={{itemId: movie?.id.toString()!, itemType: ItemType.Movie}}/>
                     <div style={{color:'white', marginLeft:'600px',fontWeight:'500', background:'#232423', borderRadius:'35% 35% 35% 35%', padding:'10px 30px 10px 30px'}} onClick={handleShowTrailer}>Trailer</div>
+                    {/* <div onMouseOver={changeBackground1} onMouseOut={changeBackgroundBack1} style={{marginLeft:'10px', backgroundColor:'transparent',color:'#e33659',padding:'9px 20px 9px 20px', width:'fit-content',borderRadius:'5px 5px 5px 5px', fontWeight:'500'}}>Add to wishlist</div> */}
+                    {/* <div onMouseOver={changeBackground1} onMouseOut={changeBackgroundBack1} style={{marginLeft:'10px', backgroundColor:'transparent',color:'#e33659',padding:'9px 20px 9px 20px', width:'fit-content',borderRadius:'5px 5px 5px 5px', fontWeight:'500'}}>Add to wishlist</div> */}
                 </div>
                 <div style={{margin:'30px 30px 60px 80px', paddingBottom:'40px'}}><p style={{color:'#adacac', fontSize:'15px'}}><span style={{border:'2px solid #adacac', borderRadius:'50% 50% 50% 50%', fontSize:'10px', fontWeight:'500'}}>&nbsp; i &nbsp;</span>&nbsp; &nbsp;Watch in a web browser or on supported devices. <span style={{fontWeight:'bold',color:'#e33659'}}>Learn More.</span></p></div>
             </div>

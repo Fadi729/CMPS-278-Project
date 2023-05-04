@@ -1,7 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
 
 @font-face {
 	font-family: "Product Sans";
@@ -12,6 +9,7 @@
 	font-family: "Product Sans Bold";
 	src: url("fonts/Product Sans Bold.ttf") format("truetype");
 }
+
 
 @tailwind base;
 @tailwind components;
