@@ -90,7 +90,7 @@ const Trailer=() =>{
     
     const temp="http://www.imdb.com/video/imdb/vi3712337177/imdb/embed?autoplay=false&width=320"
     const oldAdd=temp.split("/imdb/")[1]
-    const newAdd=movie.trailer.split("/videoplayer/")[1]
+    const newAdd=movie?.trailer.split("/videoplayer/")[1]+''
     console.log(newAdd)
     console.log("printed")
 
@@ -99,7 +99,7 @@ const Trailer=() =>{
             {showReviews && 
                 <Modal  show={showReviews} onHide={handleCloseReviews}> 
                     <Modal.Header style={{width:'700px', background:'white', marginRight:'600px', marginLeft:'-100px'}}>
-                    <Modal.Title>{movie.title}<br></br><span style={{fontSize:'14px', color:'grey'}}>Ratings and reviews</span></Modal.Title>
+                    <Modal.Title>{movie?.title}<br></br><span style={{fontSize:'14px', color:'grey'}}>Ratings and reviews</span></Modal.Title>
                     </Modal.Header>
                     <Modal.Body style={{background:'white', height:'400px', overflow:'auto', width:'700px', marginRight:'400px', marginLeft:'-100px'}}>
                     {reviews
@@ -134,15 +134,15 @@ const Trailer=() =>{
             {show &&
                 <Modal show={show} onHide={handleClose} >
                         <Modal.Header closeButton style={{width:'700px', background:'white', marginRight:'600px', marginLeft:'-100px'}}>
-                        <Modal.Title>{movie.title}<br></br><span style={{fontSize:'14px', color:'grey'}}>About this movie</span></Modal.Title>
+                        <Modal.Title>{movie?.title}<br></br><span style={{fontSize:'14px', color:'grey'}}>About this movie</span></Modal.Title>
                         </Modal.Header>
                         <Modal.Body style={{background:'white', height:'400px', overflow:'auto', width:'700px', marginRight:'400px', marginLeft:'-100px'}}>
-                        <Row style={{fontSize:'15px', padding:'10px', color:'grey', marginBottom:'20px'}}>{movie.description}</Row>
+                        <Row style={{fontSize:'15px', padding:'10px', color:'grey', marginBottom:'20px'}}>{movie?.description}</Row>
                         <h2 style={{fontWeight:'500', marginBottom:'15px'}}>Cast & credits</h2>
                         <h3 style={{fontWeight:'500', marginBottom:'5px'}}>Actors</h3>
-                        <p style={{fontSize:'12px', color:'grey', marginBottom:'20px'}}>{movie.cast.replaceAll("', '"," , ").replaceAll("['"," ").replaceAll("']",'')}</p>
+                        <p style={{fontSize:'12px', color:'grey', marginBottom:'20px'}}>{movie?.cast.replaceAll("', '"," , ").replaceAll("['"," ").replaceAll("']",'')}</p>
                         <h3 style={{fontWeight:'500', marginBottom:'5px'}}>Credits</h3>
-                        {movie.credits.split("'], '").map((e) => {
+                        {movie?.credits.split("'], '").map((e) => {
                             return (
                                 <div style={{marginBottom:'10px', fontSize:'12px', color:'grey'}}>{e.replaceAll("', '"," , ").replaceAll("'","").replaceAll("[","").replaceAll("}","").replaceAll("{","").replaceAll("]","")}</div>
                             )
@@ -167,8 +167,8 @@ const Trailer=() =>{
                     </div>
                 </div>
                 <div style={{marginLeft:'90px', marginTop:'25px'}}>
-                    <p style={{fontSize:'14px', fontWeight:'bold', color:'#dedcdc', display:'block'}}>{parseFloat(movie?.rating)/2} &#9733;</p>
-                    <p style={{color:'#adacac', fontSize:'13px'}}>{(parseInt(movie.sales)/1000).toFixed(1)+"K reviews"}</p>
+                    <p style={{fontSize:'14px', fontWeight:'bold', color:'#dedcdc', display:'block'}}>{parseFloat(movie?.rating+'')/2} &#9733;</p>
+                    <p style={{color:'#adacac', fontSize:'13px'}}>{(parseInt(movie?.sales+'')/1000).toFixed(1)+"K reviews"}</p>
                 </div>
                 <div style={{marginLeft:'80px', marginTop:'45px', display:'flex',flexDirection:'row'}} >
                     <div id="btn1" onMouseOver={changeBackground} onMouseOut={changeBackgroundBack} style={{backgroundColor:'#e33659', padding:'9px 30px 9px 40px', width:'fit-content', borderRadius:'10px 10px 10px 10px', color:'black', fontWeight:'500'}}>{"LBP "+comma.format(parseInt(movie?.price!)*10000)+" Buy"}</div>
