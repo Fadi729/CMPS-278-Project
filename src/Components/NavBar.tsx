@@ -104,9 +104,6 @@ const NavBar = () => {
 					</div>
 				</nav>
 			</header>
-			<div className="relative px-28 pt-5">
-				<Outlet />
-			</div>
 		</>
 	);
 };

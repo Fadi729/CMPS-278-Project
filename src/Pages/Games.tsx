@@ -4,6 +4,9 @@ import { Game } from "../data/Interfaces/Games";
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { IconType } from "react-icons";
 import { MdChevronLeft, MdChevronRight, MdStarRate } from "react-icons/md";
+import useNavbarContext from "../contexts/NavbarContext";
+import { useNavigate } from "react-router-dom";
+import RouteTo from "../data/Routes";
 
 const ScrollButton = ({
 	Icon,
@@ -14,7 +17,7 @@ const ScrollButton = ({
 	direction: "right" | "left";
 	handleArrowClick: (distance: number) => void;
 }) => {
-	const scrollAmount = direction === "right" ? 800 : -800;
+	const scrollAmount = direction === "right" ? 1146 : -1146;
 
 	return (
 		<button
@@ -81,6 +84,10 @@ const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 
 const Section = ({section, filter} : {section: string; filter: (arr: Game[]) => Game[] }) => {
   const {games, isLoading} = useAppSelector((state) => state.Games);
+  const navigate = useNavigate();
+  function toGamePage(appId: string): void {
+	  navigate(RouteTo.GameDetailsPage(appId));
+  }
 
   return (
 		<div className="mb-2">
@@ -95,8 +102,10 @@ const Section = ({section, filter} : {section: string; filter: (arr: Game[]) => 
 								<>
 									{console.log(section, app)}
 									
-									<div key={app.appId} className="shrink-0 p-3 w-96 hover:bg-[#f5f5f5] rounded-lg">
-										<div className=" max-w-sm rounded-md mb-2">
+									<div key={app.appId} 
+									onClick={() => toGamePage(app.appId)}
+									className="shrink-0 p-3 w-96 hover:bg-[#f5f5f5] rounded-lg">
+										<div className=" max-w-sm max-h-44 rounded-md mb-2">
 											{app.video ? (
 											<>
 											<img
@@ -107,7 +116,7 @@ const Section = ({section, filter} : {section: string; filter: (arr: Game[]) => 
 												className="rounded-[5%]"/>
 											</>):(<>
 											<img
-												src={app.screenshots![0]}
+												src={app.headerImage!}
 												className="rounded-[5%]"/>
 											</>)}
 										
