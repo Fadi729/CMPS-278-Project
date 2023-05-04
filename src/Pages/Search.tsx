@@ -101,7 +101,7 @@ const Search = () => {
             return list
         }
     }
-    
+
     return(
         <>
         <div style={{display:'flex', flexDirection:'row', marginTop:'42px', marginLeft:'-40px'}}>
@@ -112,7 +112,7 @@ const Search = () => {
         { movie &&
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
                 {movies.filter((movie: any)=> {
-                    movie.title.toLowerCase()+''.includes(key?.toLowerCase()+'')
+                    (movie.title+movie.genres+movie.description).toLowerCase()+''.includes(key?.toLowerCase()+'')
                 })
                     .map((app: any) => (
                         <div key={app.id} onClick={() => toMoviePage(""+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>
@@ -132,8 +132,7 @@ const Search = () => {
         { appGame && 
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
             {appsGames.filter((app)=>{
-                app.title?.toLowerCase().includes(key?.toLowerCase()+'')
-                app.genre?.toLowerCase().includes(key?.toLowerCase()+'')
+                (app.title+app.genre!+app.description).toLowerCase().includes(key?.toLowerCase()+'')
             })
                 .map((app) => (
                     <div
@@ -159,8 +158,7 @@ const Search = () => {
         { book && 
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
             {books.filter((book)=>{
-                book.title.toLowerCase().includes(key?.toLowerCase()+'')
-                book.categories?.toLowerCase().includes(key?.toLowerCase()+'')
+                (book.title+book.description+book.categories).toLowerCase().includes(key?.toLowerCase()+'')
             })
                 .map((book) => (
                     <div key={book.id} onClick={() => toMoviePage(""+book.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>

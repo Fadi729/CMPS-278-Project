@@ -18,6 +18,8 @@ const Admin = () => {
     const {books} = useAppSelector((state) => state.Books);
     const {applications} = useAppSelector((state) => state.Applications);
     const {games} = useAppSelector((state) => state.Games);
+    
+
 
     const navigate=useNavigate();
     const dispatch = useAppDispatch();
@@ -100,12 +102,28 @@ const Admin = () => {
                     <Container>
                         <Row>
                             <Col>
-                            <input type='text' className='form-control' placeholder="Enter ID" value={id} onChange={(e) => setId(e.target.value)}></input>
+                            <input type='text' className='form-control' placeholder="ID" value={id} onChange={(e) => setId(e.target.value)}></input>
                             </Col>
                             <Col>
-                            <input type='text' className='form-control' placeholder="Enter Title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                            <input type='text' className='form-control' placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
                             </Col><Col>
-                            <input type='text' className='form-control' placeholder="Enter Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
+                            </Col><Col>
+                            <input type='text' className='form-control' placeholder="Rating" value={rating} onChange={(e) => handleEdit(e)}></input>
                             </Col>
                             <Col>
                             <button className="btn btn-primary">Submit</button>
@@ -175,12 +193,12 @@ const Admin = () => {
                         <Modal.Body>
                             <Row>
                                 <Col>
-                                <input type='text' className='form-control' placeholder="Enter ID" value={editID} onChange={(e) => setId(e.target.value)}></input>
+                                <input type='text' className='form-control' placeholder="ID" value={editID} onChange={(e) => setId(e.target.value)}></input>
                                 </Col>
                                 <Col>
-                                <input type='text' className='form-control' placeholder="Enter Title" value={editTitle} onChange={(e) => setTitle(e.target.value)}></input>
+                                <input type='text' className='form-control' placeholder="Title" value={editTitle} onChange={(e) => setTitle(e.target.value)}></input>
                                 </Col><Col>
-                                <input type='text' className='form-control' placeholder="Enter Rating" value={editRating} onChange={(e) => setRating(e.target.value)}></input>
+                                <input type='text' className='form-control' placeholder="Rating" value={editRating} onChange={(e) => setRating(e.target.value)}></input>
                                 </Col>
                             </Row>
                         </Modal.Body>
