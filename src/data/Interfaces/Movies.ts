@@ -12,7 +12,7 @@ export default interface Movie {
     description: string;
     price:       string;
     sales:       string;
-    reviews:     Review[];
+    reviews:     string;
 }
 
 interface Review {

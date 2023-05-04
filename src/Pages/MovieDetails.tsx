@@ -1,31 +1,30 @@
-import React, {ReactNode, useEffect, useRef, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getMoviesAsync } from "../features/moviesSlice";
 import Movie from "../data/Interfaces/Movies";
 import { useParams } from "react-router-dom";
-import { CiMenuKebab } from "react-icons/ci";
-import { MdStarRate } from "react-icons/md";
+import { GoReport } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import useNavbarContext from "../contexts/NavbarContext";
 import RouteTo from "../data/Routes";
 import ReactStars from 'react-stars';
 var comma = new Intl.NumberFormat();
-import { contains } from "cheerio/lib/static";
 import Modal from 'react-bootstrap/Modal';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
+import { BsCursor } from "react-icons/bs";
+
 
 const Trailer=() =>{
     const dispatch = useAppDispatch();
     const { id } = useParams<{ id: string }>();
     const currID=id
+
     const { movies } = useAppSelector((state) => state.Movies);
-    const { targetRef, setTopValue, topValue } = useNavbarContext();
-    console.log(reviews)
     
+    
+    const { targetRef, setTopValue, topValue } = useNavbarContext();
+    
+
 	async function getMovies() {
 		await dispatch(getMoviesAsync());
 	}
@@ -86,28 +85,33 @@ const Trailer=() =>{
     const handleCloseReviews = () => setShowReviews(false);
     const handleShowReviews = () => setShowReviews(true);
     
+    const [flagged, setFlagged]=useState('black')
 
-    
     const temp="http://www.imdb.com/video/imdb/vi3712337177/imdb/embed?autoplay=false&width=320"
     const oldAdd=temp.split("/imdb/")[1]
     const newAdd=movie?.trailer.split("/videoplayer/")[1]+''
     console.log(newAdd)
     console.log("printed")
 
+    function handleHelpful(elt: any){
+        elt.style.color='red'
+    }
+
     return(
         <div>
             {showReviews && 
                 <Modal  show={showReviews} onHide={handleCloseReviews}> 
-                    <Modal.Header style={{width:'700px', background:'white', marginRight:'600px', marginLeft:'-100px'}}>
+                    <Modal.Header style={{width:'750px', background:'white', marginRight:'600px', marginLeft:'-100px'}}>
                     <Modal.Title>{movie?.title}<br></br><span style={{fontSize:'14px', color:'grey'}}>Ratings and reviews</span></Modal.Title>
                     </Modal.Header>
-                    <Modal.Body style={{background:'white', height:'400px', overflow:'auto', width:'700px', marginRight:'400px', marginLeft:'-100px'}}>
+                    <Modal.Body style={{background:'white', height:'400px', overflow:'auto', width:'750px', marginRight:'400px', marginLeft:'-100px'}}>
                     {reviews
-						.map((review: any) => (
+						.map((review: any, index: number) => (
 							<div key={review['content']} className="shrink-0 p-3 w-40 h-fit rounded-lg snap-start" >
                                 <div style={{display:'flex', flexDirection:'row'}}>
                                     <img src='https://wpuploads.appadvice.com/wp-content/uploads/2014/10/facebookanon.jpg' style={{width:'35px',height:'35px', borderRadius:'50% 50% 50% 50%'}}></img>
                                     <div className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt" style={{marginTop:'10px', marginLeft:'20px'}}>{review['author']}</div>
+                                    <div className="hover:bg-[#f2f2f2]" style={{marginLeft:'500px', marginTop:'10px', borderRadius:'50% 50% 50% 50%', padding:'10px 10px 10px 10px'}}><GoReport onClick={()=>{flagged=='black'? setFlagged('red'):setFlagged('black')}} id='report' color={flagged}></GoReport></div>
                                 </div>
                                 <div style={{display:'flex', flexDirection:'row'}}> 
                                     <div style={{minWidth:'90px'}}><ReactStars edit={false} count={5} value={review['rating']/2!} size={15} color2={'#e33659'}/></div>
@@ -115,7 +119,24 @@ const Trailer=() =>{
                                 </div>
                                 <div style={{minWidth:'600px'}}>
                                     <p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-0.8 mt-3" style={{color:'#706f6f'}}>{review['content']}</p>
-                                    <p style={{marginTop:'10px', fontSize:'12.5px', color:'#706f6f'}}>{review['helpful']+" people found this review helpful."}</p>
+                                    <p style={{marginTop:'10px', fontSize:'12.5px', color:'#706f6f', marginBottom:'10px'}}>{review['helpful']+" people found this review helpful."}</p>
+                                    <span style={{marginTop:'10px', fontSize:'12.5px', color:'#706f6f'}}>Did you find this helpful?</span>
+                                    <span id={"Yes"+index} onClick={()=>{
+                                        document.getElementById("Yes"+index)!.style.backgroundColor='#f7ddd5'
+                                        document.getElementById("Yes"+index)!.style.color='#c71c56'
+                                        document.getElementById("Yes"+index)!.style.border='none'
+                                        document.getElementById("No"+index)!.style.backgroundColor='transparent'
+                                        document.getElementById("No"+index)!.style.color='#706f6f'
+                                        document.getElementById("No"+index)!.style.border='1px solid #d1cfcf'
+                                        }} style={{display:'inline', fontSize:'12.5px', color:'#706f6f', marginLeft:'15px', borderRadius:'20px 20px 20px 20px', paddingLeft:'10px', paddingRight:'10px', border:'1px solid #d1cfcf', cursor:'pointer'}}>Yes</span>
+                                    <span id={"No"+index} onClick={()=>{
+                                            document.getElementById("No"+index)!.style.backgroundColor='#f7ddd5'
+                                            document.getElementById("No"+index)!.style.color='#c71c56'
+                                            document.getElementById("No"+index)!.style.border='none'
+                                            document.getElementById("Yes"+index)!.style.backgroundColor='transparent'
+                                            document.getElementById("Yes"+index)!.style.color='#706f6f'
+                                            document.getElementById("Yes"+index)!.style.border='1px solid #d1cfcf'
+                                    }} style={{display:'inline', fontSize:'12.5px', color:'#706f6f', marginLeft:'15px',borderRadius:'20px 20px 20px 20px', paddingLeft:'10px', paddingRight:'10px', border:'1px solid #d1cfcf',cursor:'pointer'}}>No</span>
                                 </div>
 							</div>
 						))}
@@ -188,12 +209,12 @@ const Trailer=() =>{
                         <h1 style={{fontSize:'23px',fontWeight:'500', color:'#2e2e2e'}}>Ratings and reviews <span onMouseOver={changeBackground2} onMouseOut={changeBackgroundBack1} style={{color:'grey', borderRadius:'50% 50% 50% 50%', padding:'8px 15px 10px 15px'}} onClick={handleShowReviews}>&#8594;</span></h1>
                         {reviews
 						.slice(0, 5)
-						.map((review: any) => (
+						.map((review: any, index: number) => (
 							<div key={review['content']} className="shrink-0 p-3 w-40 h-fit rounded-lg snap-start" >
                                 <div style={{display:'flex', flexDirection:'row'}}>
                                     <img src='https://wpuploads.appadvice.com/wp-content/uploads/2014/10/facebookanon.jpg' style={{width:'35px',height:'35px', borderRadius:'50% 50% 50% 50%'}}></img>
                                     <div className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt" style={{marginTop:'10px', marginLeft:'20px'}}>{review['author']}</div>
-                                    <div className="hover:bg-[#f2f2f2]" style={{marginLeft:'500px', marginTop:'10px', borderRadius:'50% 50% 50% 50%', padding:'10px 10px 10px 10px'}}><CiMenuKebab></CiMenuKebab></div>
+                                    <div className="hover:bg-[#f2f2f2]" style={{marginLeft:'500px', marginTop:'10px', borderRadius:'50% 50% 50% 50%', padding:'10px 10px 10px 10px'}}><GoReport onClick={()=>{flagged=='black'? setFlagged('red'):setFlagged('black')}} id='report' color={flagged}></GoReport></div>
                                 </div>
                                 <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}> 
                                     <div style={{minWidth:'70px'}}><ReactStars edit={false} count={5} value={review['rating']/2!} size={15} color2={'#e33659'}/></div>
@@ -203,8 +224,22 @@ const Trailer=() =>{
                                     <p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-0.8 mt-3" style={{color:'#706f6f'}}>{review['content']}</p>
                                     <p style={{marginTop:'10px', fontSize:'12.5px', color:'#706f6f', marginBottom:'10px'}}>{review['helpful']+" people found this review helpful."}</p>
                                     <span style={{marginTop:'10px', fontSize:'12.5px', color:'#706f6f'}}>Did you find this helpful?</span>
-                                    <span style={{display:'inline', fontSize:'12.5px', color:'#706f6f', marginLeft:'15px', borderRadius:'20px 20px 20px 20px', paddingLeft:'10px', paddingRight:'10px', border:'1px solid #d1cfcf'}}>Yes</span>
-                                    <span style={{display:'inline', fontSize:'12.5px', color:'#706f6f', marginLeft:'15px',borderRadius:'20px 20px 20px 20px', paddingLeft:'10px', paddingRight:'10px', border:'1px solid #d1cfcf'}}>No</span>
+                                    <span id={"yes"+index} onClick={()=>{
+                                        document.getElementById("yes"+index)!.style.backgroundColor='#f7ddd5'
+                                        document.getElementById("yes"+index)!.style.color='#c71c56'
+                                        document.getElementById("yes"+index)!.style.border='none'
+                                        document.getElementById("no"+index)!.style.backgroundColor='transparent'
+                                        document.getElementById("no"+index)!.style.color='#706f6f'
+                                        document.getElementById("no"+index)!.style.border='1px solid #d1cfcf'
+                                        }} style={{display:'inline', fontSize:'12.5px', color:'#706f6f', marginLeft:'15px', borderRadius:'20px 20px 20px 20px', paddingLeft:'10px', paddingRight:'10px', border:'1px solid #d1cfcf', cursor:'pointer'}}>Yes</span>
+                                    <span id={"no"+index} onClick={()=>{
+                                            document.getElementById("no"+index)!.style.backgroundColor='#f7ddd5'
+                                            document.getElementById("no"+index)!.style.color='#c71c56'
+                                            document.getElementById("no"+index)!.style.border='none'
+                                            document.getElementById("yes"+index)!.style.backgroundColor='transparent'
+                                            document.getElementById("yes"+index)!.style.color='#706f6f'
+                                            document.getElementById("yes"+index)!.style.border='1px solid #d1cfcf'
+                                    }} style={{display:'inline', fontSize:'12.5px', color:'#706f6f', marginLeft:'15px',borderRadius:'20px 20px 20px 20px', paddingLeft:'10px', paddingRight:'10px', border:'1px solid #d1cfcf',cursor:'pointer'}}>No</span>
                                 </div>
 							</div>
 						))}
