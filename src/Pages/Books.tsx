@@ -12,12 +12,12 @@ const Books = () => {
 
   async function getBooksData() {
     await dispatch(getBooksAsync());
-    setIsLoading(false);
+    
   }
 
   async function getBookReviewsData() {
     await dispatch(getBookReviewsAsync());
-    // setIsLoading(false);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Books = () => {
     getBookReviewsData();
   }, []);
 
-  //joining books and reviews
+  //joining books and reviews (USD)
   const bookList = books.map((book) => {
     const bookRvws = bookReviews.filter((review) => review.book_Id === book.id);
     const ratingSum = bookRvws.reduce((sum, review) => sum + review.reviewscore, 0);
@@ -39,10 +39,27 @@ const Books = () => {
     };
   });
 
+    //joining books and reviews (LBP)
+    const bookListLBP = books.map((book) => {
+      const bookRvws = bookReviews.filter((review) => review.book_Id === book.id);
+      const ratingSum = bookRvws.reduce((sum, review) => sum + review.reviewscore, 0);
+      const averageRating = ratingSum / bookRvws.length;
+      const price = bookRvws.length > 0 ? (bookRvws[0].price? bookRvws[0].price*100000:null) : null;
+  
+      return {
+        ...book,
+        rating: averageRating,
+        price: price,
+      };
+    });
+
+  
+
   // Top Selling Books
   const topBooks = books
     .filter(b => b.ratingsCount !== null)
     .sort((a, b) => b.ratingsCount! - a.ratingsCount!);
+
 
   //Free books
   const freeBooks = bookList.filter(b=> b.price == null )
