@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./Components/NavBar";
 import Admin from "./Pages/Admin";
@@ -73,8 +73,9 @@ function App() {
 			{!appIsLoading && !gameIsLoading && !movieIsLoading &&(
 				<Routes>
 					<Route path="/" element={<NavBar />}>
-						<Route index path={RouteTo.Apps} element={<Apps />} />
-						<Route index path={RouteTo.Admin} element={<Admin />} />
+						<Route index element={<Navigate to={RouteTo.Apps} />} />
+						<Route path={RouteTo.Apps} element={<Apps />} />
+						<Route path={RouteTo.Admin} element={<Admin />} />
 						<Route path={RouteTo.AppsDetails} element={<AppDetails />} />
 						<Route path={RouteTo.Games} element={<Games />} />
 						<Route path={RouteTo.Movies} element={<Movies />} />

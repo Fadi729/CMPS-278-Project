@@ -110,10 +110,6 @@ export const Item = ({ item, itemType }: { item: Application | Game; itemType: I
 
 const Section = ({ section, filter }: { section: string; filter: (arr: Application[]) => Application[] }) => {
 	const { applications, isLoading } = useAppSelector((state) => state.Applications);
-	const navigate = useNavigate();
-	function toAppPage(appId: string): void {
-		navigate(RouteTo.AppDetailsPage(appId));
-	}
 
 	return (
 		<>
@@ -135,7 +131,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Applicati
 
 const Apps = () => {
 	const dispatch = useAppDispatch();
-	const { isLoading } = useAppSelector((state) => state.Applications);
+	const { applications, isLoading } = useAppSelector((state) => state.Applications);
 	const { targetRef, setTopValue, topValue } = useNavbarContext();
 
 	useEffect(() => {
@@ -152,7 +148,7 @@ const Apps = () => {
 
 	return (
 		<>
-			{!isLoading && (
+			{!isLoading && Object.keys(applications).length !== 0 &&(
 				<div ref={targetRef} className="relative top-16">
 					<Section
 						section="Top Selling"
