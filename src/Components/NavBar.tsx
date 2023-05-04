@@ -46,6 +46,8 @@ const NavBar = () => {
 		}	
 	}
 
+
+
 	/**?
 	 * document.addEventListener("click",(e) => {
 		if(searchRef.current !== e.target && searchIconRef.current !== e.target){

@@ -7,6 +7,7 @@ import { IconType } from "react-icons";
 import { useNavigate } from "react-router-dom";
 import useNavbarContext from "../contexts/NavbarContext";
 import RouteTo from "../data/Routes";
+import {BsCurrencyExchange} from "react-icons/bs"
 var comma = new Intl.NumberFormat();
 const ScrollButton=({
 	Icon,
@@ -56,6 +57,10 @@ const HorizontalScroll=({children}:{children: ReactNode})=> {
 		}
 	};
 
+	
+
+	
+
 	return (
 		<div className="relative" onMouseEnter={() => setIsOver(true)} onMouseLeave={() => setIsOver(false)}>
 			<style>
@@ -81,12 +86,15 @@ const HorizontalScroll=({children}:{children: ReactNode})=> {
 	);
 };
 
-const Section = ({ section, filter }: { section: string; filter: (arr: Movie[]) => Movie[] }) => {
+const Section = ({curr, section, filter}: {curr: number, section: string; filter: (arr: Movie[]) => Movie[] }) => {
 	const {movies} = useAppSelector((state) => state.Movies);
+	
 	const navigate = useNavigate()
 	function toMoviePage(id: string): void {
 		navigate(RouteTo.MovieDetailsPage(id))
 	}
+	 
+
 	
   return (
 	<>
@@ -105,7 +113,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Movie[]) 
 								/>
 								<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt mb-0.8 mt-3" style={{color:'#2e2e2e'}}>{app.title}</p>
 								<div className="flex text-[#5f6368] text-sm">
-									<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{"LBP "+comma.format(parseInt(app.price)*10000)}</p>
+									<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{curr===1? "$ "+comma.format(parseInt(app.price)*curr):"LBP "+comma.format(parseInt(app.price)*curr)}</p>
 								</div>
 							</div>
 						))}
@@ -142,13 +150,24 @@ const Movies = () => {
 		};
 	}, [topValue]);
 
+	const [lbp, setLbp]=useState(1)
+	function SwitchCurrency(){
+		if(lbp===1){
+			setLbp(10000)
+		}else{
+			setLbp(1)
+		}
+		
+	}
+
 	return (
 		<>
 		{true && (
 		<div ref={targetRef} className="relative top-16">
-			<Section section="New movies" filter={(arr: Movie[])=> arr} />
-			<Section section="Top-Selling movies" filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseInt(b.sales) ?? 0) - (parseInt(a.sales) ?? 0))} />
-			<Section section="Recommended for you" filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseFloat(b.rating) ?? 0) - (parseFloat(a.rating) ?? 0))} />
+			<div onClick={SwitchCurrency} className="hover:bg-[#f2f2f2]" style={{position:'absolute', marginLeft:'1000px',marginTop:'-10px', padding:'10px 10px 10px 10px', borderRadius:'50% 50% 50% 50%'}}><BsCurrencyExchange></BsCurrencyExchange></div>
+			<Section curr={lbp} section="New movies" filter={(arr: Movie[])=> arr} />
+			<Section curr={lbp} section="Top-Selling movies" filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseInt(b.sales) ?? 0) - (parseInt(a.sales) ?? 0))} />
+			<Section curr={lbp} section="Recommended for you" filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseFloat(b.rating) ?? 0) - (parseFloat(a.rating) ?? 0))} />
 		</div>
 		)}
 		</>
