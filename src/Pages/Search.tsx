@@ -10,7 +10,9 @@ import { getGamesAsync } from "../features/gamesSlice";
 import { getApplicationsAsync } from "../features/applicationsSlice";
 import { MdStarRate } from "react-icons/md";
 
+
 const Search = () => {
+    
     const [appGame, setAppGame]=useState(true)
     const [movie, setMovie]=useState(false)
     const [book, setBook]=useState(false)
@@ -20,6 +22,7 @@ const Search = () => {
     const {applications} = useAppSelector((state) => state.Applications);
     const {games} = useAppSelector((state) => state.Games);
     const { key } = useParams<{ key: string }>();
+    
     const navigate=useNavigate();
     const dispatch = useAppDispatch();
     var comma = new Intl.NumberFormat();
@@ -108,10 +111,10 @@ const Search = () => {
         </div>
         { movie &&
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-                {movies.filter((movie)=> {
-                    movie.title.concat(movie.genres).toLowerCase().includes(key?.toLowerCase()+'')
+                {movies.filter((movie: any)=> {
+                    movie.title.toLowerCase()+''.includes(key?.toLowerCase()+'')
                 })
-                    .map((app) => (
+                    .map((app: any) => (
                         <div key={app.id} onClick={() => toMoviePage(""+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>
                             <img
                                 src={app.image.replace("._V1_SX101_CR0,0,101,150_","").replace("._V1_SY150_CR0,0,101,150_","").replace("._V1_SY150_CR2,0,101,150_","").replace("._V1_SY150_CR1,0,101,150_","").replace("._V1_SY150_SX101_","").replace("._V1_SY150_CR3,0,101,150_","")!}

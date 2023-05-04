@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @font-face {
 	font-family: "Product Sans";
 	src: url("/fonts/Product Sans Regular.ttf") format("truetype");
