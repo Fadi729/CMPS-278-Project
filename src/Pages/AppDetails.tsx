@@ -6,6 +6,8 @@ import { Application, ApplicationReview } from "../data/Interfaces/Applications"
 import { ScrollButton } from "./Apps";
 import { getApplicationsAsync } from "../features/applicationsSlice";
 import useNavbarContext from "../contexts/NavbarContext";
+import AddToWishListButton from "../Components/WishListButton";
+import { ItemType } from "../data/Interfaces/WishList";
 
 function trimNumber(num: number): string {
 	const sizes = ["K", "M", "B", "T"];
@@ -22,7 +24,7 @@ const AppHeader = ({ app }: { app: Application }) => {
 			<div className="flex flex-col justify-between">
 				<div className="text-[4rem] leading-[4.75rem] font-google font-medium">{app?.title}</div>
 				<div className="mt-4">
-					<div className="text-[#01875f] font-google font-medium">{app?.developer}</div>
+					<div className="text-[#01875f] font-Roboto font-medium">{app?.developer}</div>
 					<div className="flex gap-1 text-xs" style={{ color: "rgb(95,99,104)" }}>
 						{app?.adSupported && <div>Contains ads</div>}
 						{app?.offersIAP && <div className="before:content-['·']"> In-app purchases</div>}
@@ -56,7 +58,10 @@ const AppHeader = ({ app }: { app: Application }) => {
 				</div>
 			</div>
 
-			<button className="bg-[#01875f] w-56 p-1 rounded text-white">{app?.priceText}</button>
+			<div className="flex gap-2">
+				<button className="font-Roboto hover:bg-[#095943] bg-[#01875f] w-56 p-2 rounded-lg text-white">{app?.priceText}</button>
+				<AddToWishListButton item={{ itemId: app.appId, itemType: ItemType.Application }} />
+			</div>
 		</>
 	);
 };
@@ -321,7 +326,7 @@ const AppDetails = () => {
 	}, [topValue]);
 
 	const app = applications.find((app) => app.appId === appId);
-	
+
 	if (app === null || app === undefined) dispatch(getApplicationsAsync());
 
 	return (
