@@ -91,7 +91,14 @@ const Search = () => {
         setBook(true)
     }
 
-
+    const sr =function searchByDescIfEmpty(category: any, list: any){
+        if(list.length==0){
+            return category.filter((elt: any) => elt.description.toLowerCase().includes(key+''))
+        }else{
+            return list
+        }
+    }
+    
     return(
         <>
         <div style={{display:'flex', flexDirection:'row', marginTop:'42px', marginLeft:'-40px'}}>
@@ -101,7 +108,9 @@ const Search = () => {
         </div>
         { movie &&
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-                {movies.filter((movie)=>movie.title.toLowerCase().includes(key+''))
+                {movies.filter((movie)=> {
+                    movie.title.concat(movie.genres).toLowerCase().includes(key?.toLowerCase()+'')
+                })
                     .map((app) => (
                         <div key={app.id} onClick={() => toMoviePage(""+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>
                             <img
@@ -119,7 +128,10 @@ const Search = () => {
         }
         { appGame && 
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-            {appsGames.filter((app)=>app.title?.toLowerCase().includes(key+''))
+            {appsGames.filter((app)=>{
+                app.title?.toLowerCase().includes(key?.toLowerCase()+'')
+                app.genre?.toLowerCase().includes(key?.toLowerCase()+'')
+            })
                 .map((app) => (
                     <div
 									key={app.appId}
@@ -143,7 +155,10 @@ const Search = () => {
         }
         { book && 
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-            {books.filter((book)=>book.title.toLowerCase().includes(key+''))
+            {books.filter((book)=>{
+                book.title.toLowerCase().includes(key?.toLowerCase()+'')
+                book.categories?.toLowerCase().includes(key?.toLowerCase()+'')
+            })
                 .map((book) => (
                     <div key={book.id} onClick={() => toMoviePage(""+book.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>
                         <img

@@ -21,17 +21,16 @@ const NavBar = () => {
 
 	const imgRef=useRef(null);
 	const menuRef=useRef(null);
-	const searchIconRef = useRef(null);
-	const navRef=useRef(null)
-	
-	
 
-	function Menu(){
+
+	function Menu(e: any){
+		e.stopPropagation()
 		setOpen(!open)
 	}
 	
-	function Search(){
-		setNotSearch(!notSearch)
+	function Search(e: any){
+		e.stopPropagation()
+		setNotSearch(!notSearch)	
 	}
 	var searchRef=useRef(null)
 	const navigate = useNavigate()
@@ -69,6 +68,19 @@ const NavBar = () => {
 
 	 */
 
+	document.addEventListener("click", (e: any) => {
+		if(!notSearch){
+			if(e.target !== searchRef.current){
+				setNotSearch(true)
+			}
+		}
+		if(open){
+			if(e.target !== menuRef.current){
+				setOpen(false)
+			}
+		}
+		
+	})
 	
 
 	return (
@@ -78,7 +90,7 @@ const NavBar = () => {
 				style={{ boxShadow:  topValue !== null && topValue! < 65 ? "0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2)": "" }}
 				id="navbar"
 			>
-				<nav ref={navRef} className="flex w-full h-full items-center font-google bg-white">
+				<nav className="flex w-full h-full items-center font-google bg-white">
 					<div className="flex mr-3 ml-7 w-[24%]" style={{marginLeft:'26px'}}>
 						<svg className="h-10 w-11 mr-2" aria-hidden="true" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
 							<path fill="none" d="M0,0h40v40H0V0z"></path>
@@ -162,7 +174,7 @@ const NavBar = () => {
 						}
 					</div>
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
-						<div ref={searchIconRef} className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} onClick={Search}><MdSearch size={25} color="#404144" /></div>
+						{notSearch && <div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} onClick={Search}><MdSearch size={25} color="#404144" /></div>}
 						<div className="hover:bg-[#f5f5f5]" style={{marginRight:'-17px',borderRadius:'50% 50% 50% 50%', padding:'10px'}} ><MdHelpOutline size={25} color="#404144" /></div>
 						<div  className="hover:bg-[#f5f5f5]" style={{borderRadius:'50% 50% 50% 50%', padding:'10px'}}>
 						<img
