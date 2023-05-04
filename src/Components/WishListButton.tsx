@@ -7,11 +7,12 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 	const dispatch = useAppDispatch();
 
 	const { wishList } = useAppSelector((state) => state.WishList);
+	const { isSignedIn } = useAppSelector((state) => state.auth);
 
-	// TODO: check if item is in wishlist
 	const isItemInWishList = wishList.items.some((wishListItem) => wishListItem.itemId === item.itemId);
 
 	const handleAddToWishList = async () => {
+		if(!isSignedIn) return alert("You need to be signed in to add items to your wishlist");
 		dispatch(addItemToWishListAsync(item));
 	};
 
@@ -35,9 +36,9 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 
 	const getHoverColor = () => {
 		if (item.itemType === ItemType.Application || item.itemType === ItemType.Game) {
-			return '#f6fafe'
+			return "#f6fafe";
 		} else if (item.itemType === ItemType.Movie) {
-			return '#383a4d'
+			return "#383a4d";
 		}
 	};
 
@@ -48,12 +49,10 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 		<button
 			onClick={isItemInWishList ? handleRemoveFromWishList : handleAddToWishList}
 			// @ts-ignore
-			onMouseEnter={e => e.target.style.background = hoverColor}
+			onMouseEnter={(e) => (e.target.style.background = hoverColor)}
 			// @ts-ignore
-			onMouseLeave={e => e.target.style.background = "transparent"}
-			className={`flex justify-center items-center font-Roboto p-1 rounded-lg  text-sm font-medium}] ${
-				isItemInWishList ? "w-48" : "w-36"
-			}`}
+			onMouseLeave={(e) => (e.target.style.background = "transparent")}
+			className={`flex justify-center items-center font-Roboto p-1 rounded-lg  text-sm font-medium}] ${isItemInWishList ? "w-48" : "w-36"}`}
 			style={{ color: color!.textColor }}
 		>
 			{isItemInWishList ? (

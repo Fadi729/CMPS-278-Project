@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin, TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import RouteTo from "../data/Routes";
 import useNavbarContext from "../contexts/NavbarContext";
 import { RiHeart3Fill } from "react-icons/ri";
 import { FaSignInAlt, FaSignOutAlt, FaHistory } from "react-icons/fa";
-import { useAppDispatch } from "../hooks";
-import { LoginAsync } from "../features/authSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { LoginAsync, signOut } from "../features/authSlice";
+import axios from "axios";
 
 const NavBar = () => {
 	const [underlineApps, setUnderlineApps] = useState(false);
@@ -17,13 +18,10 @@ const NavBar = () => {
 	const [open, setOpen] = useState(false);
 
 	const { topValue } = useNavbarContext();
+	const { isSignedIn, user } = useAppSelector((state) => state.auth);
 
 	const imgRef = useRef(null);
 	const menuRef = useRef(null);
-
-	window.addEventListener("click", (e) => {
-		console.log(e.target !== menuRef.current && e.target !== imgRef.current);
-	});
 
 	function Menu() {
 		setOpen(!open);
@@ -31,8 +29,22 @@ const NavBar = () => {
 
 	const dispatch = useAppDispatch();
 
-	const Login = (response: CredentialResponse) => {
+	const Login = (response: TokenResponse) => {
 		dispatch(LoginAsync(response));
+	};
+
+	const handleSignIn = useGoogleLogin({
+		onSuccess: async (tokenResponse) => Login(tokenResponse),
+	});
+
+	const navigate = useNavigate();
+
+	const handleWishListNavigation = () => {
+		navigate(RouteTo.Wishlist);
+	};
+
+	const handleSignOut = () => {
+		dispatch(signOut());
 	};
 
 	return (
@@ -115,12 +127,6 @@ const NavBar = () => {
 								{underlineBooks && <div className="w-full h-[3px] bg-[#0179ca] rounded-full"></div>}
 							</div>
 						</NavLink>
-						<GoogleLogin
-							onSuccess={Login}
-							onError={() => {
-								console.log("Login Failed");
-							}}
-						/>
 					</div>
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
 						<div className="hover:bg-[#f5f5f5]" style={{ marginRight: "-17px", borderRadius: "50% 50% 50% 50%", padding: "10px" }}>
@@ -132,7 +138,7 @@ const NavBar = () => {
 						<div className="hover:bg-[#f5f5f5]" style={{ borderRadius: "50% 50% 50% 50%", padding: "10px" }}>
 							<img
 								ref={imgRef}
-								src="https://fonts.gstatic.com/s/i/productlogos/avatar_anonymous/v4/web-32dp/logo_avatar_anonymous_color_1x_web_32dp.png"
+								src={isSignedIn ? user?.picture : "https://www.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"}
 								className="h-8 w-8 rounded-full"
 								onClick={Menu}
 							/>
@@ -153,7 +159,7 @@ const NavBar = () => {
 						}}
 					>
 						<ul>
-							<li className="hover:bg-[#f5f5f5]" style={{ padding: "12.5px 200px 12.5px 10px" }}>
+							<li onClick={handleWishListNavigation} className="hover:bg-[#f5f5f5]" style={{ padding: "12.5px 200px 12.5px 10px" }}>
 								<RiHeart3Fill style={{ display: "inline", marginRight: "10px" }} />
 								Wishlist
 							</li>
@@ -161,15 +167,20 @@ const NavBar = () => {
 								<FaHistory style={{ display: "inline", marginRight: "10px" }} />
 								History
 							</li>
-							<li className="hover:bg-[#f5f5f5]" style={{ padding: "12.5px 200px 12.5px 10px" }}>
-								<FaSignInAlt style={{ display: "inline", marginRight: "10px" }} />
-								Sign In
-							</li>
-							<hr />
-							<li className="hover:bg-[#f5f5f5]" style={{ padding: "12.5px 200px 12.5px 10px" }}>
-								<FaSignOutAlt style={{ display: "inline", marginRight: "10px" }} />
-								Sign Out
-							</li>
+							{!isSignedIn ? (
+								<li onClick={() => handleSignIn()} className="hover:bg-[#f5f5f5]" style={{ padding: "12.5px 200px 12.5px 10px" }}>
+									<FaSignInAlt style={{ display: "inline", marginRight: "10px" }} />
+									Sign In
+								</li>
+							) : (
+								<>
+									<hr />
+									<li onClick={handleSignOut} className="hover:bg-[#f5f5f5]" style={{ padding: "12.5px 200px 12.5px 10px" }}>
+										<FaSignOutAlt style={{ display: "inline", marginRight: "10px" }} />
+										Sign Out
+									</li>
+								</>
+							)}
 						</ul>
 					</div>
 				)}

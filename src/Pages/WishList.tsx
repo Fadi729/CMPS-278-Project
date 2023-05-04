@@ -12,8 +12,8 @@ const WishListHelper = () => {
 	const { wishList, isLoading } = useAppSelector((state) => state.WishList);
 	const { applications } = useAppSelector((state) => state.Applications);
 	const { games } = useAppSelector((state) => state.Games);
-	// const { books } = useAppSelector((state) => state.Books);
 	const { movies } = useAppSelector((state) => state.Movies);
+	// const { books } = useAppSelector((state) => state.Books);
 
 	const appsAndGames = [
 		...wishList.items
@@ -37,15 +37,10 @@ const WishListHelper = () => {
 					item: movies.find((movie) => movie.id === parseInt(item.itemId)) as Movie,
 				};
 			}),
-	]
-
-	console.log(movieList)
+	];
 
 	// const booksIds = wishList.wishListItems.filter((item) => item.itemType === ItemType.Book).map((item) => item.itemId);
 	// const bookItems = books.filter((book) => book.id in booksIds);
-
-	// const moviesIds = wishList.wishListItems.filter((item) => item.itemType === ItemType.Movie).map((item) => item.itemId);
-	// const movieItems = movies.filter((movie) => movie.id in moviesIds);
 
 	return (
 		<div className="relative top-16 font-Roboto">
@@ -59,7 +54,7 @@ const WishListHelper = () => {
 							<Item key={item.item.appId} item={item.item} itemType={item.itemType} />
 						))}
 					</HorizontalScroll>
-					
+
 					<h2 className="text-lg text-[#595a5c] font-google">Movies</h2>
 					<HorizontalScroll>
 						{movieList.map((movie) => (
@@ -76,6 +71,7 @@ const WishListHelper = () => {
 
 const WishList = () => {
 	const { wishList, isLoading } = useAppSelector((state) => state.WishList);
+	const { isSignedIn } = useAppSelector((state) => state.auth);
 
 	const dispatch = useAppDispatch();
 	async function getWishlist() {
@@ -88,7 +84,17 @@ const WishList = () => {
 		}
 	}, []);
 
-	return <>{!isLoading && <WishListHelper />}</>;
+	return (
+		<>
+			{isSignedIn && !isLoading ? (
+				<WishListHelper />
+			) : (
+				<div className="relative top-16 font-Roboto text-center">
+					<p className="text-lg">Please sign in to view your Wishlist</p>
+				</div>
+			)}
+		</>
+	);
 };
 
 export default WishList;

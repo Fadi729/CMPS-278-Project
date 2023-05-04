@@ -17,6 +17,10 @@ import { useAppDispatch, useAppSelector } from "./hooks";
 import { getApplicationsAsync } from "./features/applicationsSlice";
 import { getGamesAsync } from "./features/gamesSlice";
 import { getMoviesAsync } from "./features/moviesSlice";
+import jwtDecode from "jwt-decode";
+import { User } from "./data/Interfaces/User";
+import { getWishListAsync } from "./features/wishListSlice";
+import { setUser } from "./features/authSlice";
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -35,6 +39,8 @@ function App() {
 		await dispatch(getMoviesAsync());
 	}
 
+
+	
 	useEffect(() => {
 		if (Object.keys(applications).length === 0) {
 			getApps();
@@ -46,6 +52,22 @@ function App() {
 			getMovies();
 		}
 	}, []);
+
+	useEffect (() => {
+		const token = localStorage.getItem("token");
+		// check if token exists
+		if (token) {
+			// check if token has not expired
+			const decodedToken = jwtDecode<User>(token)
+			if (decodedToken.exp! * 1000 < Date.now()) {
+				localStorage.removeItem("token");
+			}
+			else {
+				dispatch(setUser(decodedToken))
+				dispatch(getWishListAsync());
+			}
+		}	
+	}, [])
 	return (
 		<>
 			{!appIsLoading && !gameIsLoading && !movieIsLoading &&(
