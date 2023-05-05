@@ -9,6 +9,10 @@ module.exports = {
 			Roboto: ['Roboto', "sans-serif"],
 		},
 		extend: {},
+		borderWidth:{
+			DEFAULT: '1px',
+			1: '1px'
+		}
 	},
 	plugins: [],
 };

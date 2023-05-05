@@ -7,6 +7,7 @@ import { IconType } from "react-icons";
 import { useNavigate } from "react-router-dom";
 import useNavbarContext from "../contexts/NavbarContext";
 import RouteTo from "../data/Routes";
+import {BsCurrencyExchange} from "react-icons/bs"
 import { ItemType } from "../data/Interfaces/WishList";
 var comma = new Intl.NumberFormat();
 const ScrollButton = ({
@@ -57,6 +58,10 @@ const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 		}
 	};
 
+	
+
+	
+
 	return (
 		<div className="relative" onMouseEnter={() => setIsOver(true)} onMouseLeave={() => setIsOver(false)}>
 			<style>
@@ -82,7 +87,7 @@ const HorizontalScroll = ({ children }: { children: ReactNode }) => {
 	);
 };
 
-export const MovieItem = ({ movieItem }: { movieItem: Movie}) => {
+export const MovieItem = ({ movieItem, curr }: { movieItem: Movie, curr: number}) => {
 	const navigate = useNavigate();
 	function toMoviePage(id: string): void {
 		navigate(RouteTo.MovieDetailsPage(id));
@@ -110,13 +115,13 @@ export const MovieItem = ({ movieItem }: { movieItem: Movie}) => {
 				{movieItem.title}
 			</p>
 			<div className="flex text-[#5f6368] text-sm">
-				<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{"LBP " + comma.format(parseInt(movieItem.price) * 10000)}</p>
+				<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{curr===1? "$ "+comma.format(parseInt(movieItem.price)*curr):"LBP "+comma.format(parseInt(movieItem.price)*curr)}</p>
 			</div>
 		</div>
 	);
 };
 
-const Section = ({ section, filter }: { section: string; filter: (arr: Movie[]) => Movie[] }) => {
+const Section = ({ curr ,section, filter }: { curr: number, section: string; filter: (arr: Movie[]) => Movie[] }) => {
 	const { movies } = useAppSelector((state) => state.Movies);
 
 	return (
@@ -144,7 +149,7 @@ const Section = ({ section, filter }: { section: string; filter: (arr: Movie[]) 
 								// 		<p className="tracking-[.0178571429em] text-sm font-[450] font-fontAlt">{"LBP "+comma.format(parseInt(app.price)*10000)}</p>
 								// 	</div>
 								// </div>
-								<MovieItem key={movie.id} movieItem={movie} />
+								<MovieItem curr={curr} key={movie.id} movieItem={movie} />
 							))}
 					</HorizontalScroll>
 				</div>
@@ -179,21 +184,26 @@ const Movies = () => {
 		};
 	}, [topValue]);
 
+	const [lbp, setLbp]=useState(1)
+	function SwitchCurrency(){
+		if(lbp===1){
+			setLbp(10000)
+		}else{
+			setLbp(1)
+		}
+		
+	}
+
 	return (
 		<>
-			{true && (
-				<div ref={targetRef} className="relative top-16">
-					<Section section="New movies" filter={(arr: Movie[]) => arr} />
-					<Section
-						section="Top-Selling movies"
-						filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseInt(b.sales) ?? 0) - (parseInt(a.sales) ?? 0))}
-					/>
-					<Section
-						section="Recommended for you"
-						filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseFloat(b.rating) ?? 0) - (parseFloat(a.rating) ?? 0))}
-					/>
-				</div>
-			)}
+		{true && (
+		<div ref={targetRef} className="relative top-16">
+			<div onClick={SwitchCurrency} className="hover:bg-[#f2f2f2]" style={{position:'absolute', marginLeft:'1000px',marginTop:'-10px', padding:'10px 10px 10px 10px', borderRadius:'50% 50% 50% 50%'}}><BsCurrencyExchange></BsCurrencyExchange></div>
+			<Section curr={lbp} section="New movies" filter={(arr: Movie[])=> arr} />
+			<Section curr={lbp} section="Top-Selling movies" filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseInt(b.sales) ?? 0) - (parseInt(a.sales) ?? 0))} />
+			<Section curr={lbp} section="Recommended for you" filter={(arr: Movie[]): Movie[] => [...arr].sort((a, b) => (parseFloat(b.rating) ?? 0) - (parseFloat(a.rating) ?? 0))} />
+		</div>
+		)}
 		</>
 	);
 };

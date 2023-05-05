@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./Components/NavBar";
 import Admin from "./Pages/Admin";
+import Search from "./Pages/Search";
 import Apps from "./Pages/Apps";
 import Books from "./Pages/Books";
 import Games from "./Pages/Games";
@@ -24,9 +25,15 @@ import { setUser } from "./features/authSlice";
 
 function App() {
 	const dispatch = useAppDispatch();
-	const { applications, isLoading: appIsLoading } = useAppSelector((state) => state.Applications);
-	const { games, isLoading: gameIsLoading } = useAppSelector((state) => state.Games);
-	const { movies, isLoading: movieIsLoading } = useAppSelector((state) => state.Movies);
+	const { applications, isLoading: appIsLoading } = useAppSelector(
+		(state) => state.Applications
+	);
+	const { games, isLoading: gameIsLoading } = useAppSelector(
+		(state) => state.Games
+	);
+	const { movies, isLoading: movieIsLoading } = useAppSelector(
+		(state) => state.Movies
+	);
 	async function getApps() {
 		await dispatch(getApplicationsAsync());
 	}
@@ -39,8 +46,6 @@ function App() {
 		await dispatch(getMoviesAsync());
 	}
 
-
-	
 	useEffect(() => {
 		if (Object.keys(applications).length === 0) {
 			getApps();
@@ -53,27 +58,27 @@ function App() {
 		}
 	}, []);
 
-	useEffect (() => {
+	useEffect(() => {
 		const token = localStorage.getItem("token");
 		// check if token exists
 		if (token) {
 			// check if token has not expired
-			const decodedToken = jwtDecode<User>(token)
+			const decodedToken = jwtDecode<User>(token);
 			if (decodedToken.exp! * 1000 < Date.now()) {
 				localStorage.removeItem("token");
-			}
-			else {
-				dispatch(setUser(decodedToken))
+			} else {
+				dispatch(setUser(decodedToken));
 				dispatch(getWishListAsync());
 			}
-		}	
-	}, [])
+		}
+	}, []);
 	return (
 		<>
-			{!appIsLoading && !gameIsLoading && !movieIsLoading &&(
+			{!appIsLoading && !gameIsLoading && !movieIsLoading && (
 				<Routes>
 					<Route path="/" element={<NavBar />}>
 						<Route index element={<Navigate to={RouteTo.Apps} />} />
+						<Route path={RouteTo.Search} element={<Search />} />
 						<Route path={RouteTo.Apps} element={<Apps />} />
 						<Route path={RouteTo.Admin} element={<Admin />} />
 						<Route path={RouteTo.AppsDetails} element={<AppDetails />} />
@@ -82,7 +87,6 @@ function App() {
 						<Route path={RouteTo.MovieDetails} element={<MovieDetails />} />
 						<Route path={RouteTo.SimilarMovies} element={<SimilarMovies />} />
 						<Route path={RouteTo.Books} element={<Books />} />
-						<Route path={RouteTo.Wishlist} element={<WishList />} />
 					</Route>
 				</Routes>
 			)}

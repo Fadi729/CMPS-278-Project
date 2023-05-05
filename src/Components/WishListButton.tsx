@@ -9,7 +9,7 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 	const { wishList } = useAppSelector((state) => state.WishList);
 	const { isSignedIn } = useAppSelector((state) => state.auth);
 
-	const isItemInWishList = wishList.items.some((wishListItem) => wishListItem.itemId === item.itemId);
+	const isItemInWishList = wishList.items? wishList.items.some((wishListItem) => wishListItem.itemId === item.itemId): false;
 
 	const handleAddToWishList = async () => {
 		if(!isSignedIn) return alert("You need to be signed in to add items to your wishlist");
