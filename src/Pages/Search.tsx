@@ -94,13 +94,6 @@ const Search = () => {
         setBook(true)
     }
 
-    const sr =function searchByDescIfEmpty(category: any, list: any){
-        if(list.length==0){
-            return category.filter((elt: any) => elt.description.toLowerCase().includes(key+''))
-        }else{
-            return list
-        }
-    }
 
     return(
         <>
@@ -111,9 +104,9 @@ const Search = () => {
         </div>
         { movie &&
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-                {movies.filter((movie: any)=> {
-                    (movie.title+movie.genres+movie.description).toLowerCase()+''.includes(key?.toLowerCase()+'')
-                })
+                {movies.filter((movie)=>
+                    (movie.title+movie.genres+movie.description).toLowerCase().includes(key!.toLowerCase())
+                )
                     .map((app: any) => (
                         <div key={app.id} onClick={() => toMoviePage(""+app.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>
                             <img
@@ -131,9 +124,9 @@ const Search = () => {
         }
         { appGame && 
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-            {appsGames.filter((app)=>{
+            {appsGames.filter((app)=>
                 (app.title+app.genre!+app.description).toLowerCase().includes(key?.toLowerCase()+'')
-            })
+            )
                 .map((app) => (
                     <div
 									key={app.appId}
@@ -157,9 +150,9 @@ const Search = () => {
         }
         { book && 
             <div className="mb-7"  style={{width: '1160px', marginLeft:'-76px', paddingRight:'-30px'}}>
-            {books.filter((book)=>{
+            {books.filter((book)=>
                 (book.title+book.description+book.categories).toLowerCase().includes(key?.toLowerCase()+'')
-            })
+            )
                 .map((book) => (
                     <div key={book.id} onClick={() => toMoviePage(""+book.id)} className="shrink-0 p-3 w-40 h-fit hover:bg-[#f5f5f5] rounded-lg snap-start" style={{width:'196.7px', display:'inline-block', verticalAlign:'top'}}>
                         <img

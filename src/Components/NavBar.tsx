@@ -30,6 +30,7 @@ const NavBar = () => {
 	const imgRef = useRef(null);
 	const menuRef = useRef(null);
 
+
 	function Menu(e: any) {
 		e.stopPropagation();
 		setOpen(!open);
@@ -52,28 +53,6 @@ const NavBar = () => {
 			}
 		}
 	}
-
-	/**?
-	 * document.addEventListener("click",(e) => {
-		if(searchRef.current !== e.target && searchIconRef.current !== e.target){
-			setNotSearch(true)
-		}
-	})
-
-	useEffect(() => {
-		const fn = (e: any) => {
-			if(e.target !== searchRef.current){
-				setNotSearch(true)
-			}
-		}
-		if (!notSearch) {
-			window.addEventListener("click", fn)
-		}else{
-			window.removeEventListener("click", fn)
-		}
-	}, []);
-
-	 */
 
 	document.addEventListener("click", (e: any) => {
 		if (!notSearch) {
@@ -261,16 +240,20 @@ const NavBar = () => {
 						)}
 					</div>
 					<div className="flex justify-end items-center w-1/2 gap-5 p-2">
+						{notSearch &&
 						<div
-							className="hover:bg-[#f5f5f5]"
-							style={{
-								marginRight: "-17px",
-								borderRadius: "50% 50% 50% 50%",
-								padding: "10px",
-							}}
+						className="hover:bg-[#f5f5f5]"
+						style={{
+							marginRight: "-17px",
+							borderRadius: "50% 50% 50% 50%",
+							padding: "10px",
+						}}
+						onClick={Search}
 						>
 							<MdSearch size={25} color="#404144" />
 						</div>
+						}
+						
 						<div
 							className="hover:bg-[#f5f5f5]"
 							style={{

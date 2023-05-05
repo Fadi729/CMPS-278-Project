@@ -58,7 +58,7 @@ const WishListHelper = () => {
 					<h2 className="text-lg text-[#595a5c] font-google">Movies</h2>
 					<HorizontalScroll>
 						{movieList.map((movie) => (
-							<MovieItem key={movie.item.id} movieItem={movie.item} />
+							<MovieItem curr={1} key={movie.item.id} movieItem={movie.item} />
 						))}
 					</HorizontalScroll>
 				</div>

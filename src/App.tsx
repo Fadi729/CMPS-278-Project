@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./Components/NavBar";
 import Admin from "./Pages/Admin";
+import Search from "./Pages/Search";
 import Apps from "./Pages/Apps";
 import Books from "./Pages/Books";
 import Games from "./Pages/Games";
