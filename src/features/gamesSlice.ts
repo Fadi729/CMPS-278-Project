@@ -30,6 +30,7 @@ const gamesSlice = createSlice({
 	reducers: {
 		setGames: (state, action: PayloadAction<Game[]>) => {
 			state.games = action.payload;
+			state.isLoading = false;
 		},
 		setIsLoading(state, action: PayloadAction<boolean>) {
 			state.isLoading = action.payload;
