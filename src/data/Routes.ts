@@ -11,6 +11,7 @@ const RouteTo = {
 	SimilarMovies:"/movies/details/:genre",
 	SimilarMoviesPage: (genre: string) => `/movies/details/${genre}`,
 	Wishlist: "/wishlist",
+	History: "/history",
 	ToS: "/ToS",
 	About: "/About",
 	AppsDetails: "/apps/:appId",
