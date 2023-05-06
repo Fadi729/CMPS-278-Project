@@ -11,6 +11,10 @@ const ApiEndpoints = {
 
 	getApplications: `${baseUrl}/api/ApplicationData`,
 
+	login: `${baseUrl}/Auth/login`,
+
+	wishlist: `${baseUrl}/api/Wishlist`,
+
 	history: `${baseUrl}/api/History`,
 };
 

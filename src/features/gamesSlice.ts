@@ -7,6 +7,7 @@ export const getGamesAsync = createAsyncThunk("games/getGamesAsync", async (_, t
 	try {
 		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
 		thunkAPI.dispatch(setGames(response.data));
+		thunkAPI.dispatch(setIsLoading(false));
 		return response.data;
 	} catch (error) {
 		return thunkAPI.rejectWithValue(error);
@@ -15,10 +16,12 @@ export const getGamesAsync = createAsyncThunk("games/getGamesAsync", async (_, t
 
 interface State {
 	games: Game[];
+	isLoading: boolean;
 }
 
 const initialState: State = {
 	games: [] as Game[],
+	isLoading: true,
 };
 
 const gamesSlice = createSlice({
@@ -27,10 +30,14 @@ const gamesSlice = createSlice({
 	reducers: {
 		setGames: (state, action: PayloadAction<Game[]>) => {
 			state.games = action.payload;
+			state.isLoading = false;
+		},
+		setIsLoading(state, action: PayloadAction<boolean>) {
+			state.isLoading = action.payload;
 		},
 	},
 });
 
-export const { setGames } = gamesSlice.actions;
+export const { setGames, setIsLoading } = gamesSlice.actions;
 
 export default gamesSlice.reducer;

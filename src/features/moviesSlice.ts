@@ -15,10 +15,12 @@ export const getMoviesAsync = createAsyncThunk("movies/fetchMovies", async (_, t
 
 interface State {
 	movies: Movie[];
+	isLoading: boolean;
 }
 
-const initialState = {
+const initialState: State = {
 	movies: [] as Movie[],
+	isLoading: true,
 };
 
 const moviesSlice = createSlice({
@@ -27,6 +29,7 @@ const moviesSlice = createSlice({
 	reducers: {
 		setMovies: (state, action: PayloadAction<Movie[]>) => {
 			state.movies = action.payload;
+			state.isLoading = false;
 		},
 	},
 });

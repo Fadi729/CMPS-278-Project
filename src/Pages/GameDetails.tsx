@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { MdChevronLeft, MdChevronRight, MdLanguage, MdOutlineEmail, MdOutlinePlace, MdOutlineVerifiedUser, MdStarRate } from "react-icons/md";
-import { Application, ApplicationReview } from "../data/Interfaces/Applications";
+import { Game, GameReview } from "../data/Interfaces/Games";
 import { ScrollButton } from "./Apps";
-import { getApplicationsAsync } from "../features/applicationsSlice";
+import { getGamesAsync } from "../features/gamesSlice";
 import useNavbarContext from "../contexts/NavbarContext";
-import AddToWishListButton from "../Components/WishListButton";
-import { ItemType } from "../data/Interfaces/WishList";
 
 function trimNumber(num: number): string {
 	const sizes = ["K", "M", "B", "T"];
@@ -18,22 +16,34 @@ function trimNumber(num: number): string {
 	return trimmedNum.toFixed(0) + suffix;
 }
 
-const AppHeader = ({ app }: { app: Application }) => {
+const AppHeader = ({ app }: { app: Game }) => {
 	return (
 		<>
+		<div className="flex flex-row justify-evenly">
+			<div>
 			<div className="flex flex-col justify-between">
-				<div className="text-[4rem] leading-[4.75rem] font-google font-medium">{app?.title}</div>
-				<div className="mt-4">
-					<div className="text-[#01875f] font-Roboto font-medium">{app?.developer}</div>
-					<div className="flex gap-1 text-xs" style={{ color: "rgb(95,99,104)" }}>
+				<div className="text-[4rem] leading-[4.75rem] font-google font-medium mt-52 ml-4">{app?.title}</div>
+				<div className="mt-4 ml-5">
+					<div className="text-[#01875f] font-google font-medium ">{app?.developer}</div>
+					<div className="flex gap-1 text-xs " style={{ color: "rgb(95,99,104)" }}>
 						{app?.adSupported && <div>Contains ads</div>}
 						{app?.offersIAP && <div className="before:content-['·']"> In-app purchases</div>}
 					</div>
 				</div>
 			</div>
 
-			<div className="flex items-center py-4 gap-2 font-google text-sm">
-				<div className="flex flex-col items-center p-5 pl-0">
+			<div className="flex items-center py-4 gap-2 font-google text-sm ml-4">
+				<div className="flex flex-col items-center p-4 pl-0">
+					<div className="flex items-center h-6">
+						<div>
+							<img
+								src={app?.icon!}
+								className="rounded-[20%] w-12"
+							/>
+						</div>
+					</div>
+				</div>
+				<div className="flex flex-col items-center justify-center p-4">
 					<div className="flex items-center h-6">
 						<div>{app?.scoreText}</div>
 						<MdStarRate />
@@ -43,7 +53,7 @@ const AppHeader = ({ app }: { app: Application }) => {
 					</div>
 				</div>
 				<div></div>
-				<div className="flex flex-col justify-center items-center p-5">
+				<div className="flex flex-col justify-center items-center p-4">
 					<div className="flex items-center h-6">
 						<div>{trimNumber(parseInt(app?.installs!.replace(RegExp(/,/g), "")!))}</div>
 					</div>
@@ -58,9 +68,15 @@ const AppHeader = ({ app }: { app: Application }) => {
 				</div>
 			</div>
 
-			<div className="flex gap-2">
-				<button className="font-Roboto hover:bg-[#095943] bg-[#01875f] w-56 p-2 rounded-lg text-white">{app?.priceText}</button>
-				<AddToWishListButton item={{ itemId: app.appId, itemType: ItemType.Application }} />
+			<button className="bg-[#01875f] w-56 p-1 rounded text-white mb-3 ml-4">{app?.priceText}</button>
+			</div>
+			
+			<div className="ml-4">
+				<img 
+					src={app?.headerImage!}
+					className=" mt-10 mr-5 opacity-30 h-[60%] overflow-visible"
+				/>
+			</div>
 			</div>
 		</>
 	);
@@ -155,7 +171,7 @@ const AppRatings = ({ scoreText, ratings, histogram }: { scoreText: string; rati
 	);
 };
 
-const AppReviews = ({ reviews }: { reviews: ApplicationReview[] }) => {
+const AppReviews = ({ reviews }: { reviews: GameReview[] }) => {
 	return (
 		<div className="flex flex-col mb-4">
 			{reviews?.map((review) => (
@@ -208,7 +224,7 @@ const AppDescription = ({ description, updated }: { description: string; updated
 	);
 };
 
-const DeveloperInfo = ({ app }: { app: Application }) => {
+const DeveloperInfo = ({ app }: { app: Game }) => {
 	return (
 		<div className="flex flex-col mb-10">
 			<h3 className="text-[1.375rem] font-medium font-google mb-4">Developer contact</h3>
@@ -271,8 +287,8 @@ const DeveloperInfo = ({ app }: { app: Application }) => {
 };
 
 const SimilarApps = ({ appId, appGenre }: { appId: string | undefined; appGenre: string | null | undefined }) => {
-	const { applications } = useAppSelector((state) => state.Applications);
-	const similarApps = [...applications.filter((obj) => obj.genreId === appGenre), ...applications.filter((obj) => obj.genreId !== appGenre)]
+	const { games } = useAppSelector((state) => state.Games);
+	const similarApps = [...games.filter((obj) => obj.genreId === appGenre), ...games.filter((obj) => obj.genreId !== appGenre)]
 		.filter((obj) => obj.appId !== appId)
 		.slice(0, 6);
 	return (
@@ -281,7 +297,7 @@ const SimilarApps = ({ appId, appGenre }: { appId: string | undefined; appGenre:
 			<div className="flex flex-col">
 				{...similarApps.map((randomApp, index) => (
 					<div key={index} className="p-3 hover:bg-[#f5f5f5] rounded-lg cursor-pointer">
-						<NavLink className="flex" to={`${import.meta.env.BASE_URL}apps/${randomApp.appId!}/`}>
+						<NavLink className="flex" to={`${import.meta.env.BASE_URL}games/${randomApp.appId!}/`}>
 							<img
 								src={randomApp.icon!}
 								style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
@@ -307,9 +323,9 @@ const SimilarApps = ({ appId, appGenre }: { appId: string | undefined; appGenre:
 	);
 };
 
-const AppDetails = () => {
+const GameDetails = () => {
 	const { appId } = useParams<{ appId: string }>();
-	const { applications, isLoading } = useAppSelector((state) => state.Applications);
+	const { games, isLoading } = useAppSelector((state) => state.Games);
 	const { targetRef, setTopValue, topValue } = useNavbarContext();
 	const dispatch = useAppDispatch();
 
@@ -325,15 +341,15 @@ const AppDetails = () => {
 		};
 	}, [topValue]);
 
-	const app = applications.find((app) => app.appId === appId);
-
-	if (app === null || app === undefined) dispatch(getApplicationsAsync());
+	const app = games.find((app) => app.appId === appId);
+	
+	if (app === null || app === undefined) dispatch(getGamesAsync());
 
 	return (
 		<>
 			{!isLoading && (
 				<div ref={targetRef} className="relative top-12 h-full font-fontAlt">
-					<div className="flex flex-col w-3/4 mt-12">
+					{/* <div className="flex flex-col w-3/4 mt-12">
 						<AppHeader app={app!} />
 					</div>
 					<div className="inline absolute right-0 top-0">
@@ -347,7 +363,11 @@ const AppDetails = () => {
 							className="absolute w-36 left-5 rounded-[20%] -bottom-[15px] opacity-50 blur-md -z-10"
 							style={{ boxShadow: "0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15)" }}
 						/>
+					</div> */}
+					<div className="flex flex-col" style={{color: "white", backgroundColor: "#202124"} }>
+						<AppHeader app={app!} />
 					</div>
+
 					<div className="mt-24">
 						<div className="flex justify-between">
 							<div className="w-2/3">
@@ -369,4 +389,4 @@ const AppDetails = () => {
 	);
 };
 
-export default AppDetails;
+export default GameDetails;
