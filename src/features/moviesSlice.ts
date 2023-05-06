@@ -13,6 +13,16 @@ export const getMoviesAsync = createAsyncThunk("movies/fetchMovies", async (_, t
 	}
 });
 
+export const postMoviesAsync =createAsyncThunk("movies/fetchMovies", async (data, thunkAPI) => {
+	try {
+		const response = await axios.post<Movie[]>(ApiEndpoints.getMovies, data);
+		thunkAPI.dispatch(setMovies(response.data));
+		return response.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
 interface State {
 	movies: Movie[];
 	isLoading: boolean;
