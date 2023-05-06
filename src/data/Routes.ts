@@ -11,9 +11,12 @@ const RouteTo = {
 	SimilarMovies:"/movies/details/:genre",
 	SimilarMoviesPage: (genre: string) => `/movies/details/${genre}`,
 	Wishlist: "/wishlist",
+	ToS: "/ToS",
+	About: "/About",
 	AppsDetails: "/apps/:appId",
+	GameDetails: "/games/:appId",
 	AppDetailsPage: (appId: string) => `/apps/${appId}`,
-	GameDetailsPage: (gameId: string) => `/games/${gameId}`,
+	GameDetailsPage: (appId: string) => `/games/${appId}`,
 };
 
 export default RouteTo;

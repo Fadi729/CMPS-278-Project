@@ -22,6 +22,10 @@ import jwtDecode from "jwt-decode";
 import { User } from "./data/Interfaces/User";
 import { getWishListAsync } from "./features/wishListSlice";
 import { setUser } from "./features/authSlice";
+import GameDetails from "./Pages/GameDetails";
+import ToS from "./Pages/ToS";
+import About from "./Pages/About";
+import Layout from "./Components/Layout";
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -76,18 +80,21 @@ function App() {
 		<>
 			{!appIsLoading && !gameIsLoading && !movieIsLoading && (
 				<Routes>
-					<Route path="/" element={<NavBar />}>
+					<Route path="/" element={<Layout />}>
 						<Route index element={<Navigate to={RouteTo.Apps} />} />
 						<Route path={RouteTo.Search} element={<Search />} />
 						<Route path={RouteTo.Apps} element={<Apps />} />
 						<Route path={RouteTo.Admin} element={<Admin />} />
 						<Route path={RouteTo.AppsDetails} element={<AppDetails />} />
 						<Route path={RouteTo.Games} element={<Games />} />
-						<Route path={RouteTo.Movies} element={<Movies />} />
+						<Route path={RouteTo.GameDetails} element={<GameDetails />} />
+				<Route path={RouteTo.Movies} element={<Movies />} />
 						<Route path={RouteTo.MovieDetails} element={<MovieDetails />} />
 						<Route path={RouteTo.SimilarMovies} element={<SimilarMovies />} />
 						<Route path={RouteTo.Books} element={<Books />} />
-					</Route>
+						<Route path={RouteTo.ToS} element={<ToS />} />
+				<Route path={RouteTo.About} element={<About />} />
+			</Route>
 				</Routes>
 			)}
 		</>
