@@ -26,6 +26,7 @@ import GameDetails from "./Pages/GameDetails";
 import ToS from "./Pages/ToS";
 import About from "./Pages/About";
 import Layout from "./Components/Layout";
+import BookPage from "./Components/BookPage";
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -92,8 +93,10 @@ function App() {
 						<Route path={RouteTo.MovieDetails} element={<MovieDetails />} />
 						<Route path={RouteTo.SimilarMovies} element={<SimilarMovies />} />
 						<Route path={RouteTo.Books} element={<Books />} />
+						<Route path="/book/:id" element={<BookPage />} />
 						<Route path={RouteTo.ToS} element={<ToS />} />
 				<Route path={RouteTo.About} element={<About />} />
+			
 			</Route>
 				</Routes>
 			)}
