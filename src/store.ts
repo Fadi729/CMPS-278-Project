@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { Applications, Games, Movies, Books, auth, WishList } from "./features/index";
+import { Applications, Games, Movies, Books, auth, WishList, History } from "./features/index";
 
 export const store = configureStore({
 	reducer: {
@@ -8,7 +8,8 @@ export const store = configureStore({
 		Movies,
 		Books,
 		auth,
-		WishList
+		WishList,
+		History,
 	},
 });
 

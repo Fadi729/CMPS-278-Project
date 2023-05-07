@@ -14,6 +14,7 @@ import RouteTo from "./data/Routes";
 import AppDetails from "./Pages/AppDetails";
 import SimilarMovies from "./Pages/SimilarMovies";
 import WishList from "./Pages/WishList";
+import History from "./Pages/History";
 import { useAppDispatch, useAppSelector } from "./hooks";
 import { getApplicationsAsync } from "./features/applicationsSlice";
 import { getGamesAsync } from "./features/gamesSlice";
@@ -97,6 +98,7 @@ function App() {
             <Route path={RouteTo.ToS} element={<ToS />} />
             <Route path={RouteTo.About} element={<About />} />
             <Route path={RouteTo.Wishlist} element={<WishList />} />
+            <Route path={RouteTo.History} element={<History />} />
           </Route>
         </Routes>
       )}
