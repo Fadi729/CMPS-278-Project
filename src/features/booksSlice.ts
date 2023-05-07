@@ -35,11 +35,14 @@ function convertBook(book: BooksDataAPIResponse) {
 interface State {
 	books: BooksData[];
 	bookReviews: BooksReview[];
+	isLoading: boolean;
 }
 
 const initialState: State = {
 	books: [] as BooksData[],
-	bookReviews: [] as BooksReview[]
+	bookReviews: [] as BooksReview[],
+	isLoading: true,
+
 };
 
 const booksSlice = createSlice({
@@ -48,6 +51,7 @@ const booksSlice = createSlice({
 	reducers: {
 		setBooks: (state, action: PayloadAction<BooksData[]>) => {
 			state.books = action.payload;
+			state.isLoading = false;
 		},
 		setBookReviews: (state, action: PayloadAction<BooksReview[]>) => {
 			state.bookReviews = action.payload;

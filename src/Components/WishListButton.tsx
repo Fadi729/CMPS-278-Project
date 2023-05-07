@@ -31,6 +31,11 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 				iconColor: "#e33659",
 				textColor: "#e33659",
 			};
+		} else if(item.itemType === ItemType.Book){
+			return {
+				iconColor: "#0379CA",
+				textColor: "#0379CA",
+			};
 		}
 	};
 
@@ -39,6 +44,8 @@ const AddToWishListButton = ({ item }: { item: WishListItem }) => {
 			return "#f6fafe";
 		} else if (item.itemType === ItemType.Movie) {
 			return "#383a4d";
+		} else if(item.itemType === ItemType.Book){
+			return "#F7FAFE";
 		}
 	};
 

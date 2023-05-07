@@ -6,6 +6,8 @@ import { Game, GameReview } from "../data/Interfaces/Games";
 import { ScrollButton } from "./Apps";
 import { getGamesAsync } from "../features/gamesSlice";
 import useNavbarContext from "../contexts/NavbarContext";
+import AddToWishListButton from "../Components/WishListButton";
+import { ItemType } from "../data/Interfaces/WishList";
 
 function trimNumber(num: number): string {
 	const sizes = ["K", "M", "B", "T"];
@@ -68,7 +70,12 @@ const AppHeader = ({ app }: { app: Game }) => {
 				</div>
 			</div>
 
-			<button className="bg-[#01875f] w-56 p-1 rounded text-white mb-3 ml-4">{app?.priceText}</button>
+			<div className="flex gap-2">
+				<button className="font-Roboto hover:bg-[#095943] bg-[#01875f] w-56 p-2 rounded-lg text-white">{app?.priceText}</button>
+				<AddToWishListButton item={{ itemId: app.appId, itemType: ItemType.Game }} />
+			</div>
+
+			{/* <button className="bg-[#01875f] w-56 p-1 rounded text-white mb-3 ml-4">{app?.priceText}</button> */}
 			</div>
 			
 			<div className="ml-4">
