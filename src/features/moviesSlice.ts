@@ -13,7 +13,27 @@ export const getMoviesAsync = createAsyncThunk("movies/fetchMovies", async (_, t
 	}
 });
 
-export const postMoviesAsync =createAsyncThunk("movies/fetchMovies", async (data, thunkAPI) => {
+export const postMoviesAsync =createAsyncThunk("movies/postMovies", async (data, thunkAPI) => {
+	try {
+		const response = await axios.post<Movie[]>(ApiEndpoints.getMovies, data);
+		thunkAPI.dispatch(setMovies(response.data));
+		return response.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const putMoviesAsync =createAsyncThunk("movies/putMovies", async (data, thunkAPI) => {
+	try {
+		const response = await axios.post<Movie[]>(ApiEndpoints.getMovies, data);
+		thunkAPI.dispatch(setMovies(response.data));
+		return response.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+export const deleteMoviesAsync =createAsyncThunk("movies/deleteMovies", async (data, thunkAPI) => {
 	try {
 		const response = await axios.post<Movie[]>(ApiEndpoints.getMovies, data);
 		thunkAPI.dispatch(setMovies(response.data));

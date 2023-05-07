@@ -12,6 +12,33 @@ export const getGamesAsync = createAsyncThunk("games/getGamesAsync", async (_, t
 		return thunkAPI.rejectWithValue(error);
 	}
 });
+export const postGamesAsync = createAsyncThunk("games/postGamesAsync", async (data, thunkAPI) => {
+	try {
+		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
+		thunkAPI.dispatch(setGames(response.data));
+		return response.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+export const putGamesAsync = createAsyncThunk("games/putGamesAsync", async (data, thunkAPI) => {
+	try {
+		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
+		thunkAPI.dispatch(setGames(response.data));
+		return response.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+export const deleteGamesAsync = createAsyncThunk("games/deleteGamesAsync", async (data, thunkAPI) => {
+	try {
+		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
+		thunkAPI.dispatch(setGames(response.data));
+		return response.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
 
 interface State {
 	games: Game[];

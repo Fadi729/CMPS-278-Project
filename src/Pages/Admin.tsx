@@ -8,10 +8,12 @@ import Row from 'react-bootstrap/Row';
 import {useAppSelector, useAppDispatch } from "../hooks";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getMoviesAsync } from "../features/moviesSlice";
+import { getMoviesAsync, postMoviesAsync } from "../features/moviesSlice";
 import { getBooksAsync } from "../features/booksSlice";
 import { getGamesAsync } from "../features/gamesSlice";
 import { getApplicationsAsync } from "../features/applicationsSlice";
+import Movies from "./Movies";
+import Movie from "../data/Interfaces/Movies";
 
 const Admin = () => {
     /**
@@ -205,26 +207,434 @@ const Admin = () => {
         if(window.confirm("Are you sure?")== true){
             alert(id);
         }
+        
     }
 
     const [movieModal, setMovieModal] = useState(false);
     const [bookModal, setBookModal] = useState(false);
     const [appModal, setAppModal] = useState(false);
     const [gameModal, setGameModal] = useState(false);
+    const [bookReviewsModal, setBookReviewsModal] = useState(false);
+    const [appReviewsModal, setAppReviewsModal] = useState(false);
+    const [gameReviewsModal, setGameReviewsModal] = useState(false);
 
-    const ShowMovieModal = () => {setMovieModal(true)}
+    const ShowMovieModal = () => {
+        setMovieModal(true)
+        postMoviesAsync()
+    }
     const HideMovieModal = () => {setMovieModal(false)}
     const ShowBookModal = () => {setBookModal(true)}
     const HideBookModal = () => {setBookModal(false)}
+    const ShowBookReviewsModal = () => {setBookReviewsModal(true)}
+    const HideBookReviewsModal = () => {setBookReviewsModal(false)}
     const ShowAppModal = () => {setAppModal(true)}
     const HideAppModal = () => {setAppModal(false)}
+    const ShowAppReviewsModal = () => {setAppReviewsModal(true)}
+    const HideAppReviewsModal = () => {setAppReviewsModal(false)}
     const ShowGameModal = () => {setGameModal(true)}
     const HideGameModal = () => {setGameModal(false)}
+    const ShowGameReviewsModal = () => {setGameReviewsModal(true)}
+    const HideGameReviewsModal = () => {setGameReviewsModal(false)}
 
-    
+    var updateMovie={
+        ID:'',
+        Title:'',
+        Date:'',
+        Image:'',
+        Rating:'',
+        Genre:'',
+        Trailer:'',
+        Cast:'',
+        Credits:'',
+        Company:'',
+        Description:'',
+        Price:'',
+        Sales:'',
+        Reviews:''
+    };
+    var addMovie={
+        ID:'',
+        Title:'',
+        Date:'',
+        Image:'',
+        Rating:'',
+        Genre:'',
+        Trailer:'',
+        Cast:'',
+        Credits:'',
+        Company:'',
+        Description:'',
+        Price:'',
+        Sales:'',
+        Reviews:''
+    };
+    var updateBook={
+        ID:'',
+        Title:'',
+        Description:'',
+        Authors:'',
+        Image:'',
+        PreviewLink:'',
+        Publisher:'',
+        PublishedDate:'',
+        InfoLink:'',
+        Categories:'',
+        RatingsCount:''
+    };
+    var addBook={
+        ID:'',
+        Title:'',
+        Description:'',
+        Authors:'',
+        Image:'',
+        PreviewLink:'',
+        Publisher:'',
+        PublishedDate:'',
+        InfoLink:'',
+        Categories:'',
+        RatingsCount:''
+    };
+    var updateBookReview={
+        ID:'',
+        BookID:'',
+        Title:'',
+        UserID:'',
+        ProfileName:'',
+        PreviewLink:'',
+        ReviewHelpfulness:'',
+        ReviewScore:'',
+        ReviewTime:'',
+        ReviewSummary:'',
+        ReviewText:''
+    }
+    var addBookReview={
+        ID:'',
+        BookID:'',
+        Title:'',
+        UserID:'',
+        ProfileName:'',
+        PreviewLink:'',
+        ReviewHelpfulness:'',
+        ReviewScore:'',
+        ReviewTime:'',
+        ReviewSummary:'',
+        ReviewText:''
+    }
+    var updateApp={
+        url:'',
+        appId:'',
+        title:'',
+        summary:'',
+        developer:'',
+        developerId:'',
+        icon:'',
+        score:'',
+        scoreText:'',
+        priceText:'',
+        free:'',
+        description:'',
+        descriptionHTML:'',
+        installs:'',
+        minInstalls:'',
+        maxInstalls:'',
+        ratings:'',
+        reviewsCount:'',
+        histogram:'',
+        price:'',
+        currency:'',
+        available:'',
+        offersIAP:'',
+        iAPRange:'',
+        size:'',
+        androidVersion:'',
+        androidVersionText:'',
+        developerInternalID:'',
+        developerEmail:'',
+        developerWebsite:'',
+        developerAddress:'',
+        genre:'',
+        genreId:'',
+        familyGenre:'',
+        familyGenreId:'',
+        headerImage:'',
+        screenshots:'',
+        videoImage:'',
+        contentRating:'',
+        contentRatingDescription:'',
+        adSupported:'',
+        released:'',
+        updated:'',
+        version:'',
+        actions:''
+    }
+    var addApp={
+        url:'',
+        appId:'',
+        title:'',
+        summary:'',
+        developer:'',
+        developerId:'',
+        icon:'',
+        score:'',
+        scoreText:'',
+        priceText:'',
+        free:'',
+        description:'',
+        descriptionHTML:'',
+        installs:'',
+        minInstalls:'',
+        maxInstalls:'',
+        ratings:'',
+        reviewsCount:'',
+        histogram:'',
+        price:'',
+        currency:'',
+        available:'',
+        offersIAP:'',
+        iAPRange:'',
+        size:'',
+        androidVersion:'',
+        androidVersionText:'',
+        developerInternalID:'',
+        developerEmail:'',
+        developerWebsite:'',
+        developerAddress:'',
+        genre:'',
+        genreId:'',
+        familyGenre:'',
+        familyGenreId:'',
+        headerImage:'',
+        screenshots:'',
+        videoImage:'',
+        contentRating:'',
+        contentRatingDescription:'',
+        adSupported:'',
+        released:'',
+        updated:'',
+        version:'',
+        actions:''
+    }
+    var updateGame={
+        url:'',
+        appId:'',
+        title:'',
+        summary:'',
+        developer:'',
+        developerId:'',
+        icon:'',
+        score:'',
+        scoreText:'',
+        priceText:'',
+        free:'',
+        description:'',
+        descriptionHTML:'',
+        installs:'',
+        minInstalls:'',
+        maxInstalls:'',
+        ratings:'',
+        reviewsCount:'',
+        histogram:'',
+        price:'',
+        currency:'',
+        available:'',
+        offersIAP:'',
+        iAPRange:'',
+        size:'',
+        androidVersion:'',
+        androidVersionText:'',
+        developerInternalID:'',
+        developerEmail:'',
+        developerWebsite:'',
+        developerAddress:'',
+        genre:'',
+        genreId:'',
+        familyGenre:'',
+        familyGenreId:'',
+        headerImage:'',
+        screenshots:'',
+        videoImage:'',
+        contentRating:'',
+        contentRatingDescription:'',
+        adSupported:'',
+        released:'',
+        updated:'',
+        version:'',
+        actions:''
+    }
+    var addGame={
+        url:'',
+        appId:'',
+        title:'',
+        summary:'',
+        developer:'',
+        developerId:'',
+        icon:'',
+        score:'',
+        scoreText:'',
+        priceText:'',
+        free:'',
+        description:'',
+        descriptionHTML:'',
+        installs:'',
+        minInstalls:'',
+        maxInstalls:'',
+        ratings:'',
+        reviewsCount:'',
+        histogram:'',
+        price:'',
+        currency:'',
+        available:'',
+        offersIAP:'',
+        iAPRange:'',
+        size:'',
+        androidVersion:'',
+        androidVersionText:'',
+        developerInternalID:'',
+        developerEmail:'',
+        developerWebsite:'',
+        developerAddress:'',
+        genre:'',
+        genreId:'',
+        familyGenre:'',
+        familyGenreId:'',
+        headerImage:'',
+        screenshots:'',
+        videoImage:'',
+        contentRating:'',
+        contentRatingDescription:'',
+        adSupported:'',
+        released:'',
+        updated:'',
+        version:'',
+        actions:''
+    }
+    var updateGameReview={
+        Id:'',
+        appId:'',
+        userName:'',
+        userImage:'',
+        date:'',
+        score:'',
+        scoreText:'',
+        url:'',
+        title:'',
+        text:'',
+        replyDate:'',
+        replyText:'',
+        version:'',
+        thumbsUp:''
+    }
+    var addGameReview={
+        Id:'',
+        appId:'',
+        userName:'',
+        userImage:'',
+        date:'',
+        score:'',
+        scoreText:'',
+        url:'',
+        title:'',
+        text:'',
+        replyDate:'',
+        replyText:'',
+        version:'',
+        thumbsUp:''
+    }
+    var updateAppReview={
+        Id:'',
+        appId:'',
+        userName:'',
+        userImage:'',
+        date:'',
+        score:'',
+        scoreText:'',
+        url:'',
+        title:'',
+        text:'',
+        replyDate:'',
+        replyText:'',
+        version:'',
+        thumbsUp:''
+    }
+    var addAppReview={
+        Id:'',
+        appId:'',
+        userName:'',
+        userImage:'',
+        date:'',
+        score:'',
+        scoreText:'',
+        url:'',
+        title:'',
+        text:'',
+        replyDate:'',
+        replyText:'',
+        version:'',
+        thumbsUp:''
+    }
+    function AddMovie(){
 
-    
+    }
+    function EditMovie(){
 
+    }
+    function DeleteMovie(id: number){
+
+    }
+    function AddBook(){
+
+    }
+    function EditBook(){
+
+    }
+    function DeleteBook(id: String){
+
+    }
+    function AddBookReview(){
+
+    }
+    function EditBookReview(){
+
+    }
+    function DeleteBookReview(id: String){
+
+    }
+    function AddApp(){
+
+    }
+    function EditApp(){
+
+    }
+    function DeleteApp(id: String){
+
+    }
+    function AddAppReview(){
+
+    }
+    function EditAppReview(){
+
+    }
+    function DeleteAppReview(id: String){
+
+    }
+    function AddGame(){
+
+    }
+    function EditGame(){
+
+    }
+    function DeleteGame(id: String){
+
+    }
+    function AddGameReview(){
+
+    }
+    function EditGameReview(){
+
+    }
+    function DeleteGameReview(id: String){
+
+    }
     return(
         <div className='relative top-16'>
             <h1 style={{fontSize:'25px', fontWeight:'500'}}>Movies</h1>
@@ -254,21 +664,21 @@ const Admin = () => {
                         <tbody style={{overflow:'auto'}}>
                             <tr>
                             <td></td>
-                            <td><input type='text' className='form-control' placeholder="ID" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="title" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="date" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="image" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="rating" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="genre" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="trailer" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="cast" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="credits" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="company" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="description" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="price" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="sales" ></input></td>
-                            <td><input type='text' className='form-control' placeholder="reviews" ></input></td>
-                            <td><button className={"btn btn-primary"}>Add</button></td>
+                            <td><input type='text' className='form-control' placeholder="ID" onChange={(e)=>{addMovie.ID=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="title" onChange={(e)=>{addMovie.Title=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="date" onChange={(e)=>{addMovie.Date=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="image" onChange={(e)=>{addMovie.Image=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="rating" onChange={(e)=>{addMovie.Rating=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="genre" onChange={(e)=>{addMovie.Genre=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="trailer" onChange={(e)=>{addMovie.Trailer=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="cast" onChange={(e)=>{addMovie.Cast=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="credits" onChange={(e)=>{addMovie.Credits=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="company" onChange={(e)=>{addMovie.Company=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="description" onChange={(e)=>{addMovie.Description=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="price" onChange={(e)=>{addMovie.Price=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="sales" onChange={(e)=>{addMovie.Sales=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="reviews" onChange={(e)=>{addMovie.Reviews=e.target.value}}></input></td>
+                            <td><button className={"btn btn-primary"} onClick={AddMovie}>Add</button></td>
                             </tr>
                             {
                                 movies  && movies.length>0 ?
@@ -292,7 +702,7 @@ const Admin = () => {
                                             <td>Reviews</td>
                                             <td colSpan={2} style={{height:'80px', overflow:'auto',minWidth:'200px'}}>
                                                 <button className="btn btn-primary" onClick={ShowMovieModal}>Edit</button>&nbsp;
-                                                <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                                                <button className="btn btn-danger" onClick={() => DeleteMovie(item.id)}>Delete</button>
                                             </td>
                                         </tr>
                                     )
@@ -309,45 +719,45 @@ const Admin = () => {
                         </Modal.Header>
                         <Modal.Body style={{minWidth:'600px', background:'white'}}>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="ID" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="title" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="date" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="ID"  onChange={(e)=>{updateMovie.ID=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="title"  onChange={(e)=>{updateMovie.Title=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="date"  onChange={(e)=>{updateMovie.Date=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="image" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="image"  onChange={(e)=>{updateMovie.Image=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="rating" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="genre" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="rating"  onChange={(e)=>{updateMovie.Rating=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="genre"  onChange={(e)=>{updateMovie.Genre=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="trailer" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="trailer"  onChange={(e)=>{updateMovie.Trailer=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="cast" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="cast"  onChange={(e)=>{updateMovie.Cast=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="credits" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="credits"  onChange={(e)=>{updateMovie.Credits=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="company" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="company"  onChange={(e)=>{updateMovie.Company=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="description" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="description"  onChange={(e)=>{updateMovie.Description=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="price" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="sales" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="price"  onChange={(e)=>{updateMovie.Price=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="sales"  onChange={(e)=>{updateMovie.Sales=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="reviews" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="reviews"  onChange={(e)=>{updateMovie.Reviews=e.target.value}}></input></Col>
                             </Row><br></br>
                         </Modal.Body>
                         <Modal.Footer style={{minWidth:'600px', background:'white'}}>
                             <Button variant="secondary" onClick={HideMovieModal}>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={handleUpdate}>
+                            <Button variant="primary" onClick={EditMovie}>
                                 Save Changes
                             </Button>
                         </Modal.Footer>
@@ -377,18 +787,18 @@ const Admin = () => {
                         <tbody style={{overflow:'auto'}}>
                             <tr>
                             <td></td>
-                            <td><input type='text' className='form-control' placeholder="ID"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Title"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Description"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Authors"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Image"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Preview Link"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Publisher"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Published Date"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Info Link"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Categories"></input></td>
-                            <td><input type='text' className='form-control' placeholder="Ratings Count"></input></td>
-                            <td><button className={"btn btn-primary"}>Add</button></td>
+                            <td><input type='text' className='form-control' placeholder="ID"  onChange={(e)=>{addBook.ID=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Title"  onChange={(e)=>{addBook.Title=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Description"  onChange={(e)=>{addBook.Description=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Authors"  onChange={(e)=>{addBook.Authors=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Image"  onChange={(e)=>{addBook.Image=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Preview Link"  onChange={(e)=>{addBook.PreviewLink=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Publisher"  onChange={(e)=>{addBook.Publisher=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Published Date"  onChange={(e)=>{addBook.PublishedDate=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Info Link"  onChange={(e)=>{addBook.InfoLink=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Categories"  onChange={(e)=>{addBook.Categories=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="Ratings Count"  onChange={(e)=>{addBook.RatingsCount=e.target.value}}></input></td>
+                            <td><button className={"btn btn-primary"} onClick={AddBook}>Add</button></td>
                             </tr>
                             {
                                 books  && books.length>0 ?
@@ -409,7 +819,7 @@ const Admin = () => {
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.ratingsCount}</div></td>
                                             <td colSpan={2} style={{height:'80px', overflow:'auto',minWidth:'200px'}}>
                                                 <button className="btn btn-primary" onClick={ShowBookModal}>Edit</button> &nbsp;
-                                                <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                                                <button className="btn btn-danger" onClick={() => DeleteBook(item.id)}>Delete</button>
                                             </td>
                                         </tr>
                                     )
@@ -426,43 +836,43 @@ const Admin = () => {
                         </Modal.Header>
                         <Modal.Body style={{minWidth:'600px', background:'white'}}>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="ID" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="title" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="ID" onChange={(e)=>{updateBook.ID=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="title" onChange={(e)=>{updateBook.Title=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="description" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="description" onChange={(e)=>{updateBook.Description=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="authors" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="authors" onChange={(e)=>{updateBook.Authors=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="image" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="preview link" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="image" onChange={(e)=>{updateBook.Image=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="preview link" onChange={(e)=>{updateBook.PreviewLink=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="publisher" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="published date" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="publisher" onChange={(e)=>{updateBook.Publisher=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="published date" onChange={(e)=>{updateBook.PublishedDate=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="info link" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="info link" onChange={(e)=>{updateBook.InfoLink=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="categories" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="ratings count" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="categories" onChange={(e)=>{updateBook.Categories=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="ratings count" onChange={(e)=>{updateBook.RatingsCount=e.target.value}}></input></Col>
                             </Row><br></br>
                         </Modal.Body>
                         <Modal.Footer style={{minWidth:'600px', background:'white'}}>
                             <Button variant="secondary" onClick={HideBookModal}>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={handleUpdate}>
+                            <Button variant="primary" onClick={EditBook}>
                                 Save Changes
                             </Button>
                         </Modal.Footer>
                     </Modal>
                 </Fragment>
             </div>
-            <h1 style={{fontSize:'25px', fontWeight:'500'}}>Books Reviews</h1>
+            <h1 style={{fontSize:'25px', fontWeight:'500'}}>Book Reviews</h1>
             <div style={{maxHeight:'500px', overflow:'auto', marginBottom:'50px'}}>
                 <Fragment> 
                     <Table striped bordered hover style={{border:'1px solid grey'}}>
@@ -474,29 +884,28 @@ const Admin = () => {
                             <th>title</th>
                             <th>user ID</th>
                             <th>profile name</th>
-                            <th>Preview Link</th>
                             <th>review helpfulness</th>
                             <th>review score</th>
                             <th>review time</th>
                             <th>review summary</th>
                             <th>review text</th>
+                            <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody style={{overflow:'auto'}}>
                             <tr>
                             <td></td>
-                            <td><input type='text' className='form-control' placeholder="ID"></input></td>
-                            <td><input type='text' className='form-control' placeholder="book ID"></input></td>
-                            <td><input type='text' className='form-control' placeholder="title"></input></td>
-                            <td><input type='text' className='form-control' placeholder="price"></input></td>
-                            <td><input type='text' className='form-control' placeholder="user ID"></input></td>
-                            <td><input type='text' className='form-control' placeholder="profile name"></input></td>
-                            <td><input type='text' className='form-control' placeholder="review helpfulness"></input></td>
-                            <td><input type='text' className='form-control' placeholder="review score"></input></td>
-                            <td><input type='text' className='form-control' placeholder="review time"></input></td>
-                            <td><input type='text' className='form-control' placeholder="review summary"></input></td>
-                            <td><input type='text' className='form-control' placeholder="review text"></input></td>
-                            <td><button className={"btn btn-primary"}>Add</button></td>
+                            <td><input type='text' className='form-control' placeholder="ID" onChange={(e)=>{addBookReview.ID=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="book ID" onChange={(e)=>{addBookReview.BookID=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="title" onChange={(e)=>{addBookReview.Title=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="user ID" onChange={(e)=>{addBookReview.UserID=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="profile name" onChange={(e)=>{addBookReview.ProfileName=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="review helpfulness" onChange={(e)=>{addBookReview.ReviewHelpfulness=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="review score" onChange={(e)=>{addBookReview.ReviewScore=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="review time" onChange={(e)=>{addBookReview.ReviewTime=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="review summary" onChange={(e)=>{addBookReview.ReviewSummary=e.target.value}}></input></td>
+                            <td><input type='text' className='form-control' placeholder="review text" onChange={(e)=>{addBookReview.ReviewText=e.target.value}}></input></td>
+                            <td><button className={"btn btn-primary"} onClick={AddBookReview}>Add</button></td>
                             </tr>
                             {
                                 books  && books.length>0 ?
@@ -509,15 +918,14 @@ const Admin = () => {
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'170px'}}>{item.description}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'100px'}}>{item.authors}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'120px'}}>{item.image}</div></td>
-                                            <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.previewLink}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.publisher}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.publishedDate}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.infoLink}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.categories}</div></td>
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'270px'}}>{item.ratingsCount}</div></td>
                                             <td colSpan={2} style={{height:'80px', overflow:'auto',minWidth:'200px'}}>
-                                                <button className="btn btn-primary" >Edit</button> &nbsp;
-                                                <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                                                <button className="btn btn-primary" onClick={ShowBookReviewsModal}>Edit</button> &nbsp;
+                                                <button className="btn btn-danger" onClick={() => DeleteBookReview(item.id)}>Delete</button>
                                             </td>
                                         </tr>
                                     )
@@ -528,42 +936,41 @@ const Admin = () => {
                             
                         </tbody>
                     </Table>
-                    <Modal >
+                    <Modal show={bookReviewsModal} onHide={HideBookReviewsModal}>
                         <Modal.Header closeButton style={{minWidth:'600px', background:'white'}}>
-                        <Modal.Title>Update Book</Modal.Title>
+                        <Modal.Title>Update Book Review</Modal.Title>
                         </Modal.Header>
                         <Modal.Body style={{minWidth:'600px', background:'white'}}>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="ID" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="title" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="ID" onChange={(e)=>{updateBookReview.ID=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="title" onChange={(e)=>{updateBookReview.Title=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="description" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="user ID" onChange={(e)=>{updateBookReview.UserID=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="authors" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="profile name" onChange={(e)=>{updateBookReview.ProfileName=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="image" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="preview link" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="preview link" onChange={(e)=>{updateBookReview.PreviewLink=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="review helpfulness" onChange={(e)=>{updateBookReview.ReviewHelpfulness=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="publisher" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="published date" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="review score" onChange={(e)=>{updateBookReview.ReviewScore=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="review time" onChange={(e)=>{updateBookReview.ReviewTime=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="info link" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="review summary" onChange={(e)=>{updateBookReview.ReviewSummary=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="categories" ></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="ratings count" ></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="review text" onChange={(e)=>{updateBookReview.ReviewText=e.target.value}}></input></Col>
                             </Row><br></br>
                         </Modal.Body>
                         <Modal.Footer style={{minWidth:'600px', background:'white'}}>
-                            <Button variant="secondary">
+                            <Button variant="secondary" onClick={HideBookReviewsModal}>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={handleUpdate}>
+                            <Button variant="primary" onClick={EditBookReview}>
                                 Save Changes
                             </Button>
                         </Modal.Footer>
@@ -627,51 +1034,51 @@ const Admin = () => {
                         <tbody style={{overflow:'auto'}}>
                         <tr>
                             <td style={{minWidth:'40px'}}></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="app ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" ></input></td>
-                            <td style={{minWidth:'170px'}}><button className={"btn btn-primary"}>Add</button></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => addApp.url=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="app ID" onChange={(e) => addApp.appId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => addApp.title=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" onChange={(e) => addApp.summary=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" onChange={(e) => addApp.developer=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" onChange={(e) => addApp.developerId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" onChange={(e) => addApp.icon=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => addApp.score=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => addApp.scoreText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" onChange={(e) => addApp.priceText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" onChange={(e) => addApp.free=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" onChange={(e) => addApp.description=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" onChange={(e) => addApp.descriptionHTML=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" onChange={(e) => addApp.installs=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" onChange={(e) => addApp.minInstalls=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" onChange={(e) => addApp.maxInstalls=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" onChange={(e) => addApp.ratings=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" onChange={(e) => addApp.reviewsCount=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" onChange={(e) => addApp.histogram=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" onChange={(e) => addApp.price=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" onChange={(e) => addApp.currency=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" onChange={(e) => addApp.available=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" onChange={(e) => addApp.offersIAP=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" onChange={(e) => addApp.iAPRange=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" onChange={(e) => addApp.size=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" onChange={(e) => addApp.androidVersion=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" onChange={(e) => addApp.androidVersionText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" onChange={(e) => addApp.developerInternalID=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" onChange={(e) => addApp.developerEmail=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" onChange={(e) => addApp.developerWebsite=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" onChange={(e) => addApp.developerAddress=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" onChange={(e) => addApp.genre=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" onChange={(e) => addApp.genreId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" onChange={(e) => addApp.familyGenre=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" onChange={(e) => addApp.familyGenreId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" onChange={(e) => addApp.headerImage=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" onChange={(e) => addApp.screenshots=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" onChange={(e) => addApp.videoImage=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" onChange={(e) => addApp.contentRating=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" onChange={(e) => addApp.contentRatingDescription=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" onChange={(e) => addApp.adSupported=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" onChange={(e) => addApp.released=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" onChange={(e) => addApp.updated=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => addApp.version=e.target.value}></input></td>
+                            <td style={{minWidth:'170px'}}><button className={"btn btn-primary"} onClick={AddApp}>Add</button></td>
                         </tr>
                             {
                                 applications  && applications.length>0 ?
@@ -725,7 +1132,7 @@ const Admin = () => {
                                             <td><div style={{height:'60px', overflow:'auto'}}>{item.version}</div></td>
                                             <td colSpan={2}>
                                                 <button className="btn btn-primary" onClick={ShowAppModal}>Edit</button> &nbsp;
-                                                <button className="btn btn-danger" onClick={() => handleDelete(item.appId)}>Delete</button>
+                                                <button className="btn btn-danger" onClick={() => DeleteApp(item.appId)}>Delete</button>
                                             </td>
                                         </tr>
                                     )
@@ -741,70 +1148,163 @@ const Admin = () => {
                         <Modal.Title>Update App</Modal.Title>
                         </Modal.Header>
                         <Modal.Body style={{minWidth:'600px', background:'white'}}>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'70px'}} placeholder="url" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'70px'}} placeholder="app ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'70px'}} placeholder="title" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" ></input></Row><br></br>
-                            
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => updateApp.url=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="app ID" onChange={(e) => updateApp.appId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => updateApp.title=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" onChange={(e) => updateApp.summary=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" onChange={(e) => updateApp.developer=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" onChange={(e) => updateApp.developerId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" onChange={(e) => updateApp.icon=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => updateApp.score=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => updateApp.scoreText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" onChange={(e) => updateApp.priceText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" onChange={(e) => updateApp.free=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" onChange={(e) => updateApp.description=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" onChange={(e) => updateApp.descriptionHTML=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" onChange={(e) => updateApp.installs=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" onChange={(e) => updateApp.minInstalls=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" onChange={(e) => updateApp.maxInstalls=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" onChange={(e) => updateApp.ratings=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" onChange={(e) => updateApp.reviewsCount=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" onChange={(e) => updateApp.histogram=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" onChange={(e) => updateApp.price=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" onChange={(e) => updateApp.currency=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" onChange={(e) => updateApp.available=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" onChange={(e) => updateApp.offersIAP=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" onChange={(e) => updateApp.iAPRange=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" onChange={(e) => updateApp.size=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" onChange={(e) => updateApp.androidVersion=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" onChange={(e) => updateApp.androidVersionText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" onChange={(e) => updateApp.developerInternalID=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" onChange={(e) => updateApp.developerEmail=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" onChange={(e) => updateApp.developerWebsite=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" onChange={(e) => updateApp.developerAddress=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" onChange={(e) => updateApp.genre=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" onChange={(e) => updateApp.genreId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" onChange={(e) => updateApp.familyGenre=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" onChange={(e) => updateApp.familyGenreId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" onChange={(e) => updateApp.headerImage=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" onChange={(e) => updateApp.screenshots=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" onChange={(e) => updateApp.videoImage=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" onChange={(e) => updateApp.contentRating=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" onChange={(e) => updateApp.contentRatingDescription=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" onChange={(e) => updateApp.adSupported=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" onChange={(e) => updateApp.released=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" onChange={(e) => updateApp.updated=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => updateApp.version=e.target.value}></input></Row><br></br>                 
                         </Modal.Body>
                         <Modal.Footer style={{minWidth:'600px', background:'white'}}>
                         <Button variant="secondary" onClick={HideAppModal}>
                             Close
                         </Button>
-                        <Button variant="primary" onClick={handleUpdate}>
+                        <Button variant="primary" onClick={EditApp}>
+                            Save Changes
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </Fragment>
+            </div>
+            <h1 style={{fontSize:'25px', fontWeight:'500'}}>App Reviews</h1>
+            <div style={{maxHeight:'500px', overflow:'auto', marginBottom:'50px'}}>
+                <Fragment> 
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                            <th>#</th>
+                                            <th>url</th>
+                                            <th>app Id</th>
+                                            <th>user name</th>
+                                            <th>user image</th>
+                                            <th>date</th>
+                                            <th>score</th>
+                                            <th>score text</th>
+                                            <th>url</th>
+                                            <th>title</th>
+                                            <th>text</th>
+                                            <th>reply date</th>
+                                            <th>reply text</th>
+                                            <th>version</th>
+                                            <th>thumbs up</th>
+                                            <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody style={{overflow:'auto'}}>
+                        <tr>
+                            <td style={{minWidth:'40px'}}></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="Id" onChange={(e) => addAppReview.Id=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="app ID" onChange={(e) => addAppReview.appId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user name" onChange={(e) => addAppReview.userName=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user image" onChange={(e) => addAppReview.userImage=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="date" onChange={(e) => addAppReview.date=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => addAppReview.score=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => addAppReview.scoreText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => addAppReview.url=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => addAppReview.title=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="text" onChange={(e) => addAppReview.text=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply date" onChange={(e) => addAppReview.replyDate=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply text" onChange={(e) => addAppReview.replyText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => addAppReview.version=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="thumbs up" onChange={(e) => addAppReview.thumbsUp=e.target.value}></input></td>
+                            <td style={{minWidth:'170px'}}><button className={"btn btn-primary"} onClick={AddAppReview}>Add</button></td>
+                        </tr>
+                            {
+                                applications  && applications.length>0 ?
+                                applications.map((item, index) => {
+                                    return(
+                                        <tr key={index} style={{height:'60px', overflow:'auto'}}>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{index+1}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.url}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.appId}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.title}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.summary}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.developer}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.developerId}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.icon}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.score}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.scoreText}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.priceText}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.free}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.description}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.descriptionHTML}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.installs}</div></td>
+                                            <td colSpan={2}>
+                                                <button className="btn btn-primary" onClick={ShowAppReviewsModal}>Edit</button> &nbsp;
+                                                <button className="btn btn-danger" onClick={() => DeleteAppReview(item.appId)}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                                :
+                                "Loading..."
+                            }
+                            
+                        </tbody>
+                    </Table>
+                    <Modal show={appReviewsModal}  onHide={HideAppReviewsModal}>
+                        <Modal.Header closeButton style={{minWidth:'600px', background:'white'}}>
+                        <Modal.Title>Update App Review</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body style={{minWidth:'600px', background:'white'}}>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="Id" onChange={(e) => updateAppReview.Id=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="app ID" onChange={(e) => updateAppReview.appId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user name" onChange={(e) => updateAppReview.userName=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user image" onChange={(e) => updateAppReview.userImage=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="date" onChange={(e) => updateAppReview.date=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => updateAppReview.score=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => updateAppReview.scoreText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => updateAppReview.url=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => updateAppReview.title=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="text" onChange={(e) => updateAppReview.text=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply date" onChange={(e) => updateAppReview.replyDate=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply text" onChange={(e) => updateAppReview.replyText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => updateAppReview.version=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="thumbs up" onChange={(e) => updateAppReview.thumbsUp=e.target.value}></input></Row><br></br>                                                   
+                        </Modal.Body>
+                        <Modal.Footer style={{minWidth:'600px', background:'white'}}>
+                        <Button variant="secondary" onClick={HideAppReviewsModal}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={EditAppReview}>
                             Save Changes
                         </Button>
                         </Modal.Footer>
@@ -868,51 +1368,51 @@ const Admin = () => {
                         <tbody style={{overflow:'auto'}}>
                         <tr>
                             <td style={{minWidth:'40px'}}></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="game ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" ></input></td>
-                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" ></input></td>
-                            <td style={{minWidth:'170px'}}><button className={"btn btn-primary"}>Add</button></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => addGame.url=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="game ID" onChange={(e) => addGame.appId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => addGame.title=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" onChange={(e) => addGame.summary=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" onChange={(e) => addGame.developer=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" onChange={(e) => addGame.developerId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" onChange={(e) => addGame.icon=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => addGame.score=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => addGame.scoreText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" onChange={(e) => addGame.priceText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" onChange={(e) => addGame.free=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" onChange={(e) => addGame.description=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" onChange={(e) => addGame.descriptionHTML=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" onChange={(e) => addGame.installs=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" onChange={(e) => addGame.minInstalls=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" onChange={(e) => addGame.maxInstalls=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" onChange={(e) => addGame.ratings=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" onChange={(e) => addGame.reviewsCount=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" onChange={(e) => addGame.histogram=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" onChange={(e) => addGame.price=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" onChange={(e) => addGame.currency=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" onChange={(e) => addGame.available=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" onChange={(e) => addGame.offersIAP=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" onChange={(e) => addGame.iAPRange=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" onChange={(e) => addGame.size=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" onChange={(e) => addGame.androidVersion=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" onChange={(e) => addGame.androidVersionText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" onChange={(e) => addGame.developerInternalID=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" onChange={(e) => addGame.developerEmail=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" onChange={(e) => addGame.developerWebsite=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" onChange={(e) => addGame.developerAddress=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" onChange={(e) => addGame.genre=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" onChange={(e) => addGame.genreId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" onChange={(e) => addGame.familyGenre=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" onChange={(e) => addGame.familyGenreId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" onChange={(e) => addGame.headerImage=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" onChange={(e) => addGame.screenshots=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" onChange={(e) => addGame.videoImage=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" onChange={(e) => addGame.contentRating=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" onChange={(e) => addGame.contentRatingDescription=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" onChange={(e) => addGame.adSupported=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" onChange={(e) => addGame.released=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" onChange={(e) => addGame.updated=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => addGame.version=e.target.value}></input></td>
+                            <td style={{minWidth:'170px'}}><button className={"btn btn-primary"} onClick={AddGame}>Add</button></td>
                         </tr>
                             {
                                 games  && games.length>0 ?
@@ -966,7 +1466,7 @@ const Admin = () => {
                                             <td><div style={{height:'60px', overflow:'auto'}}>{item.version}</div></td>
                                             <td colSpan={2}>
                                                 <button className="btn btn-primary" onClick={ShowGameModal}>Edit</button> &nbsp;
-                                                <button className="btn btn-danger" onClick={() => handleDelete(item.appId)}>Delete</button>
+                                                <button className="btn btn-danger" onClick={() => DeleteGame(item.appId)}>Delete</button>
                                             </td>
                                         </tr>
                                     )
@@ -982,73 +1482,169 @@ const Admin = () => {
                         <Modal.Title>Update Game</Modal.Title>
                         </Modal.Header>
                         <Modal.Body style={{minWidth:'600px', background:'white'}}>
-                            <Row><input type='text' className='form-control' style={{minWidth:'70px'}} placeholder="url" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'70px'}} placeholder="game ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'70px'}} placeholder="title" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" ></input></Row><br></br>
-                            
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" ></input></Row><br></br>
-                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" ></input></Row><br></br>
-                            
+                        <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => updateGame.url=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="game ID" onChange={(e) => updateGame.appId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => updateGame.title=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="summary" onChange={(e) => updateGame.summary=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer" onChange={(e) => updateGame.developer=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer ID" onChange={(e) => updateGame.developerId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="icon" onChange={(e) => updateGame.icon=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => updateGame.score=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => updateGame.scoreText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price text" onChange={(e) => updateGame.priceText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="free" onChange={(e) => updateGame.free=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description" onChange={(e) => updateGame.description=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="description html" onChange={(e) => updateGame.descriptionHTML=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="installs" onChange={(e) => updateGame.installs=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="min installs" onChange={(e) => updateGame.minInstalls=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="max installs" onChange={(e) => updateGame.maxInstalls=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ratings" onChange={(e) => updateGame.ratings=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reviews count" onChange={(e) => updateGame.reviewsCount=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="histogram" onChange={(e) => updateGame.histogram=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="price" onChange={(e) => updateGame.price=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="currency" onChange={(e) => updateGame.currency=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="available" onChange={(e) => updateGame.available=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="offers IAP" onChange={(e) => updateGame.offersIAP=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="iAPRange" onChange={(e) => updateGame.iAPRange=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="size" onChange={(e) => updateGame.size=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version" onChange={(e) => updateGame.androidVersion=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="android version text" onChange={(e) => updateGame.androidVersionText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer internal ID" onChange={(e) => updateGame.developerInternalID=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer email" onChange={(e) => updateGame.developerEmail=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer website" onChange={(e) => updateGame.developerWebsite=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="developer address" onChange={(e) => updateGame.developerAddress=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre" onChange={(e) => updateGame.genre=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="genre ID" onChange={(e) => updateGame.genreId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre" onChange={(e) => updateGame.familyGenre=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="family genre ID" onChange={(e) => updateGame.familyGenreId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="header image" onChange={(e) => updateGame.headerImage=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="screenshots" onChange={(e) => updateGame.screenshots=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="video image" onChange={(e) => updateGame.videoImage=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating" onChange={(e) => updateGame.contentRating=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="content rating description" onChange={(e) => updateGame.contentRatingDescription=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="ad supported" onChange={(e) => updateGame.adSupported=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="released" onChange={(e) => updateGame.released=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="updated" onChange={(e) => updateGame.updated=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => updateGame.version=e.target.value}></input></Row><br></br>                 
                         </Modal.Body>
                         <Modal.Footer style={{minWidth:'600px', background:'white'}}>
                         <Button variant="secondary" onClick={HideGameModal}>
                             Close
                         </Button>
-                        <Button variant="primary" onClick={handleUpdate}>
+                        <Button variant="primary" onClick={EditGame}>
                             Save Changes
                         </Button>
                         </Modal.Footer>
                     </Modal>
                 </Fragment>
             </div>
-            
+            <h1 style={{fontSize:'25px', fontWeight:'500'}}>Game Reviews</h1>
+            <div style={{maxHeight:'500px', overflow:'auto', marginBottom:'50px'}}>
+                <Fragment> 
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                            <th>#</th>
+                                            <th>url</th>
+                                            <th>game Id</th>
+                                            <th>user name</th>
+                                            <th>user image</th>
+                                            <th>date</th>
+                                            <th>score</th>
+                                            <th>score text</th>
+                                            <th>url</th>
+                                            <th>title</th>
+                                            <th>text</th>
+                                            <th>reply date</th>
+                                            <th>reply text</th>
+                                            <th>version</th>
+                                            <th>thumbs up</th>
+                                            <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody style={{overflow:'auto'}}>
+                        <tr>
+                            <td style={{minWidth:'40px'}}></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="Id" onChange={(e) => addGameReview.Id=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="game ID" onChange={(e) => addGameReview.appId=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user name" onChange={(e) => addGameReview.userName=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user image" onChange={(e) => addGameReview.userImage=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="date" onChange={(e) => addGameReview.date=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => addGameReview.score=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => addGameReview.scoreText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => addGameReview.url=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => addGameReview.title=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="text" onChange={(e) => addGameReview.text=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply date" onChange={(e) => addGameReview.replyDate=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply text" onChange={(e) => addGameReview.replyText=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => addGameReview.version=e.target.value}></input></td>
+                            <td><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="thumbs up" onChange={(e) => addGameReview.thumbsUp=e.target.value}></input></td>
+                            <td style={{minWidth:'170px'}}><button className={"btn btn-primary"} onClick={AddGameReview}>Add</button></td>
+                        </tr>
+                            {
+                                applications  && applications.length>0 ?
+                                applications.map((item, index) => {
+                                    return(
+                                        <tr key={index} style={{height:'60px', overflow:'auto'}}>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{index+1}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.url}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.appId}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.title}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.summary}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.developer}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.developerId}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.icon}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.score}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.scoreText}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.priceText}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.free}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.description}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.descriptionHTML}</div></td>
+                                            <td><div style={{height:'60px', overflow:'auto'}}>{item.installs}</div></td>
+                                            <td colSpan={2}>
+                                                <button className="btn btn-primary" onClick={ShowGameReviewsModal}>Edit</button> &nbsp;
+                                                <button className="btn btn-danger" onClick={() => DeleteGameReview(item.appId)}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                                :
+                                "Loading..."
+                            }
+                            
+                        </tbody>
+                    </Table>
+                    <Modal show={gameReviewsModal}  onHide={HideGameReviewsModal}>
+                        <Modal.Header closeButton style={{minWidth:'600px', background:'white'}}>
+                        <Modal.Title>Update Game Review</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body style={{minWidth:'600px', background:'white'}}>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="Id" onChange={(e) => updateGameReview.Id=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="game ID" onChange={(e) => updateGameReview.appId=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user name" onChange={(e) => updateGameReview.userName=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="user image" onChange={(e) => updateGameReview.userImage=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="date" onChange={(e) => updateGameReview.date=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score" onChange={(e) => updateGameReview.score=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="score text" onChange={(e) => updateGameReview.scoreText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="url" onChange={(e) => updateGameReview.url=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="title" onChange={(e) => updateGameReview.title=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="text" onChange={(e) => updateGameReview.text=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply date" onChange={(e) => updateGameReview.replyDate=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="reply text" onChange={(e) => updateGameReview.replyText=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="version" onChange={(e) => updateGameReview.version=e.target.value}></input></Row><br></br>
+                            <Row><input type='text' className='form-control' style={{minWidth:'170px'}} placeholder="thumbs up" onChange={(e) => updateGameReview.thumbsUp=e.target.value}></input></Row><br></br>                            
+                        </Modal.Body>
+                        <Modal.Footer style={{minWidth:'600px', background:'white'}}>
+                        <Button variant="secondary" onClick={HideGameReviewsModal}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={EditGameReview}>
+                            Save Changes
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </Fragment>
+            </div>    
         </div>
     );
 };

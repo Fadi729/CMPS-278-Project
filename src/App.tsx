@@ -24,7 +24,9 @@ import { getWishListAsync } from "./features/wishListSlice";
 import { setUser } from "./features/authSlice";
 
 function App() {
+	
 	const dispatch = useAppDispatch();
+	/*
 	const { applications, isLoading: appIsLoading } = useAppSelector(
 		(state) => state.Applications
 	);
@@ -57,7 +59,7 @@ function App() {
 			getMovies();
 		}
 	}, []);
-
+	*/
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		// check if token exists
@@ -72,6 +74,10 @@ function App() {
 			}
 		}
 	}, []);
+	
+	const appIsLoading=false
+	const gameIsLoading=false
+	const movieIsLoading=false
 	return (
 		<>
 			{!appIsLoading && !gameIsLoading && !movieIsLoading && (

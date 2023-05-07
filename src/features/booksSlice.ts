@@ -13,6 +13,16 @@ export const getBooksAsync = createAsyncThunk("books/getBooksAsync", async (_, t
 		return thunkAPI.rejectWithValue(error);
 	}
 });
+export const postBooksAsync = createAsyncThunk("books/postBooksAsync", async (_, thunkAPI) => {
+	try {
+		const response = await axios.get<BooksDataAPIResponse[]>(ApiEndpoints.getBooks);
+		const books = response.data.map(convertBook);
+		thunkAPI.dispatch(setBooks(books));
+		return books;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
 
 function convertBook(book: BooksDataAPIResponse) {
 	return { ...book, authors: book.authors !== null ? eval(book.authors) : null } as BooksData;
