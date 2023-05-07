@@ -223,7 +223,27 @@ const Admin = () => {
     const [appReviewsModal, setAppReviewsModal] = useState(false);
     const [gameReviewsModal, setGameReviewsModal] = useState(false);
 
-    const ShowMovieModal = () => {
+    const ShowMovieModal = (
+    id:number,
+    title:string,
+    date:string,
+    image:string,
+    rating:string,
+    genres:string,
+    trailer:string,
+    cast:string,
+    credits:string,
+    company:string,
+    description:string,
+    price:string,
+    sales:string) => {
+        updateMovie.id=id;
+        updateMovie.title=title;updateMovie.date=date ;
+        updateMovie.image=image;updateMovie.rating=rating ;
+        updateMovie.genres=genres;updateMovie.trailer=trailer ;
+        updateMovie.cast=cast;updateMovie.credits=credits ;
+        updateMovie.company=company;updateMovie.description=description ;
+        updateMovie.price=price;updateMovie.sales=sales ;
         setMovieModal(true)
         
     }
@@ -241,27 +261,7 @@ const Admin = () => {
     const ShowGameReviewsModal = () => {setGameReviewsModal(true)}
     const HideGameReviewsModal = () => {setGameReviewsModal(false)}
 
-    var updateMovie={
-        ID:'',
-        Title:'',
-        Date:'',
-        Image:'',
-        Rating:'',
-        Genre:'',
-        Trailer:'',
-        Cast:'',
-        Credits:'',
-        Company:'',
-        Description:'',
-        Price:'',
-        Sales:'',
-        Reviews:''
-    };
-
-    
-
-    
-    var addMovie : Movie={
+    let updateMovie : Movie={
         id:0,
         title:'',
         date:'',
@@ -283,7 +283,34 @@ const Admin = () => {
             date: '',
             rating1: 0,
             notHelpful: 0
-        } as unknown as Review]
+        } as Review]
+    } as Movie ;
+
+    
+
+    
+    let addMovie : Movie={
+        title:'',
+        date:'',
+        image:'',
+        rating:'',
+        genres:'',
+        trailer:'',
+        cast:'',
+        credits:'',
+        company:'',
+        description:'',
+        price:'',
+        sales:'',
+        reviews: [{
+            content: '',
+            helpful: 0,
+            title: '',
+            author: '',
+            date: '',
+            rating1: 0,
+            notHelpful: 0
+        } as Review]
     } as Movie ;
     var updateBook={
         ID:'',
@@ -593,7 +620,8 @@ const Admin = () => {
         dispatch(postMoviesAsync(addMovie))
     }
     function EditMovie(){
-        
+        dispatch(deleteMoviesAsync(updateMovie.id))
+        dispatch(postMoviesAsync(updateMovie))
     }
     function DeleteMovie(id: number){
         dispatch(deleteMoviesAsync(id))
@@ -718,7 +746,7 @@ const Admin = () => {
                                             <td><div style={{height:'80px', overflow:'auto', minWidth:'120px'}}>{item.sales}</div></td>
                                             <td>Reviews</td>
                                             <td colSpan={2} style={{height:'80px', overflow:'auto',minWidth:'200px'}}>
-                                                <button className="btn btn-primary" onClick={ShowMovieModal}>Edit</button>&nbsp;
+                                                <button className="btn btn-primary" onClick={() => {ShowMovieModal(item.id,item.title,item.date,item.image,item.rating,item.genres,item.trailer,item.cast,item.credits,item.company,item.description,item.price,item.sales)}}>Edit</button>&nbsp;
                                                 <button className="btn btn-danger" onClick={() => {DeleteMovie(item.id)}}>Delete</button>
                                             </td>
                                         </tr>
@@ -736,38 +764,38 @@ const Admin = () => {
                         </Modal.Header>
                         <Modal.Body style={{minWidth:'600px', background:'white'}}>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="ID"  onChange={(e)=>{updateMovie.ID=e.target.value}}></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="title"  onChange={(e)=>{updateMovie.Title=e.target.value}}></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="date"  onChange={(e)=>{updateMovie.Date=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="ID"  onChange={(e)=>{updateMovie.id=parseInt(e.target.value)}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="title"  onChange={(e)=>{updateMovie.title=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="date"  onChange={(e)=>{updateMovie.date=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="image"  onChange={(e)=>{updateMovie.Image=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="image"  onChange={(e)=>{updateMovie.image=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="rating"  onChange={(e)=>{updateMovie.Rating=e.target.value}}></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="genre"  onChange={(e)=>{updateMovie.Genre=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="rating"  onChange={(e)=>{updateMovie.rating=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="genre"  onChange={(e)=>{updateMovie.genres=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="trailer"  onChange={(e)=>{updateMovie.Trailer=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="trailer"  onChange={(e)=>{updateMovie.trailer=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="cast"  onChange={(e)=>{updateMovie.Cast=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="cast"  onChange={(e)=>{updateMovie.cast=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="credits"  onChange={(e)=>{updateMovie.Credits=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="credits"  onChange={(e)=>{updateMovie.credits=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="company"  onChange={(e)=>{updateMovie.Company=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="company"  onChange={(e)=>{updateMovie.company=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="description"  onChange={(e)=>{updateMovie.Description=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="description"  onChange={(e)=>{updateMovie.description=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="price"  onChange={(e)=>{updateMovie.Price=e.target.value}}></input></Col>
-                            <Col><input type='text' className='form-control' placeholder="sales"  onChange={(e)=>{updateMovie.Sales=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="price"  onChange={(e)=>{updateMovie.price=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="sales"  onChange={(e)=>{updateMovie.sales=e.target.value}}></input></Col>
                             </Row><br></br>
                             <Row>
-                            <Col><input type='text' className='form-control' placeholder="reviews"  onChange={(e)=>{updateMovie.Reviews=e.target.value}}></input></Col>
+                            <Col><input type='text' className='form-control' placeholder="reviews"></input></Col>
                             </Row><br></br>
                         </Modal.Body>
                         <Modal.Footer style={{minWidth:'600px', background:'white'}}>
