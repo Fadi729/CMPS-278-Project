@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
-import BooksScroll from '../Components/BooksScroll';
-import BooksSection from '../Components/BooksSection';
+import BooksScroll from '../Components/BookComponents/BooksScroll';
+import BooksSection from '../Components/BookComponents/BooksSection';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { getBooksAsync, getBookReviewsAsync } from '../features/booksSlice';
 

@@ -10,7 +10,7 @@ import { store } from "./store";
 import { NavbarContextProvider } from "./contexts/NavbarContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-	<React.StrictMode>
+	// <React.StrictMode>
 		<Provider store={store}>
 			<NavbarContextProvider>
 				<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
@@ -20,5 +20,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 				</GoogleOAuthProvider>
 			</NavbarContextProvider>
 		</Provider>
-	</React.StrictMode>
+	// </React.StrictMode>
 );
