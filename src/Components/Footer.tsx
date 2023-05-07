@@ -33,11 +33,11 @@ const Foot = () => {
 	return (
 		<>
         <footer>
-					<div className="flex justify-between gap-10 text-sm w-full m-7 mb-0 ml-0">
+					<div className="flex justify-between gap-10 text-sm w-full m-7 mb-0 ml-0 text-[#5f6368]">
 						<NavLink
 							to={RouteTo.ToS}
 						>
-							<div className="flex flex-col justify-between">
+							<div className="flex flex-col justify-between pl-28">
 								<span className="my-[1.3rem]">Terms of service</span>
 							</div>
 						</NavLink>
@@ -49,7 +49,7 @@ const Foot = () => {
                                 </div>
 						</NavLink>
 
-                        <div className="flex flex-col justify-between">
+                        <div className="flex flex-col justify-between pr-28">
 							<span className="my-[1.3rem]">Country: {state.countryName}</span>
                         </div>
 
