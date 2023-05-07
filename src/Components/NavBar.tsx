@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { MdHelpOutline, MdSearch } from "react-icons/md";
+import {AiOutlineMail} from "react-icons/ai";
 import {
 	CredentialResponse,
 	GoogleLogin,
@@ -29,6 +30,7 @@ const NavBar = () => {
 
 	const imgRef = useRef(null);
 	const menuRef = useRef(null);
+	const checkBoxRef=useRef(null);
 
 
 	function Menu(e: any) {
@@ -61,7 +63,7 @@ const NavBar = () => {
 			}
 		}
 		if (open) {
-			if (e.target !== menuRef.current) {
+			if (e.target !== menuRef.current && e.target !== checkBoxRef.current) {
 				setOpen(false);
 			}
 		}
@@ -311,6 +313,15 @@ const NavBar = () => {
 							>
 								<FaHistory style={{ display: "inline", marginRight: "10px" }} />
 								History
+							</li>
+							<li
+								className="hover:bg-[#f5f5f5]"
+								style={{ padding: "12.5px 200px 12.5px 10px" }}
+								
+							>
+								<AiOutlineMail style={{ display: "inline", marginRight: "10px" }} />
+								Send me emails &nbsp; &nbsp; &nbsp;
+								<input type='checkbox' ref={checkBoxRef}></input>
 							</li>
 							{!isSignedIn ? (
 								<li
