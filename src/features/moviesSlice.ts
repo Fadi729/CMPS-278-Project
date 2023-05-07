@@ -13,10 +13,10 @@ export const getMoviesAsync = createAsyncThunk("movies/fetchMovies", async (_, t
 	}
 });
 
-export const postMoviesAsync =createAsyncThunk("movies/postMovies", async (data, thunkAPI) => {
+export const postMoviesAsync =createAsyncThunk("movies/postMovies", async (data: Movie, thunkAPI) => {
 	try {
-		const response = await axios.post<Movie[]>(ApiEndpoints.getMovies, data);
-		thunkAPI.dispatch(setMovies(response.data));
+		const response = await axios.post(ApiEndpoints.getMovies, data);
+		thunkAPI.dispatch(addMovie(data));
 		return response.data;
 	} catch (error) {
 		return thunkAPI.rejectWithValue(error);
@@ -33,10 +33,10 @@ export const putMoviesAsync =createAsyncThunk("movies/putMovies", async (data, t
 	}
 });
 
-export const deleteMoviesAsync =createAsyncThunk("movies/deleteMovies", async (data, thunkAPI) => {
+export const deleteMoviesAsync =createAsyncThunk("movies/deleteMovies", async (ID: number, thunkAPI) => {
 	try {
-		const response = await axios.delete<Movie[]>(ApiEndpoints.getMovies);
-		thunkAPI.dispatch(setMovies(response.data));
+		const response = await axios.delete(ApiEndpoints.getMovies+"/"+ID);
+		thunkAPI.dispatch(deleteMovie(ID));
 		return response.data;
 	} catch (error) {
 		return thunkAPI.rejectWithValue(error);
@@ -61,9 +61,15 @@ const moviesSlice = createSlice({
 			state.movies = action.payload;
 			state.isLoading = false;
 		},
+		addMovie: (state, action: PayloadAction<Movie>) => {
+			state.movies.push(action.payload)
+		},
+		deleteMovie: (state, action: PayloadAction<number>) => {
+			state.movies=state.movies.filter((movie) => movie.id !== action.payload)
+		}
 	},
 });
 
-export const { setMovies } = moviesSlice.actions;
+export const { setMovies, addMovie, deleteMovie } = moviesSlice.actions;
 
 export default moviesSlice.reducer;

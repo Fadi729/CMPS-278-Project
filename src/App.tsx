@@ -33,6 +33,8 @@ function App() {
 
   const dispatch = useAppDispatch();
 
+  
+
   const { applications, isLoading: appIsLoading } = useAppSelector((state) => state.Applications);
   const { games, isLoading: gameIsLoading } = useAppSelector((state) => state.Games);
   const { movies, isLoading: movieIsLoading } = useAppSelector((state) => state.Movies);
@@ -101,6 +103,10 @@ function App() {
       getWishList()
     }
   }, [isSignedIn])
+
+  
+
+  
   return (
     <>
       {!appIsLoading && !gameIsLoading && !movieIsLoading && !bookIsLoading && (

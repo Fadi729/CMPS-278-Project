@@ -1,3 +1,15 @@
+
+export default interface Review {
+    content:    string;
+    helpful:    number;
+    title:      string;
+    author:     string;
+    date:       string;
+    rating1:     number;
+    notHelpful: number;
+}
+
+
 export default interface Movie {
     id:          number;
     title:       string;
@@ -13,14 +25,4 @@ export default interface Movie {
     price:       string;
     sales:       string;
     reviews:     Review[];
-}
-
-interface Review {
-    content:    string;
-    helpful:    number;
-    title:      string;
-    author:     string;
-    date:       string;
-    rating:     number;
-    notHelpful: number;
 }

@@ -116,7 +116,7 @@ const Trailer=() =>{
                                     <div className="hover:bg-[#f2f2f2]" style={{marginLeft:'500px', marginTop:'10px', borderRadius:'50% 50% 50% 50%', padding:'10px 10px 10px 10px'}}><GoReport onClick={()=>{flagged=='black'? setFlagged('red'):setFlagged('black')}} id='report' color={flagged}></GoReport></div>
                                 </div>
                                 <div style={{display:'flex', flexDirection:'row'}}> 
-                                    <div style={{minWidth:'90px'}}><ReactStars edit={false} count={5} value={review['rating']/2!} size={15} color2={'#e33659'}/></div>
+                                    <div style={{minWidth:'90px'}}><ReactStars edit={false} count={5} value={review['rating1']/2!} size={15} color2={'#e33659'}/></div>
                                     <div  style={{marginTop:'5px', color:'#706f6f', fontSize:'11px', fontWeight:'500', minWidth:'fit-content'}}>{review['date']}</div>
                                 </div>
                                 <div style={{minWidth:'600px'}}>
