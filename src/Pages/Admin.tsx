@@ -8,8 +8,8 @@ import Row from 'react-bootstrap/Row';
 import {useAppSelector, useAppDispatch } from "../hooks";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getMoviesAsync, postMoviesAsync } from "../features/moviesSlice";
-import { getBooksAsync } from "../features/booksSlice";
+import { getMoviesAsync, postMoviesAsync, putMoviesAsync, deleteMoviesAsync } from "../features/moviesSlice";
+import { getBooksAsync, postBooksAsync} from "../features/booksSlice";
 import { getGamesAsync } from "../features/gamesSlice";
 import { getApplicationsAsync } from "../features/applicationsSlice";
 import Movies from "./Movies";
@@ -573,10 +573,10 @@ const Admin = () => {
         thumbsUp:''
     }
     function AddMovie(){
-
+        postMoviesAsync()
     }
     function EditMovie(){
-
+        putMoviesAsync()
     }
     function DeleteMovie(id: number){
 

@@ -15,7 +15,7 @@ export const getBooksAsync = createAsyncThunk("books/getBooksAsync", async (_, t
 });
 export const postBooksAsync = createAsyncThunk("books/postBooksAsync", async (_, thunkAPI) => {
 	try {
-		const response = await axios.get<BooksDataAPIResponse[]>(ApiEndpoints.getBooks);
+		const response = await axios.post<BooksDataAPIResponse[]>(ApiEndpoints.getBooks);
 		const books = response.data.map(convertBook);
 		thunkAPI.dispatch(setBooks(books));
 		return books;

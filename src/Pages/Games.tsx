@@ -91,7 +91,9 @@ const Section = ({section, filter} : {section: string; filter: (arr: Game[]) => 
 
   return (
 		<div className="mb-2">
-			<h1 className="text-lg leading-6 font-google font-medium mb-5 text-center">{section}</h1>
+			<h1 className="leading-6 font-google font-small mb-4 "
+			style={{ marginLeft: "12px", fontSize: "19px", color: "#1e1e1e", fontWeight: "500" }}
+			>{section}</h1>
 
 			{!isLoading && (
 				<>

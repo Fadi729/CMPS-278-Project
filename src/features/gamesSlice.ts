@@ -15,7 +15,7 @@ export const getGamesAsync = createAsyncThunk("games/getGamesAsync", async (_, t
 });
 export const postGamesAsync = createAsyncThunk("games/postGamesAsync", async (data, thunkAPI) => {
 	try {
-		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
+		const response = await axios.post<Game[]>(ApiEndpoints.getGames);
 		thunkAPI.dispatch(setGames(response.data));
 		return response.data;
 	} catch (error) {
@@ -24,7 +24,7 @@ export const postGamesAsync = createAsyncThunk("games/postGamesAsync", async (da
 });
 export const putGamesAsync = createAsyncThunk("games/putGamesAsync", async (data, thunkAPI) => {
 	try {
-		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
+		const response = await axios.put<Game[]>(ApiEndpoints.getGames);
 		thunkAPI.dispatch(setGames(response.data));
 		return response.data;
 	} catch (error) {
@@ -33,7 +33,7 @@ export const putGamesAsync = createAsyncThunk("games/putGamesAsync", async (data
 });
 export const deleteGamesAsync = createAsyncThunk("games/deleteGamesAsync", async (data, thunkAPI) => {
 	try {
-		const response = await axios.get<Game[]>(ApiEndpoints.getGames);
+		const response = await axios.delete<Game[]>(ApiEndpoints.getGames);
 		thunkAPI.dispatch(setGames(response.data));
 		return response.data;
 	} catch (error) {

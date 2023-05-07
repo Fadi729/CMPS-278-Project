@@ -15,7 +15,7 @@ export const getApplicationsAsync = createAsyncThunk("applications/getApplicatio
 });
 export const postApplicationsAsync = createAsyncThunk("applications/postApplicationsAsync", async (data, thunkAPI) => {
 	try {
-		const response = await axios.get<Application[]>(ApiEndpoints.getApplications);
+		const response = await axios.post<Application[]>(ApiEndpoints.getApplications);
 		thunkAPI.dispatch(setApplications(response.data));
 		thunkAPI.dispatch(setIsLoading(false));
 		return response.data;
@@ -25,7 +25,7 @@ export const postApplicationsAsync = createAsyncThunk("applications/postApplicat
 });
 export const putApplicationsAsync = createAsyncThunk("applications/putApplicationsAsync", async (data, thunkAPI) => {
 	try {
-		const response = await axios.get<Application[]>(ApiEndpoints.getApplications);
+		const response = await axios.put<Application[]>(ApiEndpoints.getApplications);
 		thunkAPI.dispatch(setApplications(response.data));
 		thunkAPI.dispatch(setIsLoading(false));
 		return response.data;
@@ -36,7 +36,7 @@ export const putApplicationsAsync = createAsyncThunk("applications/putApplicatio
 });
 export const deleteApplicationsAsync = createAsyncThunk("applications/deleteApplicationsAsync", async (data, thunkAPI) => {
 	try {
-		const response = await axios.get<Application[]>(ApiEndpoints.getApplications);
+		const response = await axios.delete<Application[]>(ApiEndpoints.getApplications);
 		thunkAPI.dispatch(setApplications(response.data));
 		thunkAPI.dispatch(setIsLoading(false));
 		return response.data;
