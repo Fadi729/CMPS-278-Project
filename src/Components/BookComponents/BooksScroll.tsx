@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import BookCover from '../Components/BookCover'
+import BookCover from "../BookComponents/BookCover"
 import { Link } from 'react-router-dom';
-import { BooksReview } from '../data/Interfaces/Books';
+import { BooksReview } from "../../data/Interfaces/Books";
 
 interface Props {
   id: string; // Add a unique ID prop

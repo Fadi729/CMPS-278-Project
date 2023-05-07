@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import BooksScroll from "../Components/BooksScroll";
-import BooksSection from "../Components/BooksSection";
+import BooksScroll from "../Components/BookComponents/BooksScroll";
+import BooksSection from "../Components/BookComponents/BooksSection";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getBooksAsync, getBookReviewsAsync } from "../features/booksSlice";
-// import { bookData } from "../dummydata/bookData";
-// import { BooksReviews } from "../dummydata/BooksReviews";
-// import { BooksData, BooksReview } from "../data/Interfaces/Books";
 
 const Books = () => {
   const { books, bookReviews } = useAppSelector((state) => state.Books);

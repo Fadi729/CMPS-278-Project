@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "./hooks";
 import { getApplicationsAsync } from "./features/applicationsSlice";
 import { getGamesAsync } from "./features/gamesSlice";
 import { getMoviesAsync } from "./features/moviesSlice";
+import { getBookReviewsAsync, getBooksAsync } from "./features/booksSlice";
 import jwtDecode from "jwt-decode";
 import { User } from "./data/Interfaces/User";
 import { getWishListAsync } from "./features/wishListSlice";
@@ -27,10 +28,11 @@ import GameDetails from "./Pages/GameDetails";
 import ToS from "./Pages/ToS";
 import About from "./Pages/About";
 import Layout from "./Components/Layout";
-import BookPage from "./Components/BookPage";
+import BookPage from "./Components/BookComponents/BookPage";
 
 function App() {
   const dispatch = useAppDispatch();
+
   const { applications, isLoading: appIsLoading } = useAppSelector(
     (state) => state.Applications
   );
@@ -40,6 +42,13 @@ function App() {
   const { movies, isLoading: movieIsLoading } = useAppSelector(
     (state) => state.Movies
   );
+  const {
+    books,
+    bookReviews,
+    isLoading: bookIsLoading,
+  } = useAppSelector((state) => state.Books);
+  const { isSignedIn } = useAppSelector((state) => state.auth);
+
   async function getApps() {
     await dispatch(getApplicationsAsync());
   }
@@ -52,6 +61,18 @@ function App() {
     await dispatch(getMoviesAsync());
   }
 
+  async function getBooks() {
+    await dispatch(getBooksAsync());
+  }
+
+  async function getBookReviews() {
+    await dispatch(getBookReviewsAsync());
+  }
+
+  async function getWishList() {
+    await dispatch(getWishListAsync());
+  }
+
   useEffect(() => {
     if (Object.keys(applications).length === 0) {
       getApps();
@@ -61,6 +82,12 @@ function App() {
     }
     if (Object.keys(movies).length === 0) {
       getMovies();
+    }
+    if (Object.keys(movies).length === 0) {
+      getBooks();
+    }
+    if (Object.keys(bookReviews).length === 0) {
+      getBookReviews();
     }
   }, []);
 
@@ -78,26 +105,38 @@ function App() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      getWishList();
+    }
+  }, [isSignedIn]);
   return (
     <>
-      {!appIsLoading && !gameIsLoading && !movieIsLoading && (
+      {!appIsLoading && !gameIsLoading && !movieIsLoading && !bookIsLoading && (
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to={RouteTo.Apps} />} />
-            <Route path={RouteTo.Search} element={<Search />} />
             <Route path={RouteTo.Apps} element={<Apps />} />
-            <Route path={RouteTo.Admin} element={<Admin />} />
             <Route path={RouteTo.AppsDetails} element={<AppDetails />} />
+
             <Route path={RouteTo.Games} element={<Games />} />
             <Route path={RouteTo.GameDetails} element={<GameDetails />} />
+
             <Route path={RouteTo.Movies} element={<Movies />} />
             <Route path={RouteTo.MovieDetails} element={<MovieDetails />} />
             <Route path={RouteTo.SimilarMovies} element={<SimilarMovies />} />
+
             <Route path={RouteTo.Books} element={<Books />} />
-            <Route path="/book/:id" element={<BookPage />} />
+            <Route path={RouteTo.BookPage} element={<BookPage />} />
+
+            <Route path={RouteTo.Search} element={<Search />} />
+
+            <Route path={RouteTo.Wishlist} element={<WishList />} />
+            <Route path={RouteTo.Admin} element={<Admin />} />
+
             <Route path={RouteTo.ToS} element={<ToS />} />
             <Route path={RouteTo.About} element={<About />} />
-            <Route path={RouteTo.Wishlist} element={<WishList />} />
             <Route path={RouteTo.History} element={<History />} />
           </Route>
         </Routes>
