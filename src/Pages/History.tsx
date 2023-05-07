@@ -61,12 +61,9 @@ const HistoryHelper = () => {
       }),
   ];
 
-  // const booksIds = wishList.wishListItems.filter((item) => item.itemType === ItemType.Book).map((item) => item.itemId);
-  // const bookItems = books.filter((book) => book.id in booksIds);
-
   return (
     <div className="relative top-16 font-Roboto">
-      <h1 className="text-2xl mb-5">Wishlist</h1>
+      <h1 className="text-2xl mb-5">History</h1>
 
       <div className="flex flex-col">
         {appsAndGames.length > 0 && (
@@ -136,7 +133,7 @@ const HistoryHelper = () => {
           movieList.length == 0 &&
           booksList.length == 0 && (
             <div className="relative top-16 font-Roboto text-center">
-              <p className="text-lg">Your wishlist is empty</p>
+              <p className="text-lg">Your history is empty</p>
             </div>
           )}
       </div>
@@ -161,12 +158,20 @@ const History = () => {
 
   return (
     <>
-      {isSignedIn && !isLoading ? (
-        <HistoryHelper />
-      ) : (
+      {!isSignedIn ? (
         <div className="relative top-16 font-Roboto text-center">
           <p className="text-lg">Please sign in to view your history</p>
         </div>
+      ) : (
+        <>
+          {isLoading ? (
+            <div className="relative top-16 font-Roboto text-center">
+              <p className="text-lg">Loading...</p>
+            </div>
+          ) : (
+            <HistoryHelper />
+          )}
+        </>
       )}
     </>
   );
